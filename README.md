@@ -30,9 +30,9 @@ Create a `modal.d.ts` file in your project (make sure to include it in tsconfig.
 
 ```ts
 import type { ReactElement } from 'react';
-import type { ModalStackParams } from 'react-animated-modal';
+import type { ModalStackParams } from '@sonnv1912/react-animated-modal';
 
-declare module 'react-animated-modal' {
+declare module '@sonnv1912/react-animated-modal' {
   interface ModalStackParams {
     AlertModal: {
         title: string;
@@ -47,7 +47,7 @@ declare module 'react-animated-modal' {
 ### 2. Open modal anywhere
 
 ```tsx
-import { useModal } from 'react-animated-modal';
+import { useModal } from '@sonnv1912/react-animated-modal';
 
 const { openModal } = useModal();
 
@@ -100,4 +100,4 @@ Each modal automatically receives the following props:
 - Great for complex apps requiring nested or dynamic modal stacks
 
 ---
-Made with ❤️ by react-animated-modal.
+Made with ❤️ by @sonnv1912/react-animated-modal.
