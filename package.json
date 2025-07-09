@@ -1,10 +1,39 @@
 {
-   "name": "react-animated-modal",
+   "name": "@sonnv1912/react-animated-modal",
    "version": "1.0.0",
    "type": "module",
    "license": "MIT",
    "main": "./dist/index.js",
    "module": "./dist/index.d.ts",
+   "author": "Ngô Văn Sơn",
+   "repository": {
+      "type": "git",
+      "url": "https://github.com/sonnv1912/react-animated-modal"
+   },
+   "homepage": "https://github.com/sonnv1912/react-animated-modal",
+   "keywords": [
+      "react",
+      "modal",
+      "animated",
+      "framer-motion"
+   ],
+   "bugs": {
+      "url": "https://github.com/sonnv1912/react-animated-modal/issues"
+   },
+   "engines": {
+      "node": ">=18.0.0"
+   },
+   "files": [
+      "dist"
+   ],
+   "sideEffects": false,
+   "publishConfig": {
+      "access": "public"
+   },
+   "peerDependencies": {
+      "react": "^18.3.1",
+      "react-dom": "^18.3.1"
+   },
    "exports": {
       ".": {
          "import": "./dist/index.d.ts",
@@ -29,6 +58,7 @@
       "zustand": "^5.0.6"
    },
    "devDependencies": {
+      "@biomejs/biome": "1.9.4",
       "@types/keyboardjs": "^2.5.3",
       "@types/node": "^24.0.12",
       "@types/react": "^19.1.8",
@@ -43,7 +73,6 @@
       "typescript-eslint": "^8.35.1",
       "vite": "^7.0.3",
       "vite-plugin-dts": "^4.5.4",
-      "@biomejs/biome": "1.9.4",
       "vitest": "^3.2.4"
    },
    "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
