@@ -8,17 +8,25 @@
    "author": "Ngô Văn Sơn",
    "repository": {
       "type": "git",
-      "url": "https://github.com/sonnv1912/react-animated-modal"
+      "url": "git+https://github.com/sonnv1912/react-animated-modal.git"
    },
    "homepage": "https://github.com/sonnv1912/react-animated-modal",
-   "keywords": ["react", "modal", "animated", "framer-motion", "react-modal"],
+   "keywords": [
+      "react",
+      "modal",
+      "animated",
+      "framer-motion",
+      "react-modal"
+   ],
    "bugs": {
       "url": "https://github.com/sonnv1912/react-animated-modal/issues"
    },
    "engines": {
       "node": ">=18.0.0"
    },
-   "files": ["dist"],
+   "files": [
+      "dist"
+   ],
    "sideEffects": false,
    "publishConfig": {
       "access": "public"
