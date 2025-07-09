@@ -1,14 +1,18 @@
-import { StrictMode, type ReactElement } from 'react';
+import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { App } from './app';
 import { ModalProvider } from '../providers/modal-provider';
+import { App } from './app';
 import { AlertModal } from './modal/alert-modal';
 import { ConfirmModal } from './modal/confirm-modal';
 
 declare module '../hooks/store/use-modal' {
    interface ModalStackParams {
-      AlertModal: (props: { title: string }) => ReactElement;
-      ConfirmModal: (props: { onConfirm: () => void }) => ReactElement;
+      AlertModal: {
+         title: string;
+      };
+      ConfirmModal: {
+         onConfirm: () => void;
+      };
    }
 }
 

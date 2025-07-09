@@ -19,7 +19,10 @@ export const ModalProvider = ({ modals }: Props) => {
    useEffect(() => {
       rootRef.current = document.body;
 
-      if (activeModals?.length === 0) {
+      if (
+         activeModals?.length === 0 ||
+         !activeModals[activeModals.length - 1].params?.closeOnPressEsc
+      ) {
          return;
       }
 
@@ -30,7 +33,7 @@ export const ModalProvider = ({ modals }: Props) => {
       keyboard.bind(['escape'], event);
 
       return () => keyboard.unbind(['escape'], event);
-   }, [activeModals?.length, closeModal]);
+   }, [activeModals, closeModal]);
 
    return (
       rootRef.current &&
@@ -59,8 +62,10 @@ export const ModalProvider = ({ modals }: Props) => {
                         params?.container?.className,
                      )}
                      onClick={() => {
-                        if (params?.closeWhenClickOutside) {
+                        if (params?.closeOnClickOutside) {
                            closeModal();
+
+                           params.onClose?.();
                         }
                      }}
                   >

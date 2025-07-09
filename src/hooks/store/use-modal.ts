@@ -9,25 +9,52 @@ export interface ModalStackParams {}
 export type ModalName = keyof ModalStackParams;
 
 export type BaseModalParams = {
+   /**
+    * Function to close the modal. Automatically injected.
+    */
    closeModal: () => void;
-   closeWhenClickOutside?: boolean;
+
+   /**
+    * Callback triggered when the modal is closed.
+    */
+   onClose?: () => void;
+
+   /**
+    * Whether to close the modal when clicking outside of it.
+    */
+   closeOnClickOutside?: boolean;
+
+   /**
+    * Whether to close the modal when pressing the Escape key.
+    */
+   closeOnPressEsc?: boolean;
+
+   /**
+    * Styling options for the outer container of the modal.
+    */
    container?: {
       className?: string;
       override?: boolean;
    };
+
+   /**
+    * Styling options for the modal content/body.
+    */
    body?: {
       className?: string;
       override?: boolean;
    };
+
+   /**
+    * Framer Motion animation settings for entrance and exit.
+    */
    animate?: {
       exit?: TargetAndTransition;
       animate?: TargetAndTransition;
    };
 };
 
-export type ModalParams<T extends ModalName> = Parameters<
-   ModalStackParams[T]
->[0] &
+export type ModalParams<T extends ModalName> = ModalStackParams[T] &
    BaseModalParams;
 
 type ModalComponent<T = any> = (props: T) => ReactElement;
@@ -83,10 +110,18 @@ export const useModal = create<State & Action>((set, get) => ({
 
       if (name) {
          const foundIndex = activeModals.findIndex((t) => t.name === name);
+         const modal = activeModals[foundIndex];
+
          if (foundIndex !== -1) {
+            modal.params?.onClose?.();
+
             activeModals.splice(foundIndex, 1);
          }
       } else {
+         const modal = activeModals[activeModals.length - 1];
+
+         modal.params?.onClose?.();
+
          activeModals.pop();
       }
 
