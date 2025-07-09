@@ -13,13 +13,13 @@
 ## 🧱 Installation
 
 ```bash
-npm install react-animated-modal
+npm install @sonnv1912/react-animated-modal
 ```
 
 or with yarn:
 
 ```bash
-yarn add react-animated-modal
+yarn add @sonnv1912/react-animated-modal
 ```
 
 ## 🚀 Usage

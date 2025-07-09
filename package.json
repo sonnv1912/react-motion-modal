@@ -1,6 +1,6 @@
 {
    "name": "@sonnv1912/react-animated-modal",
-   "version": "1.0.0",
+   "version": "1.0.1",
    "type": "module",
    "license": "MIT",
    "main": "./dist/index.js",
@@ -11,21 +11,14 @@
       "url": "https://github.com/sonnv1912/react-animated-modal"
    },
    "homepage": "https://github.com/sonnv1912/react-animated-modal",
-   "keywords": [
-      "react",
-      "modal",
-      "animated",
-      "framer-motion"
-   ],
+   "keywords": ["react", "modal", "animated", "framer-motion", "react-modal"],
    "bugs": {
       "url": "https://github.com/sonnv1912/react-animated-modal/issues"
    },
    "engines": {
       "node": ">=18.0.0"
    },
-   "files": [
-      "dist"
-   ],
+   "files": ["dist"],
    "sideEffects": false,
    "publishConfig": {
       "access": "public"
