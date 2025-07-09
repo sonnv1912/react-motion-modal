@@ -1,0 +1,80 @@
+{
+   "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+   "vcs": {
+      "enabled": true,
+      "clientKind": "git",
+      "useIgnoreFile": true
+   },
+   "files": {
+      "ignoreUnknown": true,
+      "ignore": ["node_modules", ".expo", "assets.d.ts"]
+   },
+   "formatter": {
+      "enabled": true,
+      "formatWithErrors": false,
+      "ignore": [],
+      "attributePosition": "auto",
+      "indentStyle": "space",
+      "indentWidth": 3,
+      "lineWidth": 80,
+      "lineEnding": "lf"
+   },
+   "organizeImports": {
+      "enabled": true
+   },
+   "linter": {
+      "enabled": true,
+      "rules": {
+         "all": true,
+         "style": {
+            "noDefaultExport": "off",
+            "useNamingConvention": "off",
+            "useExplicitLengthCheck": "off"
+         },
+         "correctness": {
+            "useImportExtensions": "off",
+            "noUndeclaredDependencies": "off",
+            "noUndeclaredVariables": "off",
+            "noUnusedImports": "error",
+            "noNodejsModules": "off"
+         },
+         "complexity": {
+            "noExcessiveCognitiveComplexity": {
+               "level": "error",
+               "options": {
+                  "maxAllowedComplexity": 100
+               }
+            },
+            "useSimplifiedLogicExpression": "off"
+         },
+         "performance": {
+            "noReExportAll": "off",
+            "noBarrelFile": "off",
+            "noDelete": "off"
+         },
+         "suspicious": {
+            "noReactSpecificProps": "off",
+            "noExplicitAny": "off"
+         },
+         "a11y": {
+            "useKeyWithClickEvents": "off",
+            "useMediaCaption": "off"
+         }
+      }
+   },
+   "javascript": {
+      "formatter": {
+         "arrowParentheses": "always",
+         "bracketSameLine": false,
+         "bracketSpacing": true,
+         "quoteStyle": "single",
+         "jsxQuoteStyle": "single",
+         "quoteProperties": "asNeeded",
+         "semicolons": "always",
+         "trailingCommas": "all",
+         "indentWidth": 3,
+         "enabled": true,
+         "lineWidth": 80
+      }
+   }
+}
