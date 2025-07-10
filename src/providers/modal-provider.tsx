@@ -24,7 +24,8 @@ export const ModalProvider = ({ modals, initialParams }: Props) => {
 
       if (
          activeModals?.length === 0 ||
-         !activeModals[activeModals.length - 1].params?.closeOnPressEsc
+         (!activeModals[activeModals.length - 1].params?.closeOnPressEsc &&
+            initialParams?.closeOnPressEsc)
       ) {
          return;
       }
@@ -36,7 +37,7 @@ export const ModalProvider = ({ modals, initialParams }: Props) => {
       keyboard.bind(['escape'], event);
 
       return () => keyboard.unbind(['escape'], event);
-   }, [activeModals, closeModal]);
+   }, [activeModals, closeModal, initialParams?.closeOnPressEsc]);
 
    return (
       rootRef.current &&

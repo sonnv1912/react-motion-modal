@@ -1,6 +1,6 @@
 {
    "name": "react-motion-modal",
-   "version": "1.0.2",
+   "version": "1.0.5",
    "type": "module",
    "license": "MIT",
    "main": "./dist/index.js",
@@ -37,7 +37,7 @@
       "dev": "vite",
       "build": "tsc -b && vite build",
       "preview": "vite preview",
-      "publish": "yarn build && npm publish --access public"
+      "deploy": "yarn build && yarn publish --access public"
    },
    "dependencies": {
       "@tailwindcss/vite": "^4.1.11",
