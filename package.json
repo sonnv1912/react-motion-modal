@@ -1,5 +1,5 @@
 {
-   "name": "@sonnv1912/react-animated-modal",
+   "name": "react-motion-modal",
    "version": "1.0.0",
    "type": "module",
    "license": "MIT",
@@ -7,14 +7,14 @@
    "module": "./dist/index.d.ts",
    "author": "Ngô Văn Sơn",
    "files": ["dist"],
-   "homepage": "https://github.com/sonnv1912/react-animated-modal",
+   "homepage": "https://github.com/sonnv1912/react-motion-modal",
    "keywords": ["react", "modal", "animated", "framer-motion", "react-modal"],
    "repository": {
       "type": "git",
-      "url": "git+https://github.com/sonnv1912/react-animated-modal.git"
+      "url": "git+https://github.com/sonnv1912/react-motion-modal.git"
    },
    "bugs": {
-      "url": "https://github.com/sonnv1912/react-animated-modal/issues"
+      "url": "https://github.com/sonnv1912/react-motion-modal/issues"
    },
    "engines": {
       "node": ">=18.0.0"

@@ -1,6 +1,6 @@
-# react-animated-modal
+# react-motion-modal
 
-`react-animated-modal` is a flexible modal management library built with [Zustand](https://zustand-demo.pmnd.rs/) for state management and powered by [Framer Motion](https://www.framer.com/motion/) for beautiful animations. It offers full TypeScript type-safety and allows dynamic modal opening with custom parameters.
+`react-motion-modal` is a flexible modal management library built with [Zustand](https://zustand-demo.pmnd.rs/) for state management and powered by [Framer Motion](https://www.framer.com/motion/) for beautiful animations. It offers full TypeScript type-safety and allows dynamic modal opening with custom parameters.
 
 ## ✨ Features
 
@@ -13,13 +13,13 @@
 ## 🧱 Installation
 
 ```bash
-npm install @sonnv1912/react-animated-modal
+npm install react-motion-modal
 ```
 
 or with yarn:
 
 ```bash
-yarn add @sonnv1912/react-animated-modal
+yarn add react-motion-modal
 ```
 
 ## 🚀 Usage
@@ -30,9 +30,9 @@ Create a `modal.d.ts` file in your project (make sure to include it in tsconfig.
 
 ```ts
 import type { ReactElement } from 'react';
-import type { ModalStackParams } from '@sonnv1912/react-animated-modal';
+import type { ModalStackParams } from 'react-motion-modal';
 
-declare module '@sonnv1912/react-animated-modal' {
+declare module 'react-motion-modal' {
   interface ModalStackParams {
     AlertModal: {
         title: string;
@@ -47,7 +47,7 @@ declare module '@sonnv1912/react-animated-modal' {
 ### 2. Open modal anywhere
 
 ```tsx
-import { useModal } from '@sonnv1912/react-animated-modal';
+import { useModal } from 'react-motion-modal';
 
 const { openModal } = useModal();
 
@@ -100,4 +100,4 @@ Each modal automatically receives the following props:
 - Great for complex apps requiring nested or dynamic modal stacks
 
 ---
-Made with ❤️ by @sonnv1912/react-animated-modal.
+Made with ❤️ by react-motion-modal.
