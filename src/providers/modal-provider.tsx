@@ -3,15 +3,18 @@ import keyboard from 'keyboardjs';
 import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { type ModalConfig, useModal } from '../hooks/store/use-modal';
-
-import '../assets/style/main.css';
+import {
+   type BaseModalParams,
+   type ModalConfig,
+   useModal,
+} from '../hooks/store/use-modal';
 
 type Props = {
    modals: ModalConfig;
+   initialParams?: BaseModalParams;
 };
 
-export const ModalProvider = ({ modals }: Props) => {
+export const ModalProvider = ({ modals, initialParams }: Props) => {
    const activeModals = useModal((state) => state.activeModals);
    const closeModal = useModal((state) => state.closeModal);
    const rootRef = useRef<HTMLElement>(null);
@@ -41,8 +44,15 @@ export const ModalProvider = ({ modals }: Props) => {
          <AnimatePresence initial={true} mode='popLayout'>
             {activeModals?.map((item, index) => {
                const Body = modals[item.name];
-               const params = item.params;
-               const animate = params?.animate;
+               const params = item.params || initialParams;
+               const animate = params?.animate || initialParams?.animate;
+               const onClose = params?.onClose || initialParams?.onClose;
+               const container = params?.container || initialParams?.container;
+               const body = params?.body || initialParams?.body;
+
+               const closeOnClickOutside =
+                  params?.closeOnClickOutside ||
+                  initialParams?.closeOnClickOutside;
 
                return (
                   <motion.div
@@ -57,15 +67,15 @@ export const ModalProvider = ({ modals }: Props) => {
                      className={clsx(
                         {
                            'fixed top-0 left-0 right-0 bottom-0 bg-black/40 backdrop-blur-sm':
-                              !params?.container?.override,
+                              !container?.override,
                         },
-                        params?.container?.className,
+                        container?.className,
                      )}
                      onClick={() => {
-                        if (params?.closeOnClickOutside) {
+                        if (closeOnClickOutside) {
                            closeModal();
 
-                           params.onClose?.();
+                           onClose?.();
                         }
                      }}
                   >
@@ -73,11 +83,11 @@ export const ModalProvider = ({ modals }: Props) => {
                         className={clsx(
                            {
                               'p-5 absolute max-h-screen max-w-screen overflow-auto top-1/2 -translate-y-1/2':
-                                 !params?.body?.override,
+                                 !body?.override,
                               'lg:left-1/2 lg:-translate-x-1/2':
-                                 !params?.body?.override,
+                                 !body?.override,
                            },
-                           params?.body?.className,
+                           body?.className,
                         )}
                         onClick={(e) => e.stopPropagation()}
                      >

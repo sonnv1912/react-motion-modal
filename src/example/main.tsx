@@ -1,9 +1,9 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { ModalProvider } from '../providers/modal-provider';
 import { App } from './app';
 import { AlertModal } from './modal/alert-modal';
 import { ConfirmModal } from './modal/confirm-modal';
+import { ModalProvider } from '..';
 
 declare module '../hooks/store/use-modal' {
    interface ModalStackParams {
