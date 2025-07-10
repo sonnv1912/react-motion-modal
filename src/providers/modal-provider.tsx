@@ -11,7 +11,7 @@ import {
 
 type Props = {
    modals: ModalConfig;
-   initialParams?: BaseModalParams;
+   initialParams?: Partial<BaseModalParams>;
 };
 
 export const ModalProvider = ({ modals, initialParams }: Props) => {
