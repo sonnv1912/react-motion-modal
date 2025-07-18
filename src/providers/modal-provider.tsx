@@ -25,7 +25,7 @@ export const ModalProvider = ({ modals, initialParams }: Props) => {
       if (
          activeModals?.length === 0 ||
          (!activeModals[activeModals.length - 1].params?.closeOnPressEsc &&
-            initialParams?.closeOnPressEsc)
+            !initialParams?.closeOnPressEsc)
       ) {
          return;
       }
