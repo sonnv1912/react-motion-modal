@@ -1,6 +1,6 @@
 {
    "name": "react-motion-modal",
-   "version": "1.0.7",
+   "version": "1.0.8",
    "type": "module",
    "license": "MIT",
    "main": "./dist/index.js",
@@ -54,6 +54,7 @@
       "motion": "^12.23.3",
       "react": "^19.1.0",
       "react-dom": "^19.1.0",
+      "tailwind-merge": "^3.3.1",
       "tailwindcss": "^4.1.11",
       "uuid": "^11.1.0",
       "vite-plugin-css-injected-by-js": "^3.5.2",
@@ -72,7 +73,6 @@
       "path": "^0.12.7",
       "playwright": "^1.53.2",
       "typescript": "~5.8.3",
-      "typescript-eslint": "^8.35.1",
       "vite": "^7.0.3",
       "vite-plugin-dts": "^4.5.4",
       "vitest": "^3.2.4"

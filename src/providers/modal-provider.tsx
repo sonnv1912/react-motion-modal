@@ -1,8 +1,8 @@
-import clsx from 'clsx';
 import keyboard from 'keyboardjs';
 import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
+import { twMerge } from 'tailwind-merge';
 import {
    type BaseModalParams,
    type ModalConfig,
@@ -65,11 +65,8 @@ export const ModalProvider = ({ modals, initialParams }: Props) => {
                      style={{
                         zIndex: 100 + index,
                      }}
-                     className={clsx(
-                        {
-                           'fixed top-0 left-0 right-0 bottom-0 bg-black/40 backdrop-blur-sm':
-                              !container?.override,
-                        },
+                     className={twMerge(
+                        'fixed top-0 left-0 right-0 bottom-0 bg-black/40 backdrop-blur-sm',
                         container?.className,
                      )}
                      onClick={() => {
@@ -81,13 +78,9 @@ export const ModalProvider = ({ modals, initialParams }: Props) => {
                      }}
                   >
                      <div
-                        className={clsx(
-                           {
-                              'p-5 absolute max-h-screen max-w-screen overflow-auto top-1/2 -translate-y-1/2':
-                                 !body?.override,
-                              'lg:left-1/2 lg:-translate-x-1/2':
-                                 !body?.override,
-                           },
+                        className={twMerge(
+                           'p-5 absolute max-h-screen max-w-screen overflow-auto top-1/2 -translate-y-1/2',
+                           'lg:left-1/2 lg:-translate-x-1/2',
                            body?.className,
                         )}
                         onClick={(e) => e.stopPropagation()}
