@@ -1,12 +1,12 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import { ModalProvider } from '..';
 import { App } from './app';
 import { AlertModal } from './modal/alert-modal';
 import { ConfirmModal } from './modal/confirm-modal';
-import { ModalProvider } from '..';
 
 declare module '../hooks/store/use-modal' {
-   interface ModalStackParams {
+   interface ModalDefinition {
       AlertModal: {
          title: string;
       };
@@ -16,7 +16,7 @@ declare module '../hooks/store/use-modal' {
    }
 }
 
-// biome-ignore lint/style/noNonNullAssertion: <explanation>
+// biome-ignore lint/style/noNonNullAssertion: false
 createRoot(document.getElementById('root')!).render(
    <StrictMode>
       <App />

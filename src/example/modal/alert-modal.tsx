@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import type { ModalParams } from '../../hooks/store/use-modal';
+import type { ModalParams } from '#types/modal.type';
 
 export const AlertModal = ({ closeModal }: ModalParams<'AlertModal'>) => {
    const className =

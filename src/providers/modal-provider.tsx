@@ -1,13 +1,10 @@
+import { useModal } from '@hooks/store/use-modal';
 import keyboard from 'keyboardjs';
 import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { twMerge } from 'tailwind-merge';
-import {
-   type BaseModalParams,
-   type ModalConfig,
-   useModal,
-} from '../hooks/store/use-modal';
+import type { BaseModalParams, ModalConfig } from '#types/modal.type';
 
 type Props = {
    modals: ModalConfig;

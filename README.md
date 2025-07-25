@@ -30,10 +30,10 @@ Create a `modal.d.ts` file in your project (make sure to include it in tsconfig.
 
 ```ts
 import type { ReactElement } from 'react';
-import type { ModalStackParams } from 'react-motion-modal';
+import type { ModalDefinition } from 'react-motion-modal';
 
 declare module 'react-motion-modal' {
-  interface ModalStackParams {
+  interface ModalDefinition {
     AlertModal: {
         title: string;
     };
@@ -59,7 +59,7 @@ openModal('ConfirmModal', {1
 ### 3. Use `closeModal` inside your modal component
 
 ```tsx
-const ConfirmModal = ({ title, closeModal }: ModalStackParams<'ConfirmModal'>) => (
+const ConfirmModal = ({ title, closeModal }: ModalDefinition<'ConfirmModal'>) => (
   <div>
     <h1>{title}</h1>
     <button onClick={closeModal}>Close</button>
@@ -82,15 +82,15 @@ Opens a modal by name. The `params` will be inferred based on modal type.
 
 Each modal automatically receives the following props:
 
-| Prop                    | Type                                | Description                                    |
-|-------------------------|-------------------------------------|------------------------------------------------|
-| `closeModal`            | `() => void`                        | Close function for the modal                   |
-| `closeOnClickOutside`   | `boolean`                           | Close modal when clicking outside              |
-| `closeOnPressEsc`       | `boolean`                           | Close modal when Escape key is pressed         |
-| `container`             | `{ className?: string; override?: boolean; }` | Customize wrapper styles             |
-| `body`                  | `{ className?: string; override?: boolean; }` | Customize inner modal styles          |
+| Prop                    | Type                                                             | Description                                                                   |
+|-------------------------|------------------------------------------------------------------|-------------------------------------------------------------------------------|
+| `closeModal`            | `() => void`                                                     | Close function for the modal                                                  |
+| `closeOnClickOutside`   | `boolean`                                                        | Close modal when clicking outside                                             |
+| `closeOnPressEsc`       | `boolean`                                                        | Close modal when Escape key is pressed                                        |
+| `container`             | `{ className?: string; override?: boolean; }`                    | Customize wrapper styles                                                      |
+| `body`                  | `{ className?: string; override?: boolean; }`                    | Customize inner modal styles                                                  |
 | `animate`               | `{ animate?: TargetAndTransition; exit?: TargetAndTransition; }` | Animation powered by Framer Motion. Customize how the modal enters and exits. |
-| `onClose`               | `() => void`                        | Callback triggered when modal is closed        |
+| `onClose`               | `() => void`                                                     | Callback triggered when modal is closed                                       |
 
 ## 📝 Notes
 
