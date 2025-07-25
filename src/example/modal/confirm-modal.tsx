@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import type { ModalParams } from '../../hooks/store/use-modal';
+import type { ModalParams } from '#types/modal.type';
 
 export const ConfirmModal = ({ closeModal }: ModalParams<'ConfirmModal'>) => {
    const className = 'text-white px-4 py-2 rounded-md cursor-pointe';

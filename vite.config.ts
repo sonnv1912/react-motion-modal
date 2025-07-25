@@ -1,16 +1,23 @@
 /// <reference types="vitest/config" />
 
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import { dirname, resolve } from 'node:path';
-import dts from 'vite-plugin-dts';
-import tailwindcss from '@tailwindcss/vite';
+import path, { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import tailwindcss from '@tailwindcss/vite';
+import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vite';
 import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js';
+import dts from 'vite-plugin-dts';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
+   resolve: {
+      alias: {
+         '@hooks': path.resolve(__dirname, 'src/hooks'),
+         '@components': path.resolve(__dirname, 'src/components'),
+         '#types': path.resolve(__dirname, 'src/types'),
+      },
+   },
    plugins: [
       react(),
       cssInjectedByJsPlugin(),
