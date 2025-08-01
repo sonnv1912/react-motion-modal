@@ -58,7 +58,7 @@
       "tailwindcss": "^4.1.11",
       "uuid": "^11.1.0",
       "vite-plugin-css-injected-by-js": "^3.5.2",
-      "zustand": "^5.0.6"
+      "zustand": "^5.0.7"
    },
    "devDependencies": {
       "@biomejs/biome": "2.1.1",
