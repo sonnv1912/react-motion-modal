@@ -35,8 +35,9 @@ export default defineConfig({
          fileName: 'index',
          formats: ['es'],
       },
+      minify: true,
       rollupOptions: {
-         external: ['react', 'react/jsx-runtime'],
+         external: ['react', 'react/jsx-runtime', 'react-dom'],
          output: {
             globals: {
                react: 'React',

@@ -44,7 +44,29 @@ declare module 'react-motion-modal' {
 }
 ```
 
-### 2. Open modal anywhere
+### 2. Import <ModalProvider />
+
+Import <ModalProvider /> to define your modals
+
+```ts
+import { ModalProvider } from 'react-motion-modal';
+
+export const App = () => {
+
+  return <div>
+    {...rest-of-your-app}
+
+    <ModalProvider
+      modals={{
+        AlertModal,
+        ConfirmModal,
+      }}
+    />
+  <div/>
+}
+```
+
+### 3. Open modal anywhere
 
 ```tsx
 import { useModal } from 'react-motion-modal';
@@ -56,7 +78,7 @@ openModal('ConfirmModal', {1
 });
 ```
 
-### 3. Use `closeModal` inside your modal component
+### 4. Use `closeModal` inside your modal component
 
 ```tsx
 const ConfirmModal = ({ title, closeModal }: ModalDefinition<'ConfirmModal'>) => (
