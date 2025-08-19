@@ -75,7 +75,13 @@ export const ModalProvider = ({ modals, initialParams }: Props) => {
                            zIndex: 100 + index,
                         }}
                         className={twMerge(
-                           'fixed top-0 left-0 right-0 bottom-0 bg-black/40 backdrop-blur-sm',
+                           clsx(
+                              'fixed top-0 left-0 right-0 bottom-0 bg-black/40 backdrop-blur-sm',
+                              {
+                                 'react-motion-modal__active':
+                                    active?.id === item.id,
+                              },
+                           ),
                            container?.className,
                         )}
                         onClick={() => {
@@ -89,11 +95,10 @@ export const ModalProvider = ({ modals, initialParams }: Props) => {
                         <div
                            className={twMerge(
                               clsx(
-                                 'p-5 absolute max-h-screen max-w-screen overflow-auto top-1/2 -translate-y-1/2',
+                                 'p-5 absolute max-h-screen max-w-screen top-1/2 -translate-y-1/2',
                                  'lg:left-1/2 lg:-translate-x-1/2',
                                  {
-                                    'react-motion-modal__active':
-                                       active?.id === item.id,
+                                    'overflow-auto': active?.id === item.id,
                                  },
                               ),
                               body?.className,

@@ -1,11 +1,5 @@
 @import "tailwindcss";
 
-.react-motion-modal__opening,
-.react-motion-modal__opening * {
+.react-motion-modal__opening {
   overflow-y: hidden !important;
-}
-
-.react-motion-modal__active,
-.react-motion-modal__active * {
-  overflow: auto !important;
 }
