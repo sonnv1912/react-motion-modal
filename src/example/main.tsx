@@ -22,6 +22,9 @@ createRoot(document.getElementById('root')!).render(
       <App />
 
       <ModalProvider
+         initialParams={{
+            closeOnPressEsc: true,
+         }}
          modals={{
             AlertModal,
             ConfirmModal,

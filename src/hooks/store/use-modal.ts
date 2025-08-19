@@ -6,7 +6,7 @@ import type { ActiveModal, ModalAction, ModalState } from '#types/modal.type';
 export interface ModalDefinition {}
 
 export const useModal = create<ModalState & ModalAction>((set, get) => ({
-   activeModals: [],
+   modals: [],
 
    openModal(name, _params) {
       const closeModal = () => get().closeModal(name);
@@ -22,43 +22,47 @@ export const useModal = create<ModalState & ModalAction>((set, get) => ({
          params,
       };
 
-      const activeModals = [...get().activeModals, modal];
+      const modals = [...get().modals, modal];
 
       set({
-         activeModals,
+         modals,
+         active: modal,
       });
    },
 
    closeAllModal() {
       set({
-         activeModals: [],
+         modals: [],
+         active: undefined,
       });
    },
 
    closeModal(name) {
-      const activeModals = [...get().activeModals];
+      const modals = [...get().modals];
+      let active: ActiveModal | undefined;
 
       if (name) {
-         const foundIndex = activeModals.findIndex((t) => t.name === name);
-         const modal = activeModals[foundIndex];
+         const foundIndex = modals.findIndex((t) => t.name === name);
+         const modal = modals[foundIndex];
          const params = modal.params;
 
          if (foundIndex !== -1) {
             params?.onClose?.();
 
-            activeModals.splice(foundIndex, 1);
+            active = modals.splice(foundIndex, 1)[0];
          }
       } else {
-         const modal = activeModals[activeModals.length - 1];
+         const modal = modals[modals.length - 1];
          const params = modal.params;
 
          params?.onClose?.();
 
-         activeModals.pop();
+         active = modals.pop();
       }
 
       set({
-         activeModals,
+         modals,
+         active,
       });
    },
 }));

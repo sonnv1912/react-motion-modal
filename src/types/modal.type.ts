@@ -70,7 +70,8 @@ export type ActiveModal = {
 };
 
 export type ModalState = {
-   activeModals: ActiveModal[];
+   modals: ActiveModal[];
+   active?: ActiveModal;
 };
 
 export type ModalAction = {

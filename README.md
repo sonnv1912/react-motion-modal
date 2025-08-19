@@ -19,7 +19,7 @@ npm install react-motion-modal
 or with yarn:
 
 ```bash
-yarn add react-motion-modal
+yarn add react-motion-modal zustand
 ```
 
 ## 🚀 Usage
@@ -118,7 +118,7 @@ Each modal automatically receives the following props:
 
 - Zustand-based, framework-agnostic state management
 - Built-in animation system powered by [Framer Motion](https://www.framer.com/motion/)
-- You can implement a `ModalRenderer` to dynamically render modals from `activeModals` state
+- You can implement a `ModalRenderer` to dynamically render modals from `modals` state
 - Great for complex apps requiring nested or dynamic modal stacks
 
 ---
