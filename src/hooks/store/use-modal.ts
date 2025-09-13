@@ -39,30 +39,25 @@ export const useModal = create<ModalState & ModalAction>((set, get) => ({
 
    closeModal(name) {
       const modals = [...get().modals];
-      let active: ActiveModal | undefined;
 
-      if (name) {
-         const foundIndex = modals.findIndex((t) => t.name === name);
-         const modal = modals[foundIndex];
-         const params = modal.params;
+      const foundIndex = name
+         ? modals.findIndex((t) => t.name === name)
+         : modals.length - 1;
 
-         if (foundIndex !== -1) {
-            params?.onClose?.();
+      const modal = modals[foundIndex];
+      const params = modal.params;
 
-            active = modals.splice(foundIndex, 1)[0];
-         }
-      } else {
-         const modal = modals[modals.length - 1];
-         const params = modal.params;
-
+      if (foundIndex > -1) {
          params?.onClose?.();
 
-         active = modals.pop();
-      }
+         const active = modals?.[foundIndex - 1];
 
-      set({
-         modals,
-         active,
-      });
+         modals.splice(foundIndex, 1);
+
+         set({
+            modals,
+            active,
+         });
+      }
    },
 }));

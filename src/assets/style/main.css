@@ -1,5 +1,1 @@
 @import "tailwindcss";
-
-.react-motion-modal__opening {
-  overflow-y: hidden !important;
-}
