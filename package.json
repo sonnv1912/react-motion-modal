@@ -71,7 +71,7 @@
       "playwright": "^1.53.2",
       "react": "^19.1.0",
       "react-dom": "^19.1.0",
-      "tailwindcss": "^4.1.11",
+      "tailwindcss": "^4.1.16",
       "typescript": "~5.8.3",
       "vite": "^7.0.3",
       "vite-plugin-css-injected-by-js": "^3.5.2",
