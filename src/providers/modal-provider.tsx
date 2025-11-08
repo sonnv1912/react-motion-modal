@@ -95,7 +95,7 @@ export const ModalProvider = ({ modals, initialParams }: Props) => {
                         <div
                            className={twMerge(
                               clsx(
-                                 'p-5 absolute max-h-screen max-w-screen top-1/2 -translate-y-1/2',
+                                 'p-5 absolute max-h-screen max-w-screen top-1/2 -translate-y-1/2 left-0 right-0',
                                  'lg:left-1/2 lg:-translate-x-1/2',
                                  {
                                     'overflow-auto': active?.id === item.id,
