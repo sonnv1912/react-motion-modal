@@ -25,7 +25,8 @@
 
       "paths": {
          "@hooks/*": ["./src/hooks/*"],
-         "@components/*": ["./src/hooks/*"],
+         "@components/*": ["./src/components/*"],
+         "@configs/*": ["./src/configs/*"],
          "#types/*": ["./src/types/*"]
       }
    },
