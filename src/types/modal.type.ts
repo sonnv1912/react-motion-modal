@@ -194,7 +194,8 @@ export type Params<T extends ModalName> = ModalDefinition[T] & BaseModalParams;
  *
  * @template T - The modal name type
  */
-export type ModalParams<T extends ModalName> = Pick<Params<T>, 'closeModal'>;
+export type ModalParams<T extends ModalName> = ModalDefinition[T] &
+   Pick<BaseModalParams, 'closeModal'>;
 
 /**
  * Represents a modal component that accepts props and returns a React element.
