@@ -1,6 +1,6 @@
 {
    "name": "react-motion-modal",
-   "version": "1.1.9",
+   "version": "1.2.0",
    "type": "module",
    "license": "MIT",
    "main": "./dist/index.js",

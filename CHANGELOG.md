@@ -19,8 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Type definitions now properly import required dependencies
 - Documentation examples updated to reflect current API
 
-## [1.1.9] - 2024-XX-XX
-
+## [1.1.9]
 ### Added
 - Responsive design improvements
 - Better modal stacking behavior
@@ -29,8 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Modal closing logic issues
 - CSS rendering problems
 
-## [1.1.8] - 2024-XX-XX
-
+## [1.1.8]
 ### Added
 - Streamlined modal closing logic
 - Performance optimizations
@@ -38,8 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - Unused CSS styles
 
-## [1.1.7] - 2024-XX-XX
-
+## [1.1.7]
 ### Fixed
 - Bug fixes and stability improvements
 

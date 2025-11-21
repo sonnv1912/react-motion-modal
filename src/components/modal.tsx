@@ -21,7 +21,7 @@ export const Modal = ({ data, modals, index, initialParams }: Props) => {
    const params = data.params || initialParams;
    const animate = params?.animate || initialParams?.animate;
    const onClose = params?.onClose || initialParams?.onClose;
-   const container = params?.container || initialParams?.container;
+   const backdrop = params?.backdrop || initialParams?.backdrop;
    const body = params?.body || initialParams?.body;
 
    const position =
@@ -48,7 +48,7 @@ export const Modal = ({ data, modals, index, initialParams }: Props) => {
                      'react-motion-modal__active': active?.id === data.id,
                   },
                ),
-               container?.className,
+               backdrop?.className,
             )}
             style={{
                zIndex: index,

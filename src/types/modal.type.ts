@@ -40,12 +40,12 @@ export type BaseModalParams = {
    closeOnPressEsc?: boolean;
 
    /**
-    * Styling options for the outer container (overlay) of the modal.
-    * This container typically provides the backdrop and centers the modal content.
+    * Styling options for the outer backdrop (overlay) of the modal.
+    * This backdrop typically provides the backdrop and centers the modal content.
     */
-   container?: {
+   backdrop?: {
       /**
-       * CSS class name to apply to the modal container.
+       * CSS class name to apply to the modal backdrop.
        * Useful for custom styling or responsive behavior.
        */
       className?: string;
