@@ -16,6 +16,8 @@ type Props = {
    initialParams?: Partial<BaseModalParams>;
 };
 
+const Z_INDEX = 1000;
+
 export const Modal = ({ data, modals, index, initialParams }: Props) => {
    const Body = modals[data.name];
    const params = data.params || initialParams;
@@ -51,7 +53,7 @@ export const Modal = ({ data, modals, index, initialParams }: Props) => {
                backdrop?.className,
             )}
             style={{
-               zIndex: index,
+               zIndex: Z_INDEX + index,
             }}
             onClick={() => {
                if (closeOnClickOutside) {
@@ -79,7 +81,7 @@ export const Modal = ({ data, modals, index, initialParams }: Props) => {
                body?.className,
             )}
             style={{
-               zIndex: index + 1,
+               zIndex: Z_INDEX + index + 1,
             }}
             onClick={(e) => e.stopPropagation()}
          >
