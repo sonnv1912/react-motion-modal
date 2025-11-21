@@ -66,19 +66,80 @@ export type BaseModalParams = {
    /**
     * Framer Motion animation settings for modal entrance and exit animations.
     * These settings define how the modal appears and disappears.
+    *
+    * @example
+    * ```typescript
+    * // Simple fade animation
+    * animate: {
+    *   animate: { opacity: 1 },
+    *   exit: { opacity: 0 }
+    * }
+    *
+    * // Scale and fade animation
+    * animate: {
+    *   animate: {
+    *     opacity: 1,
+    *     scale: 1,
+    *     transition: { duration: 0.3, ease: "easeOut" }
+    *   },
+    *   exit: {
+    *     opacity: 0,
+    *     scale: 0.9,
+    *     transition: { duration: 0.2, ease: "easeIn" }
+    *   }
+    * }
+    *
+    * // Slide up animation
+    * animate: {
+    *   animate: {
+    *     opacity: 1,
+    *     y: 0,
+    *     transition: { type: "spring", stiffness: 300, damping: 30 }
+    *   },
+    *   exit: {
+    *     opacity: 0,
+    *     y: 50,
+    *     transition: { duration: 0.25 }
+    *   }
+    * }
+    * ```
     */
    animate?: {
       /**
        * Animation properties for the exit transition (when modal is closing).
        * Accepts any valid Framer Motion TargetAndTransition properties.
-       * Example: { opacity: 0, scale: 0.8, transition: { duration: 0.2 } }
+       *
+       * @example
+       * ```typescript
+       * // Simple fade out
+       * exit: { opacity: 0 }
+       *
+       * // Scale down and fade out
+       * exit: {
+       *   opacity: 0,
+       *   scale: 0.8,
+       *   transition: { duration: 0.2 }
+       * }
+       * ```
        */
       exit?: TargetAndTransition;
 
       /**
        * Animation properties for the animate state (when modal is visible).
        * Accepts any valid Framer Motion TargetAndTransition properties.
-       * Example: { opacity: 1, scale: 1, transition: { duration: 0.3 } }
+       *
+       * @example
+       * ```typescript
+       * // Simple fade in
+       * animate: { opacity: 1 }
+       *
+       * // Scale up and fade in with spring
+       * animate: {
+       *   opacity: 1,
+       *   scale: 1,
+       *   transition: { type: "spring", stiffness: 400 }
+       * }
+       * ```
        */
       animate?: TargetAndTransition;
    };
@@ -86,9 +147,31 @@ export type BaseModalParams = {
    /**
     * Optional positioning string for modal placement.
     * This can be used to override default modal positioning behavior.
+    *
+    * @example
+    * ```typescript
     * import { MODAL_POSITIONS } from 'react-motion-modal';
+    *
+    * // Available positions
+    * MODAL_POSITIONS.TOP_LEFT     // 'top-left'
+    * MODAL_POSITIONS.TOP_CENTER   // 'top-center'
+    * MODAL_POSITIONS.TOP_RIGHT    // 'top-right'
+    * MODAL_POSITIONS.CENTER_LEFT  // 'center-left'
+    * MODAL_POSITIONS.CENTER       // 'center' (default)
+    * MODAL_POSITIONS.CENTER_RIGHT // 'center-right'
+    * MODAL_POSITIONS.BOTTOM_LEFT  // 'bottom-left'
+    * MODAL_POSITIONS.BOTTOM_CENTER// 'bottom-center'
+    * MODAL_POSITIONS.BOTTOM_RIGHT // 'bottom-right'
+    * ```
     */
    position?: string;
+
+   /**
+    * Enables backdrop blur effect when modal is open.
+    * When set to true, the background content will be blurred.
+    * @default false
+    */
+   blur?: boolean;
 };
 
 /**
@@ -121,8 +204,44 @@ export type ModalParams<T extends ModalName> = Pick<Params<T>, 'closeModal'>;
  *
  * @example
  * ```typescript
+ * // Basic modal component
  * const AlertModal: ModalComponent<{ message: string; closeModal: () => void }> =
- *   ({ message, closeModal }) => <div>{message}<button onClick={closeModal}>Close</button></div>;
+ *   ({ message, closeModal }) => (
+ *     <div className="bg-white p-6 rounded-lg shadow-lg">
+ *       <p>{message}</p>
+ *       <button onClick={closeModal}>Close</button>
+ *     </div>
+ *   );
+ *
+ * // Modal component with advanced features
+ * const ConfirmModal: ModalComponent<{
+ *   message: string;
+ *   onConfirm: () => void;
+ *   closeModal: () => void;
+ *   closeOnClickOutside?: boolean;
+ * }> = ({ message, onConfirm, closeModal, closeOnClickOutside = true }) => (
+ *   <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm mx-auto">
+ *     <h3 className="text-lg font-semibold mb-4">Confirm Action</h3>
+ *     <p className="mb-6">{message}</p>
+ *     <div className="flex justify-end gap-3">
+ *       <button
+ *         onClick={closeModal}
+ *         className="px-4 py-2 text-gray-600 hover:text-gray-800"
+ *       >
+ *         Cancel
+ *       </button>
+ *       <button
+ *         onClick={() => {
+ *           onConfirm();
+ *           closeModal();
+ *         }}
+ *         className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+ *       >
+ *         Confirm
+ *       </button>
+ *     </div>
+ *   </div>
+ * );
  * ```
  */
 export type ModalComponent<T = any> = (props: T) => ReactElement;
@@ -133,11 +252,44 @@ export type ModalComponent<T = any> = (props: T) => ReactElement;
  *
  * @example
  * ```typescript
+ * // First, define your modal parameters
+ * type ModalDefinition = {
+ *   alert: { message: string; type?: 'info' | 'warning' | 'error' };
+ *   confirm: { message: string; onConfirm: () => void; onCancel?: () => void };
+ *   form: { title: string; fields: FormField[]; onSubmit: (data: any) => void };
+ * };
+ *
+ * // Then create your modal components
+ * const AlertModal: ModalComponent<Params<'alert'>> = ({ message, type, closeModal }) => (
+ *   <div className={`alert alert-${type}`}>
+ *     {message}
+ *     <button onClick={closeModal}>Dismiss</button>
+ *   </div>
+ * );
+ *
+ * const ConfirmModal: ModalComponent<Params<'confirm'>> = ({
+ *   message, onConfirm, onCancel, closeModal
+ * }) => (
+ *   <div className="confirm-dialog">
+ *     <p>{message}</p>
+ *     <div className="actions">
+ *       <button onClick={() => { onCancel?.(); closeModal(); }}>No</button>
+ *       <button onClick={() => { onConfirm(); closeModal(); }}>Yes</button>
+ *     </div>
+ *   </div>
+ * );
+ *
+ * // Finally, create the configuration
  * const modalConfig: ModalConfig = {
  *   alert: AlertModal,
  *   confirm: ConfirmModal,
- *   // ... other modals
+ *   form: FormModal,
  * };
+ *
+ * // Use with ModalProvider
+ * <ModalProvider config={modalConfig}>
+ *   <App />
+ * </ModalProvider>
  * ```
  */
 export type ModalConfig = {

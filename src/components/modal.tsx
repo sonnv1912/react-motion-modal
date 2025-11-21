@@ -20,17 +20,18 @@ const Z_INDEX = 1000;
 
 export const Modal = ({ data, modals, index, initialParams }: Props) => {
    const Body = modals[data.name];
-   const params = data.params || initialParams;
-   const animate = params?.animate || initialParams?.animate;
-   const onClose = params?.onClose || initialParams?.onClose;
-   const backdrop = params?.backdrop || initialParams?.backdrop;
-   const body = params?.body || initialParams?.body;
+   const params = data.params ?? initialParams;
+   const animate = params?.animate ?? initialParams?.animate;
+   const blur = params?.blur ?? initialParams?.blur ?? true;
+   const onClose = params?.onClose ?? initialParams?.onClose;
+   const backdrop = params?.backdrop ?? initialParams?.backdrop;
+   const body = params?.body ?? initialParams?.body;
 
    const position =
-      params?.position || initialParams?.position || MODAL_POSITIONS.CENTER;
+      params?.position ?? initialParams?.position ?? MODAL_POSITIONS.CENTER;
 
    const closeOnClickOutside =
-      params?.closeOnClickOutside || initialParams?.closeOnClickOutside;
+      params?.closeOnClickOutside ?? initialParams?.closeOnClickOutside;
 
    const active = useModal((state) => state.active);
    const closeModal = useModal((state) => state.closeModal);
@@ -41,15 +42,18 @@ export const Modal = ({ data, modals, index, initialParams }: Props) => {
          initial={animate?.exit ?? { opacity: 0 }}
          animate={animate?.animate ?? { opacity: 1 }}
          layout={true}
+         className={clsx('fixed top-0 left-0 right-0 bottom-0', {
+            'backdrop-blur-sm': blur,
+         })}
+         style={{
+            zIndex: Z_INDEX + index,
+         }}
       >
          <div
             className={twMerge(
-               clsx(
-                  'fixed top-0 left-0 right-0 bottom-0 bg-black/40 backdrop-blur-sm',
-                  {
-                     'react-motion-modal__active': active?.id === data.id,
-                  },
-               ),
+               clsx('absolute top-0 left-0 right-0 bottom-0 bg-black/40', {
+                  'react-motion-modal__active': active?.id === data.id,
+               }),
                backdrop?.className,
             )}
             style={{

@@ -16,6 +16,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Fixed
+
+## [1.2.2] - 2025-11-21
+
+### Added
+- Enhanced TypeScript documentation with comprehensive JSDoc comments
+- More detailed examples for modal animations and positioning
+- Better documentation for blur effect parameter
+- Comprehensive examples for ModalComponent and ModalConfig types
+
+### Changed
+- Improved type documentation with real-world usage examples
+- Enhanced Framer Motion animation configuration documentation
+- Better documentation for modal positioning options
+
+### Fixed
 - Type definitions now properly import required dependencies
 - Documentation examples updated to reflect current API
 
