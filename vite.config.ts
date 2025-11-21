@@ -15,6 +15,7 @@ export default defineConfig({
       alias: {
          '@hooks': path.resolve(__dirname, 'src/hooks'),
          '@components': path.resolve(__dirname, 'src/components'),
+         '@configs': path.resolve(__dirname, 'src/configs'),
          '#types': path.resolve(__dirname, 'src/types'),
       },
    },
