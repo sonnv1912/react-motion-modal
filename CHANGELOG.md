@@ -8,22 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Comprehensive JSDoc documentation for all modal types
-- Modal configuration system with constants and utilities
-- Modal positioning constants and helper functions
-- Enhanced type safety with better generic constraints
 
 ### Changed
-- Restructured modal system architecture
-- Refactored provider and modal components for better maintainability
-- Updated example implementation with new structure
-- Enhanced TypeScript configuration for stricter type checking
 
 ### Deprecated
-- Old modal structure (migration required)
 
 ### Removed
-- Legacy modal implementation files
 
 ### Fixed
 - Type definitions now properly import required dependencies
