@@ -7,9 +7,7 @@ import { ConfirmModal } from './modal/confirm-modal';
 
 declare module '../hooks/store/use-modal' {
    interface ModalDefinition {
-      AlertModal: {
-         title: string;
-      };
+      AlertModal: {};
       ConfirmModal: {
          onConfirm: () => void;
       };

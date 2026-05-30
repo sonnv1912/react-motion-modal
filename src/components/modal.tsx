@@ -76,10 +76,24 @@ export const Modal = ({ data, modals, index, initialParams }: Props) => {
                      'overflow-auto': active?.id === data.id,
                      'top-1/2 -translate-y-1/2 lg:left-1/2 lg:-translate-x-1/2':
                         position === MODAL_POSITIONS.CENTER,
+                     'top-1/2 -translate-y-1/2 right-auto':
+                        position === MODAL_POSITIONS.CENTER_LEFT,
+                     'top-1/2 -translate-y-1/2 left-auto right-0':
+                        position === MODAL_POSITIONS.CENTER_RIGHT,
                      'top-0 lg:left-1/2 lg:-translate-x-1/2':
-                        position === MODAL_POSITIONS.TOP,
+                        position === MODAL_POSITIONS.TOP ||
+                        position === MODAL_POSITIONS.TOP_CENTER,
+                     'top-0 right-auto':
+                        position === MODAL_POSITIONS.TOP_LEFT,
+                     'top-0 left-auto right-0':
+                        position === MODAL_POSITIONS.TOP_RIGHT,
                      'bottom-0 lg:left-1/2 lg:-translate-x-1/2':
-                        position === MODAL_POSITIONS.BOTTOM,
+                        position === MODAL_POSITIONS.BOTTOM ||
+                        position === MODAL_POSITIONS.BOTTOM_CENTER,
+                     'bottom-0 right-auto':
+                        position === MODAL_POSITIONS.BOTTOM_LEFT,
+                     'bottom-0 left-auto right-0':
+                        position === MODAL_POSITIONS.BOTTOM_RIGHT,
                   },
                ),
                body?.className,

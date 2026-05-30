@@ -7,15 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
+## [1.2.4] - 2025-05-30
 
 ### Changed
+- Split `modal.type.ts` into separate files for better maintainability
+- `base-modal-params.type.ts` – base modal parameter types
+- `modal-components.type.ts` – modal component and config types
+- `modal-state.type.ts` – modal state and action types
+- `modal.type.ts` now re-exports all types (backward compatible)
+- Bumped dependencies (motion, zustand, vite, tailwindcss, biome, playwright, etc.)
 
-### Deprecated
-
-### Removed
+## [1.2.3] - 2025-05-30
 
 ### Fixed
+- Fixed `ModalParams` type to correctly extend `ModalDefinition[T]` with `closeModal`
+- Dependency updates for stability
 
 ## [1.2.2] - 2025-11-21
 
