@@ -1,6 +1,8 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { ModalProvider } from '..';
+import '../assets/style/main.css';
+import '../assets/style/example.css';
 import { App } from './app';
 import { AlertModal } from './modal/alert-modal';
 import { ConfirmModal } from './modal/confirm-modal';

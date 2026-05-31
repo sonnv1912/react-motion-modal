@@ -1,1 +1,113 @@
-@import "tailwindcss";
+:where(.react-motion-modal__root) {
+   position: fixed;
+   inset: 0;
+}
+
+:where(.react-motion-modal__backdrop) {
+   position: absolute;
+   inset: 0;
+   background-color: rgba(0, 0, 0, 0.4);
+}
+
+:where(.react-motion-modal__backdrop--custom) {
+   background-color: transparent;
+}
+
+:where(.react-motion-modal__body) {
+   position: absolute;
+   max-height: 100vh;
+   max-width: 100vw;
+   overflow: hidden;
+   padding: 20px;
+}
+
+:where(.react-motion-modal__content) {
+   width: 100%;
+   height: 100%;
+}
+
+:where(.react-motion-modal__body--top) {
+   top: 0;
+   left: 0;
+   right: 0;
+   width: 100%;
+}
+
+:where(.react-motion-modal__body--top-left) {
+   top: 0;
+   left: 0;
+   right: 50%;
+   bottom: 50%;
+}
+
+:where(.react-motion-modal__body--top-right) {
+   top: 0;
+   right: 0;
+   left: 50%;
+   bottom: 50%;
+}
+
+:where(.react-motion-modal__body--top-center) {
+   top: 0;
+   left: 50%;
+   transform: translateX(-50%);
+   bottom: 50%;
+}
+
+:where(.react-motion-modal__body--bottom) {
+   right: 0;
+   bottom: 0;
+   left: 0;
+   width: 100%;
+}
+
+:where(.react-motion-modal__body--bottom-left) {
+   bottom: 0;
+   left: 0;
+   right: 50%;
+   top: 50%;
+}
+
+:where(.react-motion-modal__body--bottom-right) {
+   right: 0;
+   bottom: 0;
+   left: 50%;
+   top: 50%;
+}
+
+:where(.react-motion-modal__body--bottom-center) {
+   bottom: 0;
+   left: 50%;
+   transform: translateX(-50%);
+   top: 50%;
+}
+
+:where(.react-motion-modal__body--left) {
+   top: 0;
+   bottom: 0;
+   left: 0;
+   right: 50%
+}
+
+:where(.react-motion-modal__body--right) {
+   top: 0;
+   right: 0;
+   bottom: 0;
+   left: 50%;
+}
+
+:where(.react-motion-modal__body--center) {
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   bottom: 0;
+}
+
+:where(.react-motion-modal__body--center-full) {
+   top: 0;
+   right: 0;
+   bottom: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+}

@@ -2,10 +2,8 @@
 
 import path, { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
-import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js';
 import dts from 'vite-plugin-dts';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -21,13 +19,11 @@ export default defineConfig({
    },
    plugins: [
       react(),
-      cssInjectedByJsPlugin(),
       dts({
          include: ['src'],
          tsconfigPath: './tsconfig.app.json',
          rollupTypes: true,
       }),
-      tailwindcss(),
    ],
    build: {
       lib: {

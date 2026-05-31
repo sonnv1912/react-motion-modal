@@ -1,16 +1,13 @@
-import clsx from 'clsx';
 import type { ModalParams } from '#types/modal.type';
 
 export const ConfirmModal = ({ closeModal }: ModalParams<'ConfirmModal'>) => {
-   const className = 'text-white px-4 py-2 rounded-md cursor-pointe';
-
    return (
-      <div className='bg-white p-4 rounded-xl'>
-         <p className='text-xl font-semibold mb-4 text-blue-500'>
+      <div className='example-modal'>
+         <p className='example-modal-title example-modal-title--confirm'>
             Did you confirm ?
          </p>
 
-         <p className='break-all'>
+         <p className='example-modal-text'>
             Autem sed ut veniam et. Et maxime sed culpa molestiae. Nisi et rerum
             incidunt unde ea iure. Reiciendis odio unde inventore quia ullam
             voluptatem sit exercitationem. Et odit commodi earum rem temporibus
@@ -22,20 +19,22 @@ export const ConfirmModal = ({ closeModal }: ModalParams<'ConfirmModal'>) => {
             autem. Fuga ab aut cum sit distinctio eos.
          </p>
 
-         <div className='flex items-center justify-end gap-2 mt-4 '>
-            <div
-               className={clsx('bg-gray-500 hover:bg-gray-600', className)}
+         <div className='example-modal-actions'>
+            <button
+               type='button'
+               className='example-modal-button example-modal-button--gray'
                onClick={() => closeModal()}
             >
-               <p>OK</p>
-            </div>
+               OK
+            </button>
 
-            <div
-               className={clsx('bg-blue-400 hover:bg-blue-600', className)}
+            <button
+               type='button'
+               className='example-modal-button example-modal-button--primary'
                onClick={() => closeModal()}
             >
-               <p>Cancel</p>
-            </div>
+               Cancel
+            </button>
          </div>
       </div>
    );
