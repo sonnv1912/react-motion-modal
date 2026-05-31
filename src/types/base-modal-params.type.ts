@@ -1,4 +1,5 @@
 import type { TargetAndTransition } from 'motion';
+import type { CSSProperties } from 'react';
 
 /**
  * Base parameters available for all modals.
@@ -39,6 +40,12 @@ export type BaseModalParams = {
        * Useful for custom styling or responsive behavior.
        */
       className?: string;
+
+      /**
+       * Inline styles to merge after the default backdrop styles.
+       * Useful when consumers need deterministic overrides without relying on global CSS order.
+       */
+      style?: CSSProperties;
    };
 
    /**
@@ -51,6 +58,12 @@ export type BaseModalParams = {
        * Useful for custom styling, sizing, or positioning of modal content.
        */
       className?: string;
+
+      /**
+       * Inline styles to merge after the default body styles.
+       * Useful for overriding default padding, sizing, or positioning.
+       */
+      style?: CSSProperties;
    };
 
    /**
@@ -143,15 +156,18 @@ export type BaseModalParams = {
     * import { MODAL_POSITIONS } from 'react-motion-modal';
     *
     * // Available positions
+    * MODAL_POSITIONS.TOP          // 'top' full width at the top
     * MODAL_POSITIONS.TOP_LEFT     // 'top-left'
-    * MODAL_POSITIONS.TOP_CENTER   // 'top-center'
     * MODAL_POSITIONS.TOP_RIGHT    // 'top-right'
-    * MODAL_POSITIONS.CENTER_LEFT  // 'center-left'
+    * MODAL_POSITIONS.TOP_CENTER   // 'top-center'
+    * MODAL_POSITIONS.LEFT         // 'left' full height at the left
+    * MODAL_POSITIONS.RIGHT        // 'right' full height at the right
     * MODAL_POSITIONS.CENTER       // 'center' (default)
-    * MODAL_POSITIONS.CENTER_RIGHT // 'center-right'
+    * MODAL_POSITIONS.CENTER_FULL  // 'center-full'
+    * MODAL_POSITIONS.BOTTOM       // 'bottom' full width at the bottom
     * MODAL_POSITIONS.BOTTOM_LEFT  // 'bottom-left'
-    * MODAL_POSITIONS.BOTTOM_CENTER// 'bottom-center'
     * MODAL_POSITIONS.BOTTOM_RIGHT // 'bottom-right'
+    * MODAL_POSITIONS.BOTTOM_CENTER// 'bottom-center'
     * ```
     */
    position?: string;
