@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.6] - 2026-05-31
+
+### Changed
+- Removed Tailwind CSS and the Tailwind Vite plugin from package dependencies.
+- Replaced the example app Tailwind utilities with plain CSS classes.
+- Moved modal default layout to `main.css` with zero-specificity selectors so consumer classes can override defaults without `!important`.
+- Added modal positions: `top`, `top-left`, `top-right`, `top-center`, `left`, `right`, `bottom`, `bottom-left`, `bottom-right`, `bottom-center`, `center`, and `center-full`.
+- Added default position-aware body animations for edge and corner placements.
+
+## [1.2.5] - 2026-05-30
+
+### Fixed
+- Removed Tailwind CSS injection from the distributed library build.
+- Moved Tailwind CSS import to the example app only.
+- Replaced internal modal layout Tailwind classes with inline styles to avoid overriding consumer app utilities.
+
 ## [1.2.4] - 2025-05-30
 
 ### Changed
