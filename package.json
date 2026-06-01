@@ -7,10 +7,11 @@
    "module": "./dist/index.js",
    "types": "./dist/index.d.ts",
    "author": "Ngô Văn Sơn",
+   "homepage": "https://github.com/sonnv1912/react-motion-modal",
+   "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610",
    "files": [
       "dist"
    ],
-   "homepage": "https://github.com/sonnv1912/react-motion-modal",
    "keywords": [
       "react",
       "modal",
@@ -29,7 +30,8 @@
       "node": ">=18.0.0"
    },
    "publishConfig": {
-      "access": "public"
+      "access": "public",
+      "registry": "https://registry.npmjs.org/"
    },
    "exports": {
       ".": {
@@ -81,6 +83,5 @@
       "react": ">=18.0.0",
       "react-dom": ">=18.0.0",
       "zustand": ">=5.0.0"
-   },
-   "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
+   }
 }
