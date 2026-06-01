@@ -31,6 +31,8 @@ or with yarn:
 yarn add react-motion-modal motion zustand
 ```
 
+`react` and `react-dom` are expected to already exist in your app.
+
 ## 🚀 Usage
 
 ### 1. Import styles
@@ -86,9 +88,9 @@ export const App = () => {
 ### 4. Open modal anywhere
 
 ```tsx
-import { MODAL_POSITIONS, useModal } from 'react-motion-modal';
+import { MODAL_POSITIONS, modalStore } from 'react-motion-modal';
 
-const { openModal } = useModal();
+const { openModal } = modalStore();
 
 openModal('ConfirmModal', {
    title: 'Are you sure you want to delete?',

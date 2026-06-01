@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Renamed store and provider entrypoints to `src/stores/modal.ts` and `src/providers/modal.tsx`, and updated public exports accordingly.
+- Renamed type files to shorter names such as `base-modal-params.ts`, `modal-components.ts`, and `modal-state.ts`.
+- Removed the bundled example app source from `src/example` and the unused example stylesheet from the package source.
+- Extracted modal class-name and body animation helpers into `src/utils`, and moved modal animation constants and z-index constants into `src/configs/constant.ts`.
+- Replaced `uuid`, `keyboardjs`, and `clsx` usage with built-in JavaScript and DOM APIs, removing those packages from runtime dependencies.
+- Updated the README install note and examples to reflect the current `modalStore` API and peer dependency expectations.
+
 ## [1.2.8] - 2026-06-01
 
 ### Added
