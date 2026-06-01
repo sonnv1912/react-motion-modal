@@ -1,0 +1,91 @@
+---
+sidebar_position: 2
+---
+
+# Getting Started
+
+## Import the stylesheet
+
+Import the package CSS once in your app entry:
+
+```ts
+import 'react-motion-modal/style.css';
+```
+
+## Define modal types
+
+Create a `modal.d.ts` file in your app and augment the exported `ModalDefinition` interface:
+
+```ts
+import type { ModalDefinition } from 'react-motion-modal';
+
+declare module 'react-motion-modal' {
+  interface ModalDefinition {
+    AlertModal: {
+      title: string;
+    };
+    ConfirmModal: {
+      title: string;
+      onConfirm: () => void;
+    };
+  }
+}
+```
+
+## Register modals
+
+```tsx
+import { ModalProvider } from 'react-motion-modal';
+
+export const App = () => {
+  return (
+    <>
+      <MainRoutes />
+      <ModalProvider
+        modals={{
+          AlertModal,
+          ConfirmModal,
+        }}
+        initialParams={{
+          closeOnPressEsc: true,
+        }}
+      />
+    </>
+  );
+};
+```
+
+## Open a modal
+
+```tsx
+import { MODAL_POSITIONS, modalStore } from 'react-motion-modal';
+
+const { openModal } = modalStore.getState();
+
+openModal('ConfirmModal', {
+  title: 'Delete this item?',
+  onConfirm: () => console.log('confirmed'),
+  position: MODAL_POSITIONS.RIGHT,
+});
+```
+
+## Close inside the component
+
+```tsx
+import type { ModalParams } from 'react-motion-modal';
+
+const ConfirmModal = ({ title, closeModal, onConfirm }: ModalParams<'ConfirmModal'>) => (
+  <div>
+    <h2>{title}</h2>
+    <button onClick={closeModal}>Cancel</button>
+    <button
+      onClick={() => {
+        onConfirm();
+        closeModal();
+      }}
+    >
+      Confirm
+    </button>
+  </div>
+);
+```

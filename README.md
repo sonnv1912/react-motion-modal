@@ -1,175 +1,159 @@
-# react-motion-modal
+# Turborepo starter
 
-[![npm version](https://img.shields.io/npm/v/react-motion-modal)](https://www.npmjs.com/package/react-motion-modal)
-[![npm downloads](https://img.shields.io/npm/dm/react-motion-modal)](https://www.npmjs.com/package/react-motion-modal)
-[![License](https://img.shields.io/npm/l/react-motion-modal)](https://github.com/sonnv1912/react-motion-modal/blob/main/LICENSE)
-[![Bundle size](https://img.shields.io/bundlephobia/minzip/react-motion-modal)](https://bundlephobia.com/package/react-motion-modal)
-[![TypeScript types](https://img.shields.io/npm/types/react-motion-modal)](https://www.npmjs.com/package/react-motion-modal)
-[![Node version](https://img.shields.io/node/v/react-motion-modal)](https://www.npmjs.com/package/react-motion-modal)
-[![GitHub issues](https://img.shields.io/github/issues/sonnv1912/react-motion-modal)](https://github.com/sonnv1912/react-motion-modal/issues)
-[![Socket](https://socket.dev/api/badge/npm/package/react-motion-modal)](https://socket.dev/npm/package/react-motion-modal)
+This Turborepo starter is maintained by the Turborepo core team.
 
-`react-motion-modal` is a flexible modal management library built with [Zustand](https://zustand-demo.pmnd.rs/) for state management and powered by [Framer Motion](https://www.framer.com/motion/) for beautiful animations. It offers full TypeScript type-safety and allows dynamic modal opening with custom parameters.
+## Using this example
 
-## ✨ Features
+Run the following command:
 
-- Stack-based modal management (multiple modals at once)
-- Type-safe parameters per modal
-- Auto-injection of `closeModal()` into each modal props
-- Full intellisense for modal names and parameters
-- Easily extensible via module augmentation
-
-## 🧱 Installation
-
-```bash
-npm install react-motion-modal motion zustand
+```sh
+npx create-turbo@latest
 ```
 
-or with yarn:
+## What's inside?
 
-```bash
-yarn add react-motion-modal motion zustand
+This Turborepo includes the following packages/apps:
+
+### Apps and Packages
+
+- `docs`: a [Next.js](https://nextjs.org/) app
+- `web`: another [Next.js](https://nextjs.org/) app
+- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
+- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
+- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+
+Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+
+### Utilities
+
+This Turborepo has some additional tools already setup for you:
+
+- [TypeScript](https://www.typescriptlang.org/) for static type checking
+- [ESLint](https://eslint.org/) for code linting
+- [Prettier](https://prettier.io) for code formatting
+
+### Build
+
+To build all apps and packages, run the following command:
+
+With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
+
+```sh
+cd my-turborepo
+turbo build
 ```
 
-`react` and `react-dom` are expected to already exist in your app.
+Without global `turbo`, use your package manager:
 
-## 🚀 Usage
-
-### 1. Import styles
-
-Import the package stylesheet once in your app entry:
-
-```ts
-import 'react-motion-modal/style.css';
+```sh
+cd my-turborepo
+npx turbo build
+yarn dlx turbo build
+yarn exec turbo build
 ```
 
-### 2. Define modal types
+You can build a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
 
-Create a `modal.d.ts` file in your project (make sure to include it in tsconfig.json):
+With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
 
-```ts
-import type { ModalDefinition } from 'react-motion-modal';
-
-declare module 'react-motion-modal' {
-  interface ModalDefinition {
-    AlertModal: {
-        title: string;
-    };
-    ConfirmModal: {
-        onConfirm: () => void;
-    };
-  }
-}
+```sh
+turbo build --filter=docs
 ```
 
-### 3. Import <ModalProvider />
+Without global `turbo`:
 
-Import <ModalProvider /> to define your modals
-
-```ts
-import { ModalProvider } from 'react-motion-modal';
-
-export const App = () => {
-   return (
-      <div>
-         {/* rest of your app */}
-
-         <ModalProvider
-            modals={{
-               AlertModal,
-               ConfirmModal,
-            }}
-         />
-      </div>
-   );
-};
+```sh
+npx turbo build --filter=docs
+yarn exec turbo build --filter=docs
+yarn exec turbo build --filter=docs
 ```
 
-### 4. Open modal anywhere
+### Develop
 
-```tsx
-import { MODAL_POSITIONS, modalStore } from 'react-motion-modal';
+To develop all apps and packages, run the following command:
 
-const { openModal } = modalStore();
+With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
 
-openModal('ConfirmModal', {
-   title: 'Are you sure you want to delete?',
-   position: MODAL_POSITIONS.RIGHT,
-   closeOnClickOutside: true,
-});
+```sh
+cd my-turborepo
+turbo dev
 ```
 
-### 5. Use `closeModal` inside your modal component
+Without global `turbo`, use your package manager:
 
-```tsx
-import type { ModalParams } from 'react-motion-modal';
-
-const ConfirmModal = ({ title, closeModal }: ModalParams<'ConfirmModal'>) => (
-   <div>
-      <h1>{title}</h1>
-      <button onClick={closeModal}>Close</button>
-   </div>
-);
+```sh
+cd my-turborepo
+npx turbo dev
+yarn exec turbo dev
+yarn exec turbo dev
 ```
 
-## 🧩 API
+You can develop a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
 
-### `openModal(name, params)`
+With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
 
-Opens a modal by name. The `params` will be inferred based on modal type.
-
-### `closeModal(name?)`
-
-- If `name` is provided, closes that specific modal.
-- If not, closes the most recent modal (top of the stack).
-
-### `BaseModalParams`
-
-Each modal automatically receives the following props:
-
-| Prop                  | Type                                                             | Description                                                                   |
-|-----------------------|------------------------------------------------------------------|-------------------------------------------------------------------------------|
-| `closeModal`          | `() => void`                                                     | Close function for the modal                                                  |
-| `onClose`             | `() => void`                                                     | Callback triggered when modal is closed                                       |
-| `closeOnClickOutside` | `boolean`                                                        | Close modal when clicking outside                                             |
-| `closeOnPressEsc`     | `boolean`                                                        | Close modal when Escape key is pressed                                        |
-| `position`            | `string`                                                         | Modal placement. Unknown values fall back to `center`.                         |
-| `backdrop`            | `{ className?: string; style?: CSSProperties; }`                 | Customize the backdrop layer                                                  |
-| `body`                | `{ className?: string; style?: CSSProperties; }`                 | Customize the modal body wrapper                                              |
-| `animate`             | `{ animate?: TargetAndTransition; exit?: TargetAndTransition; }` | Animation powered by Framer Motion. Custom animation disables defaults.        |
-| `blur`                | `boolean`                                                        | Apply backdrop blur                                                           |
-
-### `MODAL_POSITIONS`
-
-```ts
-MODAL_POSITIONS.TOP;
-MODAL_POSITIONS.TOP_LEFT;
-MODAL_POSITIONS.TOP_RIGHT;
-MODAL_POSITIONS.TOP_CENTER;
-MODAL_POSITIONS.LEFT;
-MODAL_POSITIONS.RIGHT;
-MODAL_POSITIONS.CENTER;
-MODAL_POSITIONS.CENTER_FULL;
-MODAL_POSITIONS.BOTTOM;
-MODAL_POSITIONS.BOTTOM_LEFT;
-MODAL_POSITIONS.BOTTOM_RIGHT;
-MODAL_POSITIONS.BOTTOM_CENTER;
+```sh
+turbo dev --filter=web
 ```
 
-Default body animation follows the position. For example, `left` slides in from the left, `right` slides in from the right, `top` slides down, and `bottom` slides up.
+Without global `turbo`:
 
-## 🔐 Release Security
+```sh
+npx turbo dev --filter=web
+yarn exec turbo dev --filter=web
+yarn exec turbo dev --filter=web
+```
 
-- CI runs from `.github/workflows/ci.yml` on pushes and pull requests.
-- npm publishing is defined in `.github/workflows/publish.yml` and uses `npm publish --provenance --access public`.
-- Trusted publishing still needs to be enabled in npm package settings for this repository before the workflow can publish official releases.
+### Remote Caching
 
-## 📝 Notes
+> [!TIP]
+> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
 
-- Zustand-based, framework-agnostic state management
-- Built-in animation system powered by [Framer Motion](https://www.framer.com/motion/)
-- You can implement a `ModalRenderer` to dynamically render modals from `modals` state
-- Great for complex apps requiring nested or dynamic modal stacks
+Turborepo can use a technique known as [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
 
----
-Made with ❤️ by react-motion-modal.
+By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
+
+With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
+
+```sh
+cd my-turborepo
+turbo login
+```
+
+Without global `turbo`, use your package manager:
+
+```sh
+cd my-turborepo
+npx turbo login
+yarn exec turbo login
+yarn exec turbo login
+```
+
+This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+
+Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+
+With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
+
+```sh
+turbo link
+```
+
+Without global `turbo`:
+
+```sh
+npx turbo link
+yarn exec turbo link
+yarn exec turbo link
+```
+
+## Useful Links
+
+Learn more about the power of Turborepo:
+
+- [Tasks](https://turborepo.dev/docs/crafting-your-repository/running-tasks)
+- [Caching](https://turborepo.dev/docs/crafting-your-repository/caching)
+- [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching)
+- [Filtering](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters)
+- [Configuration Options](https://turborepo.dev/docs/reference/configuration)
+- [CLI Usage](https://turborepo.dev/docs/reference/command-line-reference)

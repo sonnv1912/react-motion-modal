@@ -1,0 +1,57 @@
+---
+sidebar_position: 4
+---
+
+# ModalProvider
+
+`ModalProvider` is the renderer layer for the modal store.
+
+```tsx
+import { ModalProvider } from 'react-motion-modal';
+```
+
+## Props
+
+### `modals`
+
+Maps modal names to React components.
+
+```tsx
+<ModalProvider
+  modals={{
+    AlertModal,
+    ConfirmModal,
+  }}
+/>
+```
+
+### `initialParams`
+
+Default behavior shared by every modal unless a modal overrides it.
+
+Useful examples:
+
+```tsx
+<ModalProvider
+  modals={modals}
+  initialParams={{
+    closeOnPressEsc: true,
+    closeOnClickOutside: true,
+    blur: true,
+  }}
+/>
+```
+
+## Rendering behavior
+
+- renders into `document.body` with `createPortal`
+- keeps a stack of modals through `AnimatePresence`
+- closes the topmost modal on `Escape` when enabled
+
+## When to customize `initialParams`
+
+Use `initialParams` for app-wide defaults such as:
+
+- enabling backdrop blur everywhere
+- setting a shared exit animation
+- making outside click behavior consistent

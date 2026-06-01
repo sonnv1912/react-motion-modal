@@ -29,10 +29,11 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Build package
-        run: yarn build
+        run: yarn workspace react-motion-modal build
 
       - name: Update npm
         run: npm install -g npm@latest
 
       - name: Publish to npm with provenance
+        working-directory: apps/library
         run: npm publish

@@ -1,0 +1,56 @@
+---
+sidebar_position: 3
+---
+
+# Store API
+
+The main runtime entrypoint is `modalStore`.
+
+```ts
+import { modalStore } from 'react-motion-modal';
+```
+
+## `openModal(name, params)`
+
+Opens a modal by name and pushes it on top of the modal stack.
+
+```ts
+modalStore.getState().openModal('AlertModal', {
+  title: 'Saved',
+});
+```
+
+`params` are inferred from the modal name you pass.
+
+## `closeModal(name?)`
+
+Closes one modal:
+
+- with `name`: closes the first matching modal by name
+- without `name`: closes the topmost modal
+
+```ts
+modalStore.getState().closeModal();
+modalStore.getState().closeModal('AlertModal');
+```
+
+## `closeAllModal()`
+
+Removes every open modal and clears the active modal.
+
+```ts
+modalStore.getState().closeAllModal();
+```
+
+## Store state
+
+The store keeps:
+
+- `modals`: ordered stack of open modals
+- `active`: the current topmost modal
+
+Use it directly when you need read access in custom integrations:
+
+```ts
+const active = modalStore.getState().active;
+```

@@ -1,0 +1,32 @@
+---
+sidebar_position: 5
+---
+
+# Base Modal Params
+
+Every modal receives shared runtime props in addition to its own typed params.
+
+## Props
+
+| Prop | Type | Purpose |
+| --- | --- | --- |
+| `closeModal` | `() => void` | Closes the current modal |
+| `onClose` | `() => void` | Runs when the modal is closed |
+| `closeOnClickOutside` | `boolean` | Allows closing from backdrop click |
+| `closeOnPressEsc` | `boolean` | Allows closing from the Escape key |
+| `position` | `string` | Controls placement and default body animation |
+| `blur` | `boolean` | Applies backdrop blur |
+| `backdrop` | `{ className?: string; style?: CSSProperties }` | Backdrop class/style overrides |
+| `body` | `{ className?: string; style?: CSSProperties }` | Body wrapper class/style overrides |
+| `animate` | `{ animate?: TargetAndTransition; exit?: TargetAndTransition }` | Replaces default enter/exit animation |
+
+## Typing helpers
+
+Use these exported types when building modal components:
+
+```ts
+import type { ModalParams, Params } from 'react-motion-modal';
+```
+
+- `ModalParams<'SomeModal'>`: modal-specific params plus `closeModal`
+- `Params<'SomeModal'>`: modal-specific params plus the full base modal param set

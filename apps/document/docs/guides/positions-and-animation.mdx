@@ -1,0 +1,55 @@
+---
+sidebar_position: 6
+---
+
+# Positions And Animation
+
+The library ships with built-in modal placements through `MODAL_POSITIONS`.
+
+```ts
+import { MODAL_POSITIONS } from 'react-motion-modal';
+```
+
+## Available positions
+
+```ts
+MODAL_POSITIONS.TOP;
+MODAL_POSITIONS.TOP_LEFT;
+MODAL_POSITIONS.TOP_RIGHT;
+MODAL_POSITIONS.TOP_CENTER;
+MODAL_POSITIONS.LEFT;
+MODAL_POSITIONS.RIGHT;
+MODAL_POSITIONS.CENTER;
+MODAL_POSITIONS.CENTER_FULL;
+MODAL_POSITIONS.BOTTOM;
+MODAL_POSITIONS.BOTTOM_LEFT;
+MODAL_POSITIONS.BOTTOM_RIGHT;
+MODAL_POSITIONS.BOTTOM_CENTER;
+```
+
+## Default motion behavior
+
+When you do not pass a custom `animate` prop, body motion follows the selected position:
+
+- `LEFT` slides from the left
+- `RIGHT` slides from the right
+- `TOP` and `TOP_CENTER` slide from above
+- `BOTTOM` and `BOTTOM_CENTER` slide from below
+- corner positions slide diagonally
+- `CENTER` fades and scales in
+- `CENTER_FULL` fades in without the scale effect
+
+## Overriding animation
+
+Pass `animate` on `openModal` if you need a custom motion spec:
+
+```ts
+modalStore.getState().openModal('AlertModal', {
+  animate: {
+    animate: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: 24 },
+  },
+});
+```
+
+Passing `animate` disables the built-in body animation preset for that modal.

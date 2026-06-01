@@ -1,0 +1,33 @@
+---
+sidebar_position: 1
+sidebar_label: Introduction
+---
+
+# react-motion-modal
+
+`react-motion-modal` is a React modal management library built around a global modal store, type-safe modal parameters, and position-aware motion defaults.
+
+## What it gives you
+
+- Open modals from anywhere with `modalStore()`
+- Register modal components once with `ModalProvider`
+- Type-safe params through `ModalDefinition` module augmentation
+- Built-in positions such as `right`, `bottom`, `top-left`, and `center-full`
+- Default animations that follow modal placement
+
+## Installation
+
+```bash
+npm install react-motion-modal motion zustand
+```
+
+`react` and `react-dom` are expected to already exist in your app.
+
+## Core flow
+
+1. Define your modal names and params through `ModalDefinition`
+2. Mount `ModalProvider` once near the root
+3. Call `modalStore().openModal(...)` from anywhere
+4. Read `closeModal` inside the modal component props
+
+The next pages cover the actual API and integration details.

@@ -1,0 +1,43 @@
+---
+sidebar_position: 7
+---
+
+# Styling
+
+The package ships with default CSS for the modal root, backdrop, body wrapper, and content container.
+
+## Import the CSS once
+
+```ts
+import 'react-motion-modal/style.css';
+```
+
+## Override wrapper styles
+
+Use `backdrop` and `body` when opening a modal:
+
+```ts
+modalStore.getState().openModal('AlertModal', {
+  backdrop: {
+    className: 'bg-black/60',
+  },
+  body: {
+    className: 'max-w-lg p-6',
+  },
+});
+```
+
+## Why overrides are usually easy
+
+The default stylesheet is intentionally lightweight, and the runtime merges:
+
+- `backdrop.style` after default backdrop styles
+- `body.style` after default body styles
+
+That makes inline overrides deterministic when class ordering is not enough.
+
+## Recommended split
+
+- Put layout and container overrides in `body`
+- Put dimming and click-target appearance in `backdrop`
+- Put modal-specific visuals inside your actual modal component
