@@ -1,23 +1,113 @@
-/**
- * CSS files with the .module.css suffix will be treated as CSS modules
- * and scoped locally.
- */
-
 .heroBanner {
-  padding: 4rem 0;
-  text-align: center;
+  padding: 4.5rem 0 3.5rem;
   position: relative;
   overflow: hidden;
 }
 
-@media screen and (max-width: 996px) {
-  .heroBanner {
-    padding: 2rem;
-  }
+.heroContainer {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(260px, 0.8fr);
+  gap: 2rem;
+  align-items: center;
+}
+
+.heroTitle {
+  margin: 0;
+  font-size: clamp(2.75rem, 6vw, 3.5rem);
+  letter-spacing: 0;
+}
+
+.heroTitle span {
+  color: var(--ifm-color-primary-lightest);
+}
+
+.heroSubtitle {
+  margin: 1.25rem 0 0;
+  font-size: 1.125rem;
+  color: rgba(255, 255, 255, 0.78);
 }
 
 .buttons {
   display: flex;
+  flex-wrap: wrap;
+  gap: 0.875rem;
+  margin-top: 1.75rem;
+}
+
+.metaButton {
+  border-width: 1px;
+}
+
+.npmBadge {
+  display: inline-flex;
   align-items: center;
+  gap: 0.35rem;
+  height: 48px;
+  line-height: 0;
+}
+
+.npmBadge img {
+  display: block;
+  height: 30px;
+  width: auto;
+}
+
+.heroVisual {
+  display: flex;
   justify-content: center;
+  align-items: center;
+}
+
+.heroImage {
+  width: min(100%, 320px);
+  height: auto;
+  display: block;
+}
+
+.summaryBand {
+  border-top: 1px solid var(--ifm-toc-border-color);
+  border-bottom: 1px solid var(--ifm-toc-border-color);
+  background: var(--ifm-background-surface-color);
+}
+
+.summaryGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+.summaryItem {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.summaryLabel {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--ifm-color-primary);
+}
+
+@media screen and (max-width: 996px) {
+  .heroBanner {
+    padding: 3rem 0 2.5rem;
+  }
+
+  .heroContainer {
+    grid-template-columns: 1fr;
+    text-align: left;
+  }
+
+  .heroVisual {
+    order: -1;
+  }
+
+  .heroImage {
+    width: min(220px, 55vw);
+  }
+
+  .summaryGrid {
+    grid-template-columns: 1fr;
+  }
 }

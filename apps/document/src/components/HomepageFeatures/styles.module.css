@@ -1,11 +1,68 @@
 .features {
-  display: flex;
-  align-items: center;
-  padding: 2rem 0;
+  padding: 3rem 0 4rem;
   width: 100%;
 }
 
-.featureSvg {
-  height: 200px;
-  width: 200px;
+.grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.card {
+  border: 1px solid var(--ifm-toc-border-color);
+  border-radius: 8px;
+  padding: 1.25rem;
+  background:
+    radial-gradient(circle at 16px 18px, rgba(56, 175, 236, 0.18), transparent 34%),
+    linear-gradient(135deg, rgba(103, 124, 244, 0.14), transparent 42%),
+    var(--ifm-background-surface-color);
+}
+
+.title {
+  position: relative;
+  margin-bottom: 0.75rem;
+  padding-left: 0.85rem;
+  background: linear-gradient(90deg, #ffffff 0%, #b5bffb 48%, #38afec 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-size: 1.125rem;
+  font-weight: 800;
+  text-shadow: 0 0 22px rgba(103, 124, 244, 0.48);
+}
+
+.title::before {
+  position: absolute;
+  top: 0.2rem;
+  bottom: 0.2rem;
+  left: 0;
+  width: 3px;
+  border-radius: 999px;
+  background: var(--app-secondary);
+  box-shadow: 0 0 14px rgba(56, 175, 236, 0.72);
+  content: '';
+}
+
+.title::after {
+  display: inline-block;
+  width: 0.48rem;
+  height: 0.48rem;
+  margin-left: 0.55rem;
+  border-radius: 999px;
+  background: var(--app-orange);
+  box-shadow: 0 0 16px rgba(212, 125, 0, 0.88);
+  content: '';
+  vertical-align: 0.08rem;
+}
+
+.description {
+  margin: 0;
+  color: var(--ifm-color-emphasis-700);
+}
+
+@media screen and (max-width: 996px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
 }

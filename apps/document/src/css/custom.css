@@ -1,30 +1,289 @@
 /**
- * Any CSS included here will be global. The classic template
- * bundles Infima by default. Infima is a CSS framework designed to
- * work well for content-centric websites.
+ * Global documentation theme.
+ *
+ * The `--app-*` tokens mirror the product palette, then bridge into Infima's
+ * `--ifm-*` variables so Docusaurus components inherit the same theme.
  */
 
-/* You can override the default Infima variables here. */
 :root {
-  --ifm-color-primary: #2e8555;
-  --ifm-color-primary-dark: #29784c;
-  --ifm-color-primary-darker: #277148;
-  --ifm-color-primary-darkest: #205d3b;
-  --ifm-color-primary-light: #33925d;
-  --ifm-color-primary-lighter: #359962;
-  --ifm-color-primary-lightest: #3cad6e;
+  color-scheme: light;
+
+  --app-background: #f6f6f6;
+  --app-primary: #625df2;
+  --app-primary-hover: #514bd8;
+  --app-primary-active: #443fbd;
+  --app-secondary: #3269e5;
+  --app-red: #f16247;
+  --app-gray: #8b8b8b;
+  --app-fade: #61606066;
+  --app-green: #04ab00;
+  --app-orange: #ec9419;
+  --app-border-divider: #e1e1e1;
+  --app-box-primary: #fcfcfc;
+  --app-box-secondary: #efefef;
+  --app-box-muted: #dadada;
+  --app-text-normal: #2b3674;
+  --app-text-muted: #777a84;
+  --app-text-highlight: #ffffff;
+  --app-shadow-primary-30: 0 0 15px #7558f84d;
+  --app-shadow-primary-50: 0 0 15px #7558f880;
+  --app-shadow-primary-80: 0 0 15px #7558f8cc;
+
+  --ifm-color-primary: var(--app-primary);
+  --ifm-color-primary-dark: #514bd8;
+  --ifm-color-primary-darker: #443fbd;
+  --ifm-color-primary-darkest: #343094;
+  --ifm-color-primary-light: #7874f4;
+  --ifm-color-primary-lighter: #8d89f6;
+  --ifm-color-primary-lightest: #b7b4fb;
+
+  --ifm-background-color: var(--app-background);
+  --ifm-background-surface-color: var(--app-box-primary);
+  --ifm-font-color-base: var(--app-text-normal);
+  --ifm-font-color-secondary: var(--app-text-muted);
+  --ifm-heading-color: var(--app-text-normal);
+  --ifm-link-color: var(--app-primary);
+  --ifm-link-hover-color: var(--app-primary-hover);
+  --ifm-navbar-background-color: var(--app-box-primary);
+  --ifm-navbar-link-color: var(--app-text-normal);
+  --ifm-navbar-link-hover-color: var(--app-primary);
+  --ifm-menu-color: var(--app-text-normal);
+  --ifm-menu-color-active: var(--app-primary);
+  --ifm-menu-color-background-active: var(--app-box-secondary);
+  --ifm-toc-border-color: var(--app-border-divider);
+  --ifm-table-border-color: var(--app-border-divider);
+  --ifm-hr-border-color: var(--app-border-divider);
+  --ifm-code-background: var(--app-box-secondary);
+  --ifm-code-color: var(--app-primary);
   --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  --ifm-card-background-color: var(--app-box-primary);
+  --ifm-footer-background-color: #272738;
+  --ifm-footer-color: #d2d2d2;
+  --ifm-footer-link-color: #d2d2d2;
+  --ifm-footer-title-color: #ffffff;
+  --ifm-hero-background-color: var(--app-primary);
+  --ifm-hero-text-color: var(--app-text-highlight);
+  --ifm-button-border-radius: 8px;
+  --ifm-global-radius: 8px;
+  --docusaurus-highlighted-code-line-bg: rgba(98, 93, 242, 0.12);
 }
 
-/* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme='dark'] {
-  --ifm-color-primary: #25c2a0;
-  --ifm-color-primary-dark: #21af90;
-  --ifm-color-primary-darker: #1fa588;
-  --ifm-color-primary-darkest: #1a8870;
-  --ifm-color-primary-light: #29d5b0;
-  --ifm-color-primary-lighter: #32d8b4;
-  --ifm-color-primary-lightest: #4fddbf;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+  color-scheme: dark;
+
+  --app-background: #272738;
+  --app-primary: #677cf4;
+  --app-primary-hover: #7f91f6;
+  --app-primary-active: #9aa8f8;
+  --app-secondary: #38afec;
+  --app-red: #e36262;
+  --app-gray: #8a8f95;
+  --app-fade: #645d5d4d;
+  --app-green: #2eab5d;
+  --app-orange: #d47d00;
+  --app-border-divider: #494949;
+  --app-box-primary: #2f2f3e;
+  --app-box-secondary: #414150;
+  --app-box-muted: #3c3c4f;
+  --app-text-normal: #d2d2d2;
+  --app-text-muted: #9e9e9e;
+  --app-text-highlight: #ffffff;
+  --app-shadow-primary-30: 0 0 15px #5c6bc04d;
+  --app-shadow-primary-50: 0 0 15px #5c6bc080;
+  --app-shadow-primary-80: 0 0 15px #5c6bc0cc;
+
+  --ifm-color-primary: var(--app-primary);
+  --ifm-color-primary-dark: #5269f2;
+  --ifm-color-primary-darker: #465eef;
+  --ifm-color-primary-darkest: #263ed4;
+  --ifm-color-primary-light: #7c8ff6;
+  --ifm-color-primary-lighter: #8a9bf7;
+  --ifm-color-primary-lightest: #b5bffb;
+
+  --ifm-background-color: var(--app-background);
+  --ifm-background-surface-color: var(--app-box-primary);
+  --ifm-font-color-base: var(--app-text-normal);
+  --ifm-font-color-secondary: var(--app-text-muted);
+  --ifm-heading-color: var(--app-text-highlight);
+  --ifm-link-color: var(--app-secondary);
+  --ifm-link-hover-color: #67c3f1;
+  --ifm-navbar-background-color: var(--app-box-primary);
+  --ifm-navbar-link-color: var(--app-text-normal);
+  --ifm-navbar-link-hover-color: var(--app-secondary);
+  --ifm-menu-color: var(--app-text-normal);
+  --ifm-menu-color-active: var(--app-secondary);
+  --ifm-menu-color-background-active: var(--app-box-secondary);
+  --ifm-toc-border-color: var(--app-border-divider);
+  --ifm-table-border-color: var(--app-border-divider);
+  --ifm-hr-border-color: var(--app-border-divider);
+  --ifm-code-background: var(--app-box-muted);
+  --ifm-code-color: var(--app-secondary);
+  --ifm-card-background-color: var(--app-box-primary);
+  --ifm-footer-background-color: #20202d;
+  --ifm-footer-color: var(--app-text-normal);
+  --ifm-footer-link-color: var(--app-text-normal);
+  --ifm-footer-title-color: var(--app-text-highlight);
+  --ifm-hero-background-color: var(--app-background);
+  --ifm-hero-text-color: var(--app-text-highlight);
+  --docusaurus-highlighted-code-line-bg: rgba(56, 175, 236, 0.16);
+}
+
+html {
+  background: var(--app-background);
+}
+
+.navbar {
+  border-bottom: 1px solid var(--app-border-divider);
+  box-shadow: none;
+}
+
+.navbar__brand,
+.navbar__link {
+  color: var(--ifm-navbar-link-color);
+}
+
+.navbar__link--active,
+.navbar__link:hover {
+  color: var(--ifm-navbar-link-hover-color);
+}
+
+.navbarVersion {
+  margin-right: 0.25rem;
+  border: 1px solid rgba(103, 124, 244, 0.36);
+  border-radius: 999px;
+  padding: 0.2rem 0.55rem;
+  background: rgba(103, 124, 244, 0.14);
+  color: var(--ifm-color-primary-lightest);
+  font-size: 0.8rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.navbarVersion:hover {
+  border-color: rgba(56, 175, 236, 0.54);
+  background: rgba(56, 175, 236, 0.16);
+  color: #ffffff;
+}
+
+.hero.hero--primary {
+  --ifm-hero-background-color: #252b30;
+  --ifm-hero-text-color: var(--app-text-highlight);
+
+  background:
+    linear-gradient(135deg, rgba(98, 93, 242, 0.18), rgba(50, 105, 229, 0.08)),
+    #252b30;
+}
+
+[data-theme='dark'] .hero.hero--primary {
+  --ifm-hero-background-color: var(--app-background);
+
+  background:
+    linear-gradient(135deg, rgba(103, 124, 244, 0.16), rgba(56, 175, 236, 0.08)),
+    var(--app-background);
+}
+
+.footer {
+  background:
+    linear-gradient(135deg, rgba(98, 93, 242, 0.18), rgba(50, 105, 229, 0.08)),
+    #252b30;
+  color: var(--ifm-footer-color);
+}
+
+[data-theme='dark'] .footer {
+  background:
+    linear-gradient(135deg, rgba(103, 124, 244, 0.16), rgba(56, 175, 236, 0.08)),
+    var(--app-background);
+}
+
+.button {
+  border-radius: var(--ifm-button-border-radius);
+  font-weight: 700;
+}
+
+.button--primary {
+  --ifm-button-background-color: var(--app-primary);
+  --ifm-button-border-color: var(--app-primary);
+  --ifm-button-color: var(--app-text-highlight);
+
+  box-shadow: var(--app-shadow-primary-30);
+}
+
+.button--primary:hover {
+  --ifm-button-background-color: var(--app-primary-hover);
+  --ifm-button-border-color: var(--app-primary-hover);
+  --ifm-button-color: var(--app-text-highlight);
+}
+
+.button.button--secondary {
+  --ifm-button-background-color: var(--app-secondary);
+  --ifm-button-border-color: var(--app-secondary);
+  --ifm-button-color: var(--app-text-highlight);
+
+  color: var(--app-text-highlight);
+}
+
+.button.button--secondary:hover {
+  --ifm-button-background-color: var(--ifm-link-hover-color);
+  --ifm-button-border-color: var(--ifm-link-hover-color);
+  --ifm-button-color: var(--app-text-highlight);
+
+  color: var(--app-text-highlight);
+}
+
+.button--outline {
+  --ifm-button-background-color: transparent;
+  --ifm-button-border-color: currentColor;
+  --ifm-button-color: currentColor;
+}
+
+.card,
+.theme-doc-sidebar-container,
+.table-of-contents {
+  border-color: var(--app-border-divider);
+}
+
+.theme-code-block,
+pre,
+code {
+  border-radius: var(--ifm-global-radius);
+}
+
+.theme-doc-markdown h2 {
+  position: relative;
+  width: fit-content;
+  padding-left: 0.9rem;
+  background: linear-gradient(90deg, #ffffff 0%, #b5bffb 48%, #38afec 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 800;
+  text-shadow: 0 0 22px rgba(103, 124, 244, 0.48);
+}
+
+.theme-doc-markdown h2::before {
+  position: absolute;
+  top: 0.24rem;
+  bottom: 0.24rem;
+  left: 0;
+  width: 3px;
+  border-radius: 999px;
+  background: var(--app-secondary);
+  box-shadow: 0 0 14px rgba(56, 175, 236, 0.72);
+  content: '';
+}
+
+.theme-doc-markdown h2::after {
+  display: inline-block;
+  width: 0.48rem;
+  height: 0.48rem;
+  margin-left: 0.55rem;
+  border-radius: 999px;
+  background: var(--app-orange);
+  box-shadow: 0 0 16px rgba(212, 125, 0, 0.88);
+  content: '';
+  vertical-align: 0.08rem;
+}
+
+.footer__links{
+  margin-bottom: 2rem;
 }

@@ -3,6 +3,9 @@ sidebar_position: 1
 sidebar_label: Introduction
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # react-motion-modal
 
 `react-motion-modal` is a React modal management library built around a global modal store, type-safe modal parameters, and position-aware motion defaults.
@@ -17,11 +20,27 @@ sidebar_label: Introduction
 
 ## Installation
 
+<Tabs>
+  <TabItem value="npm" label="npm" default>
+
 ```bash
 npm install react-motion-modal motion zustand
 ```
 
+  </TabItem>
+  <TabItem value="yarn" label="Yarn">
+
+```bash
+yarn add react-motion-modal motion zustand
+```
+
+  </TabItem>
+</Tabs>
+
+:::warning
+Peer Dependencies
 `react` and `react-dom` are expected to already exist in your app.
+:::
 
 ## Core flow
 

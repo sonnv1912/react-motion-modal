@@ -1,8 +1,12 @@
 import type * as Preset from '@docusaurus/preset-classic';
 import type { Config } from '@docusaurus/types';
+import { createRequire } from 'node:module';
 import { themes as prismThemes } from 'prism-react-renderer';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
+
+const require = createRequire(import.meta.url);
+const libraryPackage = require('../library/package.json') as { version: string };
 
 const config: Config = {
    title: 'react-motion-modal',
@@ -53,15 +57,16 @@ const config: Config = {
    ],
 
    themeConfig: {
-      image: 'img/docusaurus-social-card.jpg',
       colorMode: {
-         respectPrefersColorScheme: true,
+         defaultMode: 'dark',
+         disableSwitch: true,
+         respectPrefersColorScheme: false,
       },
       navbar: {
          title: 'react-motion-modal',
          logo: {
             alt: 'react-motion-modal',
-            src: 'img/logo.svg',
+            src: 'img/logo.png',
          },
          items: [
             {
@@ -74,6 +79,12 @@ const config: Config = {
                to: '/docs/changelog',
                label: 'Changelog',
                position: 'left',
+            },
+            {
+               href: 'https://www.npmjs.com/package/react-motion-modal',
+               label: `v${libraryPackage.version}`,
+               position: 'right',
+               className: 'navbarVersion',
             },
             {
                href: 'https://github.com/sonnv1912/react-motion-modal',
