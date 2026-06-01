@@ -46,6 +46,7 @@
       "dev": "vite",
       "build": "tsc -b && vite build",
       "ci": "yarn build",
+      "check-types": "tsc -b --pretty false",
       "lint": "biome lint .",
       "format": "biome format --write .",
       "preview": "vite preview",
