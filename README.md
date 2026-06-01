@@ -6,7 +6,6 @@
 [![Bundle size](https://img.shields.io/bundlephobia/minzip/react-motion-modal)](https://bundlephobia.com/package/react-motion-modal)
 [![TypeScript types](https://img.shields.io/npm/types/react-motion-modal)](https://www.npmjs.com/package/react-motion-modal)
 [![Node version](https://img.shields.io/node/v/react-motion-modal)](https://www.npmjs.com/package/react-motion-modal)
-[![npm package size](https://img.shields.io/packagephobia/publish/react-motion-modal)](https://www.npmjs.com/package/react-motion-modal)
 [![GitHub issues](https://img.shields.io/github/issues/sonnv1912/react-motion-modal)](https://github.com/sonnv1912/react-motion-modal/issues)
 [![Socket](https://socket.dev/api/badge/npm/package/react-motion-modal)](https://socket.dev/npm/package/react-motion-modal)
 
