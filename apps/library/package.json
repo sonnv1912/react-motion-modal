@@ -49,9 +49,9 @@
       "lint": "biome lint .",
       "format": "biome format --write .",
       "preview": "vite preview",
-      "bump:patch": "npm version patch",
-      "bump:minor": "npm version minor",
-      "bump:major": "npm version major",
+      "bump:patch": "yarn version --patch --no-git-tag-version",
+      "bump:minor": "yarn version --minor --no-git-tag-version",
+      "bump:major": "yarn version --major --no-git-tag-version",
       "release:check": "yarn build && npm pack --dry-run"
    },
    "dependencies": {},
