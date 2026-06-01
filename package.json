@@ -31,12 +31,6 @@
    "publishConfig": {
       "access": "public"
    },
-   "peerDependencies": {
-      "motion": ">12.0.0",
-      "react": ">=18.0.0",
-      "react-dom": ">=18.0.0",
-      "zustand": ">=5.0.0"
-   },
    "exports": {
       ".": {
          "types": "./dist/index.d.ts",
@@ -49,11 +43,12 @@
    "scripts": {
       "dev": "vite",
       "build": "tsc -b && vite build",
+      "ci": "yarn build",
       "preview": "vite preview",
       "bump:patch": "npm version patch",
       "bump:minor": "npm version minor",
       "bump:major": "npm version major",
-      "deploy": "yarn build && npm publish --registry https://registry.npmjs.org/ --access public"
+      "release:check": "yarn build && npm pack --dry-run"
    },
    "dependencies": {
       "clsx": "^2.1.1",
@@ -80,6 +75,12 @@
       "vite-plugin-dts": "^4.5.4",
       "vitest": "^3.2.4",
       "zustand": "^5.0.7"
+   },
+   "peerDependencies": {
+      "motion": ">12.0.0",
+      "react": ">=18.0.0",
+      "react-dom": ">=18.0.0",
+      "zustand": ">=5.0.0"
    },
    "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
 }
