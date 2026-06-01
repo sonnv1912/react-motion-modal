@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
-import type { ModalDefinition } from '../hooks/store/use-modal';
-import type { BaseModalParams } from './base-modal-params.type';
+import type { ModalDefinition } from '../stores/modal';
+import type { BaseModalParams } from './base-modal-params';
 
 /**
  * Extracts the key type from the ModalDefinition interface.

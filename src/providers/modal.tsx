@@ -1,10 +1,9 @@
 import { Modal } from '@components/modal';
-import { useModal } from '@hooks/store/use-modal';
-import keyboard from 'keyboardjs';
+import { modalStore } from '@stores/modal';
 import { AnimatePresence } from 'motion/react';
 import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import type { BaseModalParams, ModalConfig } from '#types/modal.type';
+import type { BaseModalParams, ModalConfig } from '#types/modal';
 
 type Props = {
    modals: ModalConfig;
@@ -12,8 +11,8 @@ type Props = {
 };
 
 export const ModalProvider = ({ modals, initialParams }: Props) => {
-   const activeModals = useModal((state) => state.modals);
-   const closeModal = useModal((state) => state.closeModal);
+   const activeModals = modalStore((state) => state.modals);
+   const closeModal = modalStore((state) => state.closeModal);
    const rootRef = useRef<HTMLElement>(null);
 
    useEffect(() => {
@@ -27,13 +26,15 @@ export const ModalProvider = ({ modals, initialParams }: Props) => {
          return;
       }
 
-      const event = () => {
-         closeModal();
+      const onKeyDown = (event: KeyboardEvent) => {
+         if (event.key === 'Escape') {
+            closeModal();
+         }
       };
 
-      keyboard.bind(['escape'], event);
+      window.addEventListener('keydown', onKeyDown);
 
-      return () => keyboard.unbind(['escape'], event);
+      return () => window.removeEventListener('keydown', onKeyDown);
    }, [activeModals, closeModal, initialParams?.closeOnPressEsc]);
 
    return (

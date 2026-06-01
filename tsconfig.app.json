@@ -24,9 +24,10 @@
       "noUncheckedSideEffectImports": true,
 
       "paths": {
-         "@hooks/*": ["./src/hooks/*"],
+         "@stores/*": ["./src/stores/*"],
          "@components/*": ["./src/components/*"],
          "@configs/*": ["./src/configs/*"],
+         "@utils/*": ["./src/utils/*"],
          "#types/*": ["./src/types/*"]
       }
    },

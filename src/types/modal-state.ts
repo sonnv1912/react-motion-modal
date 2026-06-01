@@ -1,4 +1,4 @@
-import type { ModalName, Params } from './modal-components.type';
+import type { ModalName, Params } from './modal-components';
 
 /**
  * Represents a currently active (opened) modal instance.

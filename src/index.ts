@@ -1,9 +1,10 @@
-import type { ModalParams } from '#types/modal.type';
 import './assets/style/main.css';
-import type { ModalDefinition } from './hooks/store/use-modal';
+
+import type { ModalParams } from '#types/modal';
+import type { ModalDefinition } from './stores/modal';
 
 export * from './configs/constant';
-export * from './hooks/store/use-modal';
-export * from './providers/modal-provider';
+export * from './providers/modal';
+export * from './stores/modal';
 
 export type { ModalParams, ModalDefinition };
