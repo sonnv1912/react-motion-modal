@@ -20,7 +20,7 @@
    ],
    "repository": {
       "type": "git",
-      "url": "https://github.com/sonnv1912/react-motion-modal"
+      "url": "git+https://github.com/sonnv1912/react-motion-modal.git"
    },
    "bugs": {
       "url": "https://github.com/sonnv1912/react-motion-modal/issues"
