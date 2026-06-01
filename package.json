@@ -52,14 +52,9 @@
       "bump:major": "npm version major",
       "release:check": "yarn build && npm pack --dry-run"
    },
-   "dependencies": {
-      "clsx": "^2.1.1",
-      "keyboardjs": "^2.7.0",
-      "uuid": "^11.1.0"
-   },
+   "dependencies": {},
    "devDependencies": {
       "@biomejs/biome": "2.2.0",
-      "@types/keyboardjs": "^2.5.3",
       "@types/node": "^24.0.12",
       "@types/react": "^19.1.8",
       "@types/react-dom": "^19.1.6",
