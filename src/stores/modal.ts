@@ -6,6 +6,9 @@ import type {
    ModalState,
 } from '#types/modal';
 
+// biome-ignore lint/suspicious/noEmptyInterface: false
+export interface ModalDefinition {}
+
 const createModalId = () => {
    return `modal-${Date.now()}-${Math.random().toString(36).slice(2)}`;
 };

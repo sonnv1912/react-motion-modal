@@ -17,11 +17,12 @@ export const ModalProvider = ({ modals, initialParams }: Props) => {
 
    useEffect(() => {
       rootRef.current = document.body;
+      const lastModalParams = activeModals[activeModals.length - 1]
+         ?.params as BaseModalParams | undefined;
 
       if (
          activeModals?.length === 0 ||
-         (!activeModals[activeModals.length - 1].params?.closeOnPressEsc &&
-            !initialParams?.closeOnPressEsc)
+         (!lastModalParams?.closeOnPressEsc && !initialParams?.closeOnPressEsc)
       ) {
          return;
       }

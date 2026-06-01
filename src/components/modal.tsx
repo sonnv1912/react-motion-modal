@@ -6,7 +6,12 @@ import {
    getModalBodyPositionClassName,
 } from '@utils/modal';
 import { motion } from 'motion/react';
-import type { ActiveModal, BaseModalParams, ModalConfig } from '#types/modal';
+import type {
+   ActiveModal,
+   BaseModalParams,
+   ModalComponent,
+   ModalConfig,
+} from '#types/modal';
 
 type Props = {
    data: ActiveModal;
@@ -16,7 +21,7 @@ type Props = {
 };
 
 export const Modal = ({ data, modals, index, initialParams }: Props) => {
-   const Body = modals[data.name];
+   const Body = modals[data.name] as ModalComponent<any>;
    const params = data.params ?? initialParams;
    const animate = params?.animate ?? initialParams?.animate;
    const blur = params?.blur ?? initialParams?.blur ?? true;
