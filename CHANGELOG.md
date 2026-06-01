@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.8] - 2026-06-01
+
+### Added
+- Added GitHub Actions workflows for CI and npm publishing with provenance.
+- Added a `SECURITY.md` policy and an MIT `LICENSE` file to document release and security expectations.
+- Added `release:check` and `ci` scripts to validate release artifacts and CI builds consistently.
+- Added npm, bundle, type, issue, and Socket badges to the README.
+
+### Changed
+- Documented the trusted publishing release flow in the README.
+- Replaced the manual local publish script with a CI-oriented release verification script.
+
 ## [1.2.6] - 2026-05-31
 
 ### Changed

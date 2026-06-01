@@ -1,5 +1,15 @@
 # react-motion-modal
 
+[![npm version](https://img.shields.io/npm/v/react-motion-modal)](https://www.npmjs.com/package/react-motion-modal)
+[![npm downloads](https://img.shields.io/npm/dm/react-motion-modal)](https://www.npmjs.com/package/react-motion-modal)
+[![License](https://img.shields.io/npm/l/react-motion-modal)](https://github.com/sonnv1912/react-motion-modal/blob/main/LICENSE)
+[![Bundle size](https://img.shields.io/bundlephobia/minzip/react-motion-modal)](https://bundlephobia.com/package/react-motion-modal)
+[![TypeScript types](https://img.shields.io/npm/types/react-motion-modal)](https://www.npmjs.com/package/react-motion-modal)
+[![Node version](https://img.shields.io/node/v/react-motion-modal)](https://www.npmjs.com/package/react-motion-modal)
+[![npm package size](https://img.shields.io/packagephobia/publish/react-motion-modal)](https://www.npmjs.com/package/react-motion-modal)
+[![GitHub issues](https://img.shields.io/github/issues/sonnv1912/react-motion-modal)](https://github.com/sonnv1912/react-motion-modal/issues)
+[![Socket](https://socket.dev/api/badge/npm/package/react-motion-modal)](https://socket.dev/npm/package/react-motion-modal)
+
 `react-motion-modal` is a flexible modal management library built with [Zustand](https://zustand-demo.pmnd.rs/) for state management and powered by [Framer Motion](https://www.framer.com/motion/) for beautiful animations. It offers full TypeScript type-safety and allows dynamic modal opening with custom parameters.
 
 ## ✨ Features
@@ -146,6 +156,12 @@ MODAL_POSITIONS.BOTTOM_CENTER;
 ```
 
 Default body animation follows the position. For example, `left` slides in from the left, `right` slides in from the right, `top` slides down, and `bottom` slides up.
+
+## 🔐 Release Security
+
+- CI runs from `.github/workflows/ci.yml` on pushes and pull requests.
+- npm publishing is defined in `.github/workflows/publish.yml` and uses `npm publish --provenance --access public`.
+- Trusted publishing still needs to be enabled in npm package settings for this repository before the workflow can publish official releases.
 
 ## 📝 Notes
 
