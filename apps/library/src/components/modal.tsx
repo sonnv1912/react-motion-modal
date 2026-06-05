@@ -33,7 +33,7 @@ export const Modal = ({ data, modals, index, initialParams }: Props) => {
       params?.position ?? initialParams?.position ?? MODAL_POSITIONS.CENTER;
 
    const closeOnClickOutside =
-      params?.closeOnClickOutside ?? initialParams?.closeOnClickOutside;
+      params?.closeOnClickOutside ?? initialParams?.closeOnClickOutside ?? true;
 
    const bodyAnimation = animate ? undefined : getModalBodyAnimation(position);
    const active = modalStore((state) => state.active);
