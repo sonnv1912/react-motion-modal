@@ -260,6 +260,14 @@ code {
   text-shadow: 0 0 22px rgba(103, 124, 244, 0.48);
 }
 
+.theme-doc-markdown h2 code {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: transparent;
+  font: inherit;
+}
+
 .theme-doc-markdown h2::before {
   position: absolute;
   top: 0.24rem;
