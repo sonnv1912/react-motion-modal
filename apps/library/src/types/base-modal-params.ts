@@ -175,7 +175,7 @@ export type BaseModalParams = {
    /**
     * Enables backdrop blur effect when modal is open.
     * When set to true, the background content will be blurred.
-    * @default false
+    * @default true
     */
    blur?: boolean;
 };

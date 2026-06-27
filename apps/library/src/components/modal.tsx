@@ -25,7 +25,6 @@ export const Modal = ({ data, modals, index, initialParams }: Props) => {
    const params = data.params ?? initialParams;
    const animate = params?.animate ?? initialParams?.animate;
    const blur = params?.blur ?? initialParams?.blur ?? true;
-   const onClose = params?.onClose ?? initialParams?.onClose;
    const backdrop = params?.backdrop ?? initialParams?.backdrop;
    const body = params?.body ?? initialParams?.body;
 
@@ -39,6 +38,9 @@ export const Modal = ({ data, modals, index, initialParams }: Props) => {
    const active = modalStore((state) => state.active);
    const closeModal = modalStore((state) => state.closeModal);
 
+   // `onClose` is invoked by the store's `closeModal` action (the single
+   // source of truth), so it must NOT be called again here — otherwise it
+   // fires twice when the user clicks outside the modal.
    return (
       <motion.div
          className='react-motion-modal__root'
@@ -66,13 +68,15 @@ export const Modal = ({ data, modals, index, initialParams }: Props) => {
             onClick={() => {
                if (closeOnClickOutside) {
                   closeModal();
-
-                  onClose?.();
                }
             }}
          />
 
          <div
+            role='dialog'
+            aria-modal='true'
+            tabIndex={-1}
+            data-modal-id={data.id}
             className={joinClassName(
                'react-motion-modal__body',
                getModalBodyPositionClassName(position),

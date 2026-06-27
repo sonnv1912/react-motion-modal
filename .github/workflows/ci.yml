@@ -25,11 +25,18 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Check types
-        run: yarn check-types
+      - name: Lint
+        run: yarn lint
 
-      - name: Build workspaces
-        run: yarn build
+      - name: Check types
+        run: yarn workspace react-motion-modal check-types
+
+      - name: Build library
+        run: yarn workspace react-motion-modal build
+
+      - name: Run tests
+        working-directory: apps/library
+        run: yarn test
 
       - name: Verify publish contents
         working-directory: apps/library

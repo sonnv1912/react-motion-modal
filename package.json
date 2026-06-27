@@ -2,16 +2,20 @@
    "name": "react-motion-modal-monorepo",
    "private": true,
    "scripts": {
-      "build": "turbo run build",
       "dev": "turbo run dev",
       "dev:document": "yarn workspace document dev",
-      "check-types": "turbo run check-types",
-      "lint": "turbo run lint",
+      "dev:example": "yarn workspace example dev",
+      "prepare": "husky",
       "format": "biome format --write .",
-      "lint:root": "biome lint ."
+      "lint": "biome lint ."
+   },
+   "lint-staged": {
+      "*.{ts,tsx,json}": "biome check --write --no-errors-on-unmatched"
    },
    "devDependencies": {
       "@biomejs/biome": "2.2.0",
+      "husky": "^9.1.7",
+      "lint-staged": "^15",
       "turbo": "^2.9.16",
       "typescript": "5.9.2"
    },

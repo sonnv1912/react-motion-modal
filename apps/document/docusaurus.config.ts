@@ -1,12 +1,14 @@
+import { createRequire } from 'node:module';
 import type * as Preset from '@docusaurus/preset-classic';
 import type { Config } from '@docusaurus/types';
-import { createRequire } from 'node:module';
 import { themes as prismThemes } from 'prism-react-renderer';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const require = createRequire(import.meta.url);
-const libraryPackage = require('../library/package.json') as { version: string };
+const libraryPackage = require('../library/package.json') as {
+   version: string;
+};
 
 const config: Config = {
    title: 'react-motion-modal',

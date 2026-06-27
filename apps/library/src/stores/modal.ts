@@ -58,13 +58,14 @@ export const modalStore = create<ModalState & ModalAction>((set, get) => ({
       if (foundIndex > -1) {
          params?.onClose?.();
 
-         const active = modals?.[foundIndex - 1];
-
          modals.splice(foundIndex, 1);
 
+         // The active modal is always the topmost remaining one. Splicing a
+         // non-top modal (close by name) must not leave `active` pointing at
+         // the modal below the one we removed, or at undefined.
          set({
             modals,
-            active,
+            active: modals[modals.length - 1],
          });
       }
    },

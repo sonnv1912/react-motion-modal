@@ -7,8 +7,6 @@
       "dev": "docusaurus start",
       "start": "docusaurus start",
       "build": "docusaurus build",
-      "lint": "biome lint .",
-      "format": "biome format --write .",
       "swizzle": "docusaurus swizzle",
       "deploy": "docusaurus deploy",
       "clear": "docusaurus clear",

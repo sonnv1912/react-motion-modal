@@ -35,12 +35,24 @@ export default defineConfig({
       },
       minify: true,
       rollupOptions: {
-         external: ['react', 'react/jsx-runtime', 'react-dom'],
+         // Peer dependencies must stay external so consumers share a single
+         // instance and the published bundle stays small.
+         external: [
+            'react',
+            'react/jsx-runtime',
+            'react-dom',
+            /^motion(\/.*)?$/,
+            /^zustand(\/.*)?$/,
+         ],
          output: {
             globals: {
                react: 'React',
             },
          },
       },
+   },
+   test: {
+      environment: 'node',
+      include: ['src/**/*.{test,spec}.{ts,tsx}'],
    },
 });

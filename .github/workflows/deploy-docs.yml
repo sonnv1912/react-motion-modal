@@ -4,6 +4,12 @@ on:
   push:
     branches:
       - main
+    tags:
+      - "v*"
+    paths:
+      # Only rebuild the docs site when its content changes (e.g. the
+      # changelog). Tag pushes trigger regardless of paths.
+      - "apps/document/**"
   workflow_dispatch:
 
 permissions:

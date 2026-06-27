@@ -1,0 +1,27 @@
+{
+   "compilerOptions": {
+      "target": "ES2022",
+      "useDefineForClassFields": true,
+      "lib": ["ES2022", "DOM", "DOM.Iterable"],
+      "module": "ESNext",
+      "skipLibCheck": true,
+      "moduleResolution": "bundler",
+      "allowImportingTsExtensions": true,
+      "verbatimModuleSyntax": true,
+      "moduleDetection": "force",
+      "noEmit": true,
+      "jsx": "react-jsx",
+      "strict": true,
+      "noUnusedLocals": true,
+      "noUnusedParameters": true,
+      "paths": {
+         "react-motion-modal": ["../library/src/index.ts"],
+         "@stores/*": ["../library/src/stores/*"],
+         "@components/*": ["../library/src/components/*"],
+         "@configs/*": ["../library/src/configs/*"],
+         "@utils/*": ["../library/src/utils/*"],
+         "#types/*": ["../library/src/types/*"]
+      }
+   },
+   "include": ["src"]
+}
