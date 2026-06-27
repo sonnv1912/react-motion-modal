@@ -4,11 +4,10 @@ on:
   push:
     branches:
       - main
-    tags:
-      - "v*"
     paths:
-      # Only rebuild the docs site when its content changes (e.g. the
-      # changelog). Tag pushes trigger regardless of paths.
+      # Rebuild the docs site when its content changes (e.g. the changelog).
+      # Note: the github-pages environment blocks tag-based deployments, so we
+      # rely on the changelog/docs commit landing on main (and manual dispatch).
       - "apps/document/**"
   workflow_dispatch:
 
