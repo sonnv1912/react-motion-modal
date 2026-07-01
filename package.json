@@ -13,7 +13,7 @@
       "*.{ts,tsx,json}": "biome check --write --no-errors-on-unmatched"
    },
    "devDependencies": {
-      "@biomejs/biome": "2.2.0",
+      "@biomejs/biome": "2.5.1",
       "husky": "^9.1.7",
       "lint-staged": "^15",
       "turbo": "^2.9.16",
