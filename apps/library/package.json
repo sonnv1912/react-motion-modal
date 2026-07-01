@@ -67,7 +67,7 @@
       "@vitest/coverage-v8": "3.2.4",
       "globals": "^16.3.0",
       "motion": "^12.23.12",
-      "playwright": "^1.53.2",
+      "playwright": "^1.61.1",
       "react": "^19.1.0",
       "react-dom": "^19.1.0",
       "typescript": "~5.8.3",
