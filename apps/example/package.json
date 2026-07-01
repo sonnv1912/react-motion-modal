@@ -11,12 +11,12 @@
    },
    "dependencies": {
       "motion": "^12.23.12",
-      "react": "^19.1.0",
+      "react": "^19.2.7",
       "react-dom": "^19.1.0",
       "zustand": "^5.0.7"
    },
    "devDependencies": {
-      "@types/react": "^19.1.8",
+      "@types/react": "^19.2.17",
       "@types/react-dom": "^19.1.6",
       "@vitejs/plugin-react": "^4.6.0",
       "typescript": "~5.8.3",
