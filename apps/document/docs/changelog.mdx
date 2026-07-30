@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 1.4.0 · 2026-07-30
+
 ### Fixed
 
 - Bound injected close handlers to modal instance IDs, so repeated modal names close the correct instance.
@@ -19,11 +21,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed modals opened before `ModalProvider` mounts so the portal renders after the body root is available.
 - Added a real Tab focus trap, accessible dialog naming props, and inactive-dialog isolation for stacked modals.
 - Allowed oversized modal bodies to scroll instead of clipping their content.
+- Prevented edge and corner positions from squeezing modal bodies into half or quarter viewports on smaller screens.
 
 ### Added
 
 - Exported the full public type surface, including `Params`, `BaseModalParams`, `ModalConfig`, and `ModalInitialParams`.
-- Added Chromium browser regression tests for portal rendering, focus containment, and accessible names.
+- Added Chromium browser regression tests for portal rendering, focus containment, accessible names, and responsive modal placement.
 
 ### Changed
 
