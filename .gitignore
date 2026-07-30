@@ -19,6 +19,9 @@ coverage
 # Turbo
 .turbo
 
+# Local tooling
+.codegraph/
+
 # Vercel
 .vercel
 
