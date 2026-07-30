@@ -1,9 +1,12 @@
 import { type ReactNode, useState } from 'react';
 import {
    MODAL_POSITIONS,
+   type ModalConfig,
+   type ModalInitialParams,
    type ModalParams,
    ModalProvider,
    modalStore,
+   type Params,
 } from 'react-motion-modal';
 
 // 1. Declare your modal names + params (type-safe via module augmentation).
@@ -29,7 +32,7 @@ const Card = ({ children }: { children: ReactNode }) => (
    </div>
 );
 
-const AlertModal = ({ message, closeModal }: ModalParams<'alert'>) => (
+const AlertModal = ({ message, closeModal }: Params<'alert'>) => (
    <Card>
       <p style={{ marginTop: 0 }}>{message}</p>
       <button type='button' onClick={closeModal}>
@@ -109,6 +112,16 @@ const POSITIONS: ReadonlyArray<readonly [string, string]> = [
    ['Top-Right', MODAL_POSITIONS.TOP_RIGHT],
 ];
 
+const modalConfig: ModalConfig = {
+   alert: AlertModal,
+   confirm: ConfirmModal,
+   form: FormModal,
+};
+
+const initialParams: ModalInitialParams = {
+   ariaLabel: 'Example modal',
+};
+
 export const App = () => {
    const { openModal } = modalStore();
    const [log, setLog] = useState<string[]>([]);
@@ -118,13 +131,7 @@ export const App = () => {
 
    return (
       <>
-         <ModalProvider
-            modals={{
-               alert: AlertModal,
-               confirm: ConfirmModal,
-               form: FormModal,
-            }}
-         />
+         <ModalProvider modals={modalConfig} initialParams={initialParams} />
 
          <main>
             <h1>react-motion-modal — example</h1>

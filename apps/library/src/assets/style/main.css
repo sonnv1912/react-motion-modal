@@ -15,9 +15,10 @@
 
 :where(.react-motion-modal__body) {
    position: absolute;
+   box-sizing: border-box;
    max-height: 100vh;
    max-width: 100vw;
-   overflow: hidden;
+   overflow: auto;
    padding: 20px;
 }
 
@@ -86,7 +87,7 @@
    top: 0;
    bottom: 0;
    left: 0;
-   right: 50%
+   right: 50%;
 }
 
 :where(.react-motion-modal__body--right) {

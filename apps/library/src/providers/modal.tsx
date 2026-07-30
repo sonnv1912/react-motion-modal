@@ -1,26 +1,33 @@
 import { Modal } from '@components/modal';
 import { modalStore } from '@stores/modal';
-import { getFocusableElements } from '@utils/focus';
+import { getFocusableElements, trapFocus } from '@utils/focus';
 import { AnimatePresence } from 'motion/react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import type { BaseModalParams, ModalConfig } from '#types/modal';
+import type {
+   BaseModalParams,
+   ModalConfig,
+   ModalInitialParams,
+} from '#types/modal';
 
-type Props = {
+export type ModalProviderProps = {
    modals: ModalConfig;
-   initialParams?: Partial<BaseModalParams>;
+   initialParams?: ModalInitialParams;
 };
 
-export const ModalProvider = ({ modals, initialParams }: Props) => {
+export const ModalProvider = ({
+   modals,
+   initialParams,
+}: ModalProviderProps) => {
    const activeModals = modalStore((state) => state.modals);
    const active = modalStore((state) => state.active);
    const closeModal = modalStore((state) => state.closeModal);
-   const rootRef = useRef<HTMLElement>(null);
+   const [portalRoot, setPortalRoot] = useState<HTMLElement | null>(null);
    const containerRef = useRef<HTMLDivElement>(null);
    const returnFocusRef = useRef<HTMLElement | null>(null);
 
    useEffect(() => {
-      rootRef.current = document.body;
+      setPortalRoot(document.body);
    }, []);
 
    const hasOpenModals = activeModals.length > 0;
@@ -28,10 +35,6 @@ export const ModalProvider = ({ modals, initialParams }: Props) => {
    // Close the topmost modal on Escape. Enabled by default; an explicit
    // `false` (per-modal or via initialParams) is required to disable it.
    useEffect(() => {
-      if (!hasOpenModals) {
-         return;
-      }
-
       const lastModalParams = activeModals[activeModals.length - 1]?.params as
          | BaseModalParams
          | undefined;
@@ -41,20 +44,31 @@ export const ModalProvider = ({ modals, initialParams }: Props) => {
          initialParams?.closeOnPressEsc ??
          true;
 
-      if (!closeOnPressEsc) {
+      if (!hasOpenModals) {
          return;
       }
 
       const onKeyDown = (event: KeyboardEvent) => {
-         if (event.key === 'Escape') {
+         if (event.key === 'Escape' && closeOnPressEsc) {
             closeModal();
+            return;
          }
+
+         const activeId = active?.id;
+         const dialog = activeId
+            ? containerRef.current?.querySelector<HTMLElement>(
+                 `[data-modal-id="${activeId}"]`,
+              )
+            : undefined;
+
+         trapFocus(dialog, event);
       };
 
       window.addEventListener('keydown', onKeyDown);
       return () => window.removeEventListener('keydown', onKeyDown);
    }, [
       activeModals,
+      active?.id,
       closeModal,
       initialParams?.closeOnPressEsc,
       hasOpenModals,
@@ -106,7 +120,7 @@ export const ModalProvider = ({ modals, initialParams }: Props) => {
    }, [active, hasOpenModals]);
 
    return (
-      rootRef.current &&
+      portalRoot &&
       createPortal(
          <div className='react-motion-modal' ref={containerRef}>
             <AnimatePresence initial={true} mode='sync'>
@@ -121,7 +135,7 @@ export const ModalProvider = ({ modals, initialParams }: Props) => {
                ))}
             </AnimatePresence>
          </div>,
-         rootRef.current,
+         portalRoot,
       )
    );
 };

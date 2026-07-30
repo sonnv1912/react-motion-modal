@@ -1,4 +1,7 @@
-export type { BaseModalParams } from './base-modal-params';
+export type {
+   BaseModalParams,
+   ModalInitialParams,
+} from './base-modal-params';
 export type {
    ModalComponent,
    ModalConfig,

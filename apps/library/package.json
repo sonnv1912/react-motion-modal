@@ -49,13 +49,15 @@
       "build": "tsc -b && vite build",
       "ci": "yarn build",
       "check-types": "tsc -b --pretty false",
-      "test": "vitest run",
+      "test": "yarn test:unit && yarn test:browser",
+      "test:unit": "vitest run",
+      "test:browser": "vitest run --config vite.browser.config.ts",
       "test:watch": "vitest",
       "preview": "vite preview",
       "bump:patch": "yarn version --patch --no-git-tag-version",
       "bump:minor": "yarn version --minor --no-git-tag-version",
       "bump:major": "yarn version --major --no-git-tag-version",
-      "release:check": "yarn build && npm pack --dry-run"
+      "release:check": "yarn test && yarn build && npm pack --dry-run"
    },
    "dependencies": {},
    "devDependencies": {

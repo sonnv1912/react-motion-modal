@@ -19,6 +19,24 @@ export type BaseModalParams = {
    onClose?: () => void;
 
    /**
+    * Accessible name for the dialog when there is no visible heading that can
+    * be referenced with `ariaLabelledBy`.
+    * @default "Modal"
+    */
+   ariaLabel?: string;
+
+   /**
+    * ID of the visible element that labels the dialog.
+    * Takes precedence over `ariaLabel` when provided.
+    */
+   ariaLabelledBy?: string;
+
+   /**
+    * ID of the element that describes the dialog.
+    */
+   ariaDescribedBy?: string;
+
+   /**
     * Controls whether the modal should close when the user clicks outside the modal content.
     * @default true
     */
@@ -179,3 +197,12 @@ export type BaseModalParams = {
     */
    blur?: boolean;
 };
+
+/**
+ * Provider-level defaults for modal rendering and interaction.
+ * Lifecycle callbacks and the injected close handler belong to each modal
+ * instance, so they cannot be configured as provider defaults.
+ */
+export type ModalInitialParams = Partial<
+   Omit<BaseModalParams, 'closeModal' | 'onClose'>
+>;

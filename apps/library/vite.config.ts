@@ -54,5 +54,6 @@ export default defineConfig({
    test: {
       environment: 'node',
       include: ['src/**/*.{test,spec}.{ts,tsx}'],
+      exclude: ['src/**/*.browser.test.tsx'],
    },
 });

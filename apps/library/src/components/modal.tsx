@@ -11,18 +11,23 @@ import type {
    BaseModalParams,
    ModalComponent,
    ModalConfig,
+   ModalInitialParams,
 } from '#types/modal';
 
 type Props = {
    data: ActiveModal;
    modals: ModalConfig;
    index: number;
-   initialParams?: Partial<BaseModalParams>;
+   initialParams?: ModalInitialParams;
 };
 
 export const Modal = ({ data, modals, index, initialParams }: Props) => {
    const Body = modals[data.name] as ModalComponent<any>;
-   const params = data.params ?? initialParams;
+   const modalParams = data.params as BaseModalParams | undefined;
+   const params = {
+      ...initialParams,
+      ...modalParams,
+   } as BaseModalParams;
    const animate = params?.animate ?? initialParams?.animate;
    const blur = params?.blur ?? initialParams?.blur ?? true;
    const backdrop = params?.backdrop ?? initialParams?.backdrop;
@@ -36,7 +41,7 @@ export const Modal = ({ data, modals, index, initialParams }: Props) => {
 
    const bodyAnimation = animate ? undefined : getModalBodyAnimation(position);
    const active = modalStore((state) => state.active);
-   const closeModal = modalStore((state) => state.closeModal);
+   const isActive = active?.id === data.id;
 
    // `onClose` is invoked by the store's `closeModal` action (the single
    // source of truth), so it must NOT be called again here — otherwise it
@@ -50,6 +55,7 @@ export const Modal = ({ data, modals, index, initialParams }: Props) => {
          layout={true}
          style={{
             zIndex: MODAL_Z_INDEX + index,
+            pointerEvents: isActive ? undefined : 'none',
             backdropFilter: blur ? 'blur(8px)' : undefined,
             WebkitBackdropFilter: blur ? 'blur(8px)' : undefined,
          }}
@@ -57,7 +63,7 @@ export const Modal = ({ data, modals, index, initialParams }: Props) => {
          <div
             className={joinClassName(
                'react-motion-modal__backdrop',
-               active?.id === data.id && 'react-motion-modal__active',
+               isActive && 'react-motion-modal__active',
                backdrop?.className && 'react-motion-modal__backdrop--custom',
                backdrop?.className,
             )}
@@ -67,20 +73,26 @@ export const Modal = ({ data, modals, index, initialParams }: Props) => {
             }}
             onClick={() => {
                if (closeOnClickOutside) {
-                  closeModal();
+                  params.closeModal();
                }
             }}
          />
 
          <div
             role='dialog'
-            aria-modal='true'
+            aria-modal={isActive ? 'true' : undefined}
+            aria-hidden={isActive ? undefined : true}
+            aria-label={
+               params.ariaLabelledBy ? undefined : (params.ariaLabel ?? 'Modal')
+            }
+            aria-labelledby={params.ariaLabelledBy}
+            aria-describedby={params.ariaDescribedBy}
             tabIndex={-1}
             data-modal-id={data.id}
             className={joinClassName(
                'react-motion-modal__body',
                getModalBodyPositionClassName(position),
-               active?.id === data.id && 'react-motion-modal__body--active',
+               isActive && 'react-motion-modal__body--active',
                body?.className,
             )}
             style={{

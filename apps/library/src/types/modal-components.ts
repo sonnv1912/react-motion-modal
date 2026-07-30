@@ -128,7 +128,7 @@ export type ModalComponent<T = any> = (props: T) => ReactElement;
  * };
  *
  * // Use with ModalProvider
- * <ModalProvider config={modalConfig}>
+ * <ModalProvider modals={modalConfig}>
  *   <App />
  * </ModalProvider>
  * ```
