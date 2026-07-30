@@ -123,6 +123,11 @@ Opens a modal by name. The `params` will be inferred based on modal type.
 - If `name` is provided, closes that specific modal.
 - If not, closes the most recent modal (top of the stack).
 
+### `closeAllModal()`
+
+Closes every modal from top to bottom and invokes each instance's `onClose`
+callback once.
+
 ### `BaseModalParams`
 
 Each modal automatically receives the following props:
@@ -131,6 +136,9 @@ Each modal automatically receives the following props:
 |-----------------------|------------------------------------------------------------------|-------------------------------------------------------------------------------|
 | `closeModal`          | `() => void`                                                     | Close function for the modal                                                  |
 | `onClose`             | `() => void`                                                     | Callback triggered when modal is closed                                       |
+| `ariaLabel`           | `string`                                                         | Accessible dialog name. Defaults to `Modal`                                   |
+| `ariaLabelledBy`      | `string`                                                         | ID of the visible element that labels the dialog                              |
+| `ariaDescribedBy`     | `string`                                                         | ID of the element that describes the dialog                                   |
 | `closeOnClickOutside` | `boolean`                                                        | Close modal when clicking outside                                             |
 | `closeOnPressEsc`     | `boolean`                                                        | Close modal when Escape key is pressed                                        |
 | `position`            | `string`                                                         | Modal placement. Unknown values fall back to `center`.                         |
@@ -138,6 +146,9 @@ Each modal automatically receives the following props:
 | `body`                | `{ className?: string; style?: CSSProperties; }`                 | Customize the modal body wrapper                                              |
 | `animate`             | `{ animate?: TargetAndTransition; exit?: TargetAndTransition; }` | Animation powered by Framer Motion. Custom animation disables defaults.        |
 | `blur`                | `boolean`                                                        | Apply backdrop blur                                                           |
+
+The package also exports `Params`, `BaseModalParams`, `ModalConfig`,
+`ModalInitialParams`, and the store state/action types for advanced usage.
 
 ### `MODAL_POSITIONS`
 
@@ -161,7 +172,7 @@ Default body animation follows the position. For example, `left` slides in from 
 ## 🔐 Release Security
 
 - CI runs from `.github/workflows/ci.yml` on pushes and pull requests.
-- npm publishing is defined in `.github/workflows/publish.yml` and uses `npm publish --provenance --access public`.
+- npm publishing is defined in `.github/workflows/publish.yml` and uses npm trusted publishing with provenance.
 - Trusted publishing still needs to be enabled in npm package settings for this repository before the workflow can publish official releases.
 
 ## 📝 Notes

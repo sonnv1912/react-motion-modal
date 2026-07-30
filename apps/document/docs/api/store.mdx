@@ -36,7 +36,8 @@ modalStore.getState().closeModal('AlertModal');
 
 ## `closeAllModal()`
 
-Removes every open modal and clears the active modal.
+Closes every open modal from top to bottom, invokes each modal's `onClose`
+callback once, and clears the active modal.
 
 ```ts
 modalStore.getState().closeAllModal();

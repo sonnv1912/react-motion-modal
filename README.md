@@ -117,6 +117,11 @@ Opens a modal by name. The `params` type is inferred from the modal definition.
 - If `name` is provided, closes that specific modal.
 - If not, closes the most recent modal.
 
+### `closeAllModal()`
+
+Closes every modal from top to bottom and invokes each instance's `onClose`
+callback once.
+
 ### `BaseModalParams`
 
 Each modal automatically receives:
@@ -125,6 +130,9 @@ Each modal automatically receives:
 |-----------------------|------------------------------------------------------------------|------------------------------------------------------------------------|
 | `closeModal`          | `() => void`                                                     | Close function for the modal                                           |
 | `onClose`             | `() => void`                                                     | Callback triggered when the modal closes                               |
+| `ariaLabel`           | `string`                                                         | Accessible dialog name. Defaults to `Modal`                             |
+| `ariaLabelledBy`      | `string`                                                         | ID of the visible element that labels the dialog                        |
+| `ariaDescribedBy`     | `string`                                                         | ID of the element that describes the dialog                             |
 | `closeOnClickOutside` | `boolean`                                                        | Close modal when clicking outside                                      |
 | `closeOnPressEsc`     | `boolean`                                                        | Close modal when Escape is pressed                                     |
 | `position`            | `string`                                                         | Modal placement. Unknown values fall back to `center`.                 |
@@ -132,6 +140,9 @@ Each modal automatically receives:
 | `body`                | `{ className?: string; style?: CSSProperties }`                  | Customize the modal body wrapper                                       |
 | `animate`             | `{ animate?: TargetAndTransition; exit?: TargetAndTransition }`  | Motion config. Custom animation disables the built-in position default |
 | `blur`                | `boolean`                                                        | Apply backdrop blur                                                    |
+
+The package also exports `Params`, `BaseModalParams`, `ModalConfig`,
+`ModalInitialParams`, and the store state/action types for advanced usage.
 
 ### `MODAL_POSITIONS`
 

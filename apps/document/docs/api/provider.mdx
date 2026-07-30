@@ -28,6 +28,8 @@ Maps modal names to React components.
 ### `initialParams`
 
 Default behavior shared by every modal unless a modal overrides it.
+Its exported type is `ModalInitialParams`. Instance-specific `closeModal` and
+`onClose` values are intentionally not accepted as provider defaults.
 
 Useful examples:
 
@@ -47,6 +49,7 @@ Useful examples:
 - renders into `document.body` with `createPortal`
 - keeps a stack of modals through `AnimatePresence`
 - closes the topmost modal on `Escape` when enabled
+- traps Tab focus inside the active dialog and restores focus after closing
 
 ## When to customize `initialParams`
 

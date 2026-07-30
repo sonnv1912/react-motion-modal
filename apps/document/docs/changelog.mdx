@@ -11,9 +11,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Fixed
+
+- Bound injected close handlers to modal instance IDs, so repeated modal names close the correct instance.
+- Made closing an empty or missing modal a safe no-op and prevented rapid repeated close actions from throwing.
+- Made `closeAllModal()` invoke each open modal's `onClose` callback once.
+- Fixed modals opened before `ModalProvider` mounts so the portal renders after the body root is available.
+- Added a real Tab focus trap, accessible dialog naming props, and inactive-dialog isolation for stacked modals.
+- Allowed oversized modal bodies to scroll instead of clipping their content.
+
+### Added
+
+- Exported the full public type surface, including `Params`, `BaseModalParams`, `ModalConfig`, and `ModalInitialParams`.
+- Added Chromium browser regression tests for portal rendering, focus containment, and accessible names.
+
 ### Changed
 
 - Docs deployment now triggers on documentation changes to `main` (and manual dispatch) instead of tag pushes, because the GitHub Pages environment does not allow tag-based deployments.
+- Release publishing now runs lint, type checks, unit tests, browser tests, build, and package verification before publishing.
 
 ## 1.3.2 · 2026-06-27
 

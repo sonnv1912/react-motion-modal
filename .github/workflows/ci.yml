@@ -31,6 +31,9 @@ jobs:
       - name: Check types
         run: yarn workspace react-motion-modal check-types
 
+      - name: Install browser test runtime
+        run: yarn playwright install --with-deps chromium
+
       - name: Build library
         run: yarn workspace react-motion-modal build
 

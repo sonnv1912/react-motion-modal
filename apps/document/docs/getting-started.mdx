@@ -65,6 +65,7 @@ const { openModal } = modalStore.getState();
 openModal('ConfirmModal', {
   title: 'Delete this item?',
   onConfirm: () => console.log('confirmed'),
+  ariaLabel: 'Delete confirmation',
   position: MODAL_POSITIONS.RIGHT,
 });
 ```
