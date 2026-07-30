@@ -28,6 +28,10 @@ export default defineConfig({
             '@components': resolve(librarySource, 'components'),
             '@configs': resolve(librarySource, 'configs'),
             '@utils': resolve(librarySource, 'utils'),
+            // Resolve the bare package name to library source so the docs
+            // build (and components like ModalLab) never depend on a built
+            // dist/ — mirrors what pluginPlayground includes below.
+            'react-motion-modal': resolve(librarySource, 'index.ts'),
          },
       },
    },
