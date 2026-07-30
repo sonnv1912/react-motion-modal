@@ -1,0 +1,55 @@
+---
+title: ModalProvider
+description: Render a modal system into an accessible React portal.
+---
+
+# ModalProvider
+
+`ModalProvider` renders one modal system into a portal.
+
+```tsx
+<ModalProvider system={modals} />
+```
+
+## Props
+
+### `system`
+
+The instance returned by `createModalSystem()`.
+
+### `defaultOptions`
+
+Shared render and interaction defaults. Definition defaults and per-open
+options override these values.
+
+```tsx
+<ModalProvider
+  system={modals}
+  defaultOptions={{
+    closeOnPressEsc: true,
+    closeOnClickOutside: true,
+    backdrop: {
+      className: 'app-modal-backdrop',
+    },
+  }}
+/>
+```
+
+### `portalRoot`
+
+An optional portal target. It defaults to `document.body`.
+
+```tsx
+<ModalProvider system={modals} portalRoot={overlayRoot} />
+```
+
+## Lifecycle behavior
+
+- A modal opened before mount renders when the provider becomes available.
+- Escape and backdrop cancellation use distinct outcome reasons.
+- Only the top modal is interactive and exposed as `aria-modal`.
+- Focus stays inside the top dialog and returns to the previous element.
+- Body scroll is locked while the stack is non-empty.
+- Unmounting the last provider cancels pending operations with
+  `provider-unmounted`.
+- React Strict Mode remounts do not cancel a live operation.

@@ -1,12 +1,18 @@
-// This file is not used by "docusaurus start/build" commands.
-// It is here to improve your IDE experience (type-checking, autocompletion...),
-// and can also run the package.json "typecheck" script manually.
 {
-   "extends": "@docusaurus/tsconfig",
    "compilerOptions": {
-      "baseUrl": ".",
-      "ignoreDeprecations": "6.0",
-      "strict": true
+      "target": "ES2022",
+      "lib": ["ES2022", "DOM", "DOM.Iterable"],
+      "module": "ESNext",
+      "moduleResolution": "bundler",
+      "jsx": "react-jsx",
+      "resolveJsonModule": true,
+      "allowImportingTsExtensions": true,
+      "verbatimModuleSyntax": true,
+      "noEmit": true,
+      "strict": true,
+      "skipLibCheck": true,
+      "types": ["node"]
    },
-   "exclude": [".docusaurus", "build"]
+   "include": ["rspress.config.ts", "docs/**/*.ts", "docs/**/*.tsx"],
+   "exclude": ["build", "node_modules"]
 }

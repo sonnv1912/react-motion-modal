@@ -1,41 +1,34 @@
-# Website
+# Documentation website
 
-This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
+The documentation and interactive playground are built with
+[Rspress](https://rspress.dev/).
 
 ## Installation
 
 ```bash
-yarn
+yarn install
 ```
 
-## Local Development
+## Local development
 
 ```bash
-yarn start
+yarn workspace document dev
 ```
 
-This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
+Rspress watches the documentation, theme, and library source. The playground
+loads `apps/library/src` directly, so examples always run against the current
+workspace implementation.
 
 ## Build
 
 ```bash
-yarn build
+yarn workspace document build
 ```
 
-This command generates static content into the `build` directory and can be served using any static contents hosting service.
+Static output is generated in `apps/document/build`.
 
 ## Deployment
 
-Using SSH:
-
-```bash
-USE_SSH=true yarn deploy
-```
-
-Not using SSH:
-
-```bash
-GIT_USER=<Your GitHub username> yarn deploy
-```
-
-If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
+`.github/workflows/deploy-docs.yml` builds and publishes the site to GitHub
+Pages when documentation changes land on `main`, or when the workflow is
+started manually.

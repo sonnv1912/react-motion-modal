@@ -1,0 +1,59 @@
+---
+title: Positions and Animation
+description: Use and customize the built-in motion presets.
+---
+
+# Motion Presets
+
+Presets bind a spatial pattern to matching enter and exit motion.
+
+## Dialog
+
+```ts
+motionPresets.dialog();
+```
+
+Centers the modal and fades/scales the content.
+
+## Drawer
+
+```ts
+motionPresets.drawer();                 // right
+motionPresets.drawer({ side: 'left' });
+```
+
+Pins the body to a horizontal edge and slides it on the x-axis.
+
+## Sheet
+
+```ts
+motionPresets.sheet();                // bottom
+motionPresets.sheet({ edge: 'top' });
+```
+
+Pins the body to a vertical edge and slides it on the y-axis.
+
+## Custom motion
+
+Use a preset as the default, then override motion for one invocation:
+
+```ts
+modals.open(
+  'notice',
+  { message: 'Saved' },
+  {
+    motion: {
+      content: {
+        initial: { opacity: 0, y: 12 },
+        animate: { opacity: 1, y: 0 },
+        exit: { opacity: 0, y: 12 },
+      },
+    },
+  },
+);
+```
+
+The renderer automatically replaces transforms with a short opacity-only
+transition when the user prefers reduced motion.
+
+`MODAL_POSITIONS` remains available for explicit placement overrides.

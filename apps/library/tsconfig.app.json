@@ -24,11 +24,9 @@
       "noUncheckedSideEffectImports": true,
 
       "paths": {
-         "@stores/*": ["./src/stores/*"],
          "@components/*": ["./src/components/*"],
          "@configs/*": ["./src/configs/*"],
-         "@utils/*": ["./src/utils/*"],
-         "#types/*": ["./src/types/*"]
+         "@utils/*": ["./src/utils/*"]
       }
    },
    "include": ["src", "storybook", "*.d.ts"]

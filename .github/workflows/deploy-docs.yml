@@ -9,6 +9,9 @@ on:
       # Note: the github-pages environment blocks tag-based deployments, so we
       # rely on the changelog/docs commit landing on main (and manual dispatch).
       - "apps/document/**"
+      # The playground bundles the current library source directly.
+      - "apps/library/**"
+      - "yarn.lock"
   workflow_dispatch:
 
 permissions:
@@ -30,7 +33,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 20.19
           cache: yarn
 
       - name: Setup Pages

@@ -1,0 +1,66 @@
+---
+title: Modal Contracts
+description: Type contracts exposed by react-motion-modal.
+---
+
+# Modal Contracts
+
+## `ModalRenderProps<Input, Result>`
+
+Every registered component receives three namespaced props:
+
+| Prop | Type | Purpose |
+| --- | --- | --- |
+| `input` | `Input` | Data supplied to `open()` |
+| `resolve` | `(value: Result) => void` | Completes the flow with a value |
+| `cancel` | `(reason?: 'programmatic') => void` | Cancels the flow |
+
+```tsx
+function NameForm({
+  input,
+  resolve,
+  cancel,
+}: ModalRenderProps<{ initialName: string }, string>) {
+  // ...
+}
+```
+
+## `ModalOutcome<Result>`
+
+```ts
+type ModalOutcome<Result> =
+  | { status: 'resolved'; value: Result }
+  | {
+      status: 'cancelled';
+      reason:
+        | 'escape'
+        | 'backdrop'
+        | 'programmatic'
+        | 'replaced'
+        | 'provider-unmounted';
+    };
+```
+
+Cancellation is normal control flow and never rejects the promise.
+
+## `ModalOpenOptions`
+
+| Option | Purpose |
+| --- | --- |
+| `ariaLabel` | Accessible name, defaulting to `Modal` |
+| `ariaLabelledBy` | ID of a visible label |
+| `ariaDescribedBy` | ID of descriptive content |
+| `closeOnClickOutside` | Enables backdrop cancellation; defaults to `true` |
+| `closeOnPressEsc` | Enables Escape cancellation; defaults to `true` |
+| `position` | Overrides preset placement |
+| `motion` | Overrides preset motion targets |
+| `backdrop` | Backdrop `className` and inline `style` |
+| `body` | Body wrapper `className` and inline `style` |
+| `blur` | Enables an 8px backdrop filter |
+
+Options merge in this order:
+
+1. provider `defaultOptions`
+2. motion preset
+3. definition `defaultOptions`
+4. per-open options

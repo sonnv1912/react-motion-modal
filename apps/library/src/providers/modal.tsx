@@ -1,63 +1,79 @@
 import { Modal } from '@components/modal';
-import { modalStore } from '@stores/modal';
 import { getFocusableElements, trapFocus } from '@utils/focus';
+import { mergeModalOptions } from '@utils/modal-options';
 import { AnimatePresence } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { useStore } from 'zustand/react';
+import {
+   attachModalProvider,
+   getModalSystemStore,
+} from '../system/modal-system';
 import type {
-   BaseModalParams,
-   ModalConfig,
-   ModalInitialParams,
-} from '#types/modal';
+   ModalOpenOptions,
+   ModalRegistry,
+   ModalSystem,
+} from '../types/modal-system';
 
-export type ModalProviderProps = {
-   modals: ModalConfig;
-   initialParams?: ModalInitialParams;
-};
+export type ModalProviderProps<Registry extends ModalRegistry = ModalRegistry> =
+   {
+      system: ModalSystem<Registry>;
+      defaultOptions?: ModalOpenOptions;
+      portalRoot?: HTMLElement | null;
+   };
 
-export const ModalProvider = ({
-   modals,
-   initialParams,
-}: ModalProviderProps) => {
-   const activeModals = modalStore((state) => state.modals);
-   const active = modalStore((state) => state.active);
-   const closeModal = modalStore((state) => state.closeModal);
-   const [portalRoot, setPortalRoot] = useState<HTMLElement | null>(null);
+/**
+ * Renders one modal system into a portal and owns its browser accessibility
+ * lifecycle.
+ */
+export const ModalProvider = <Registry extends ModalRegistry>({
+   system,
+   defaultOptions,
+   portalRoot: requestedPortalRoot,
+}: ModalProviderProps<Registry>) => {
+   const store = getModalSystemStore(system);
+   const activeModals = useStore(store, (state) => state.activeModals);
+   const active = activeModals[activeModals.length - 1];
+   const [portalRoot, setPortalRoot] = useState<HTMLElement | null>(
+      requestedPortalRoot ?? null,
+   );
    const containerRef = useRef<HTMLDivElement>(null);
    const returnFocusRef = useRef<HTMLElement | null>(null);
-
-   useEffect(() => {
-      setPortalRoot(document.body);
-   }, []);
-
    const hasOpenModals = activeModals.length > 0;
 
-   // Close the topmost modal on Escape. Enabled by default; an explicit
-   // `false` (per-modal or via initialParams) is required to disable it.
    useEffect(() => {
-      const lastModalParams = activeModals[activeModals.length - 1]?.params as
-         | BaseModalParams
-         | undefined;
+      setPortalRoot(requestedPortalRoot ?? document.body);
+   }, [requestedPortalRoot]);
 
-      const closeOnPressEsc =
-         lastModalParams?.closeOnPressEsc ??
-         initialParams?.closeOnPressEsc ??
-         true;
+   useEffect(() => attachModalProvider(system), [system]);
 
+   useEffect(() => {
       if (!hasOpenModals) {
          return;
       }
 
+      const options = mergeModalOptions(
+         defaultOptions,
+         active?.definition.preset
+            ? {
+                 position: active.definition.preset.position,
+                 motion: active.definition.preset.motion,
+              }
+            : undefined,
+         active?.definition.defaultOptions,
+         active?.options,
+      );
+      const closeOnPressEsc = options.closeOnPressEsc ?? true;
+
       const onKeyDown = (event: KeyboardEvent) => {
          if (event.key === 'Escape' && closeOnPressEsc) {
-            closeModal();
+            active?.cancel('escape');
             return;
          }
 
-         const activeId = active?.id;
-         const dialog = activeId
+         const dialog = active
             ? containerRef.current?.querySelector<HTMLElement>(
-                 `[data-modal-id="${activeId}"]`,
+                 `[data-modal-id="${active.id}"]`,
               )
             : undefined;
 
@@ -66,15 +82,8 @@ export const ModalProvider = ({
 
       window.addEventListener('keydown', onKeyDown);
       return () => window.removeEventListener('keydown', onKeyDown);
-   }, [
-      activeModals,
-      active?.id,
-      closeModal,
-      initialParams?.closeOnPressEsc,
-      hasOpenModals,
-   ]);
+   }, [active, defaultOptions, hasOpenModals]);
 
-   // Lock background scroll while any modal is open.
    useEffect(() => {
       if (!hasOpenModals) {
          return;
@@ -89,16 +98,10 @@ export const ModalProvider = ({
       };
    }, [hasOpenModals]);
 
-   // Focus management: move focus into the active dialog when a modal opens,
-   // and restore focus to the previously focused element when the stack
-   // empties. The active dialog is resolved by id (from store state) so
-   // exiting modals don't steal focus during their exit.
    useEffect(() => {
       if (!portalRoot) {
          return;
       }
-
-      const activeId = active?.id;
 
       if (!hasOpenModals) {
          returnFocusRef.current?.focus?.();
@@ -111,9 +114,9 @@ export const ModalProvider = ({
             (document.activeElement as HTMLElement | null) ?? null;
       }
 
-      const dialog = activeId
+      const dialog = active
          ? containerRef.current?.querySelector<HTMLElement>(
-              `[data-modal-id="${activeId}"]`,
+              `[data-modal-id="${active.id}"]`,
            )
          : undefined;
 
@@ -123,23 +126,24 @@ export const ModalProvider = ({
       }
    }, [active, hasOpenModals, portalRoot]);
 
-   return (
-      portalRoot &&
-      createPortal(
-         <div className='react-motion-modal' ref={containerRef}>
-            <AnimatePresence initial={true} mode='sync'>
-               {activeModals?.map((item, index) => (
-                  <Modal
-                     key={item.id}
-                     data={item}
-                     index={index}
-                     initialParams={initialParams}
-                     modals={modals}
-                  />
-               ))}
-            </AnimatePresence>
-         </div>,
-         portalRoot,
-      )
+   if (!portalRoot) {
+      return null;
+   }
+
+   return createPortal(
+      <div className='react-motion-modal' ref={containerRef}>
+         <AnimatePresence initial={true} mode='sync'>
+            {activeModals.map((item, index) => (
+               <Modal
+                  key={item.id}
+                  data={item}
+                  index={index}
+                  isActive={active?.id === item.id}
+                  defaultOptions={defaultOptions}
+               />
+            ))}
+         </AnimatePresence>
+      </div>,
+      portalRoot,
    );
 };

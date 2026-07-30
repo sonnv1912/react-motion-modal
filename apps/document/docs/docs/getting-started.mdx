@@ -1,0 +1,93 @@
+---
+title: Getting Started
+description: Define, mount, and open your first typed modal.
+---
+
+# Getting Started
+
+## Import the stylesheet
+
+Import the structural CSS once in your app entry:
+
+```ts
+import 'react-motion-modal/style.css';
+```
+
+The stylesheet only handles portal layout, positions, overflow, and stacking.
+Your application owns surfaces, spacing, shadows, and backdrop color.
+
+## Define a typed modal
+
+```tsx
+import {
+  defineModal,
+  type ModalRenderProps,
+  motionPresets,
+} from 'react-motion-modal';
+
+type ConfirmInput = {
+  title: string;
+};
+
+function ConfirmModal({
+  input,
+  resolve,
+  cancel,
+}: ModalRenderProps<ConfirmInput, boolean>) {
+  return (
+    <section className="dialog">
+      <h2>{input.title}</h2>
+      <button onClick={() => cancel()}>Cancel</button>
+      <button onClick={() => resolve(true)}>Confirm</button>
+    </section>
+  );
+}
+
+const confirm = defineModal({
+  component: ConfirmModal,
+  preset: motionPresets.dialog(),
+  policy: 'singleton',
+});
+```
+
+## Create and mount the system
+
+```tsx
+import { createModalSystem, ModalProvider } from 'react-motion-modal';
+
+export const modals = createModalSystem({ confirm });
+
+export function App() {
+  return (
+    <>
+      <Routes />
+      <ModalProvider
+        system={modals}
+        defaultOptions={{
+          backdrop: {
+            style: { backgroundColor: 'rgb(0 0 0 / 40%)' },
+          },
+        }}
+      />
+    </>
+  );
+}
+```
+
+## Await the result
+
+```ts
+const outcome = await modals.open('confirm', {
+  title: 'Delete this item?',
+});
+
+if (outcome.status === 'resolved' && outcome.value) {
+  await deleteItem();
+}
+
+if (outcome.status === 'cancelled') {
+  console.log(outcome.reason);
+}
+```
+
+The modal name selects both the required input and the resolved result type.

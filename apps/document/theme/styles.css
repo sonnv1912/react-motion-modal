@@ -1,0 +1,110 @@
+:root {
+  --rp-c-brand: #677cf4;
+  --rp-c-brand-light: #8b9af7;
+  --rp-c-brand-lighter: #b5bffb;
+  --rp-c-brand-dark: #5269f2;
+  --rp-c-brand-darker: #3d54d8;
+  --rp-c-brand-tint: rgb(103 124 244 / 16%);
+  --rp-home-hero-title-bg: linear-gradient(120deg, #ffffff 12%, #b5bffb 52%, #38afec 92%);
+  --rp-home-hero-title-color: #ffffff;
+  --rp-home-feature-bg: rgb(47 47 62 / 78%);
+  --rp-radius: 0.75rem;
+}
+
+html.rp-dark {
+  --rp-c-bg: #272738;
+  --rp-c-bg-soft: #2f2f3e;
+  --rp-c-bg-mute: #414150;
+  --rp-c-bg-alt: #20202d;
+  --rp-c-divider: #606071;
+  --rp-c-divider-light: #494959;
+  --rp-c-text-0: #ffffff;
+  --rp-c-text-1: #d2d2d2;
+  --rp-c-text-2: #aaaab4;
+  --rp-c-link: #67c3f1;
+}
+
+body {
+  background:
+    radial-gradient(circle at 20% 0%, rgb(103 124 244 / 10%), transparent 34rem),
+    var(--rp-c-bg);
+}
+
+.rp-home-hero {
+  margin-block: 4rem 3rem;
+}
+
+.rp-home-hero__image-img {
+  filter: drop-shadow(0 0 2.4rem rgb(103 124 244 / 35%));
+}
+
+.rp-home-hero__action {
+  padding-inline: 1.25rem;
+  border-radius: var(--rp-radius);
+}
+
+.rp-home-hero__action.rp-button--brand {
+  background: var(--rp-c-brand-darker);
+  color: #ffffff;
+}
+
+.rp-home-hero__action.rp-button--brand:hover {
+  background: var(--rp-c-brand-dark);
+  opacity: 1;
+}
+
+.rp-home-hero__action.rp-button--alt {
+  border-color: var(--rp-c-divider);
+  background: var(--rp-c-bg-soft);
+  color: var(--rp-c-text-0);
+}
+
+.rp-home-hero__action.rp-button--alt:hover {
+  border-color: var(--rp-c-brand-light);
+  background: var(--rp-c-bg-mute);
+  opacity: 1;
+}
+
+.rp-home-feature__card {
+  border-radius: 1rem;
+}
+
+.rp-home-feature__card:hover {
+  box-shadow: 0 0 2rem rgb(103 124 244 / 18%);
+}
+
+.rp-doc h2 {
+  width: fit-content;
+  background: linear-gradient(90deg, #ffffff 0%, #b5bffb 48%, #38afec 100%);
+  background-clip: text;
+  color: transparent;
+}
+
+.rp-playground {
+  min-height: 38rem;
+  border-color: var(--rp-c-divider-light);
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.rp-playground > :first-child {
+  min-height: 22rem;
+}
+
+@media (max-width: 640px) {
+  .rp-home-hero {
+    margin-top: 2rem;
+  }
+
+  .rp-home-hero__actions {
+    width: min(100%, 22rem);
+  }
+
+  .rp-home-hero__action {
+    width: 100%;
+  }
+
+  .rp-playground {
+    min-height: 48rem;
+  }
+}

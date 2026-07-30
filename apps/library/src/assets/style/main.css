@@ -6,10 +6,6 @@
 :where(.react-motion-modal__backdrop) {
    position: absolute;
    inset: 0;
-   background-color: rgba(0, 0, 0, 0.4);
-}
-
-:where(.react-motion-modal__backdrop--custom) {
    background-color: transparent;
 }
 
@@ -22,7 +18,6 @@
    max-width: 100dvw;
    overflow-x: hidden;
    overflow-y: auto;
-   padding: 20px;
 }
 
 :where(.react-motion-modal__content) {

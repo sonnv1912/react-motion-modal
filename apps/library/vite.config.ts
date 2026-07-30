@@ -11,11 +11,9 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 export default defineConfig({
    resolve: {
       alias: {
-         '@stores': path.resolve(__dirname, 'src/stores'),
          '@components': path.resolve(__dirname, 'src/components'),
          '@configs': path.resolve(__dirname, 'src/configs'),
          '@utils': path.resolve(__dirname, 'src/utils'),
-         '#types': path.resolve(__dirname, 'src/types'),
       },
    },
    plugins: [

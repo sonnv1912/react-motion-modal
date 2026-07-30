@@ -1,0 +1,98 @@
+---
+title: Migrating to v2
+description: Move from the global v1 API to typed, isolated modal systems.
+---
+
+# Migrating From v1
+
+v2 replaces the global store and module augmentation with an explicit typed
+system.
+
+## Registry
+
+Before:
+
+```ts
+declare module 'react-motion-modal' {
+  interface ModalDefinition {
+    confirm: { title: string };
+  }
+}
+
+<ModalProvider modals={{ confirm: ConfirmModal }} />
+```
+
+After:
+
+```ts
+const confirm = defineModal({
+  component: ConfirmModal,
+  preset: motionPresets.dialog(),
+});
+
+export const modals = createModalSystem({ confirm });
+
+<ModalProvider system={modals} />
+```
+
+## Component props
+
+Before:
+
+```tsx
+function ConfirmModal({ title, closeModal }: ModalParams<'confirm'>) {
+  // ...
+}
+```
+
+After:
+
+```tsx
+function ConfirmModal({
+  input,
+  resolve,
+  cancel,
+}: ModalRenderProps<{ title: string }, boolean>) {
+  // ...
+}
+```
+
+## Opening and completion
+
+Before:
+
+```ts
+modalStore.getState().openModal('confirm', {
+  title: 'Delete?',
+  onConfirm: deleteItem,
+});
+```
+
+After:
+
+```ts
+const outcome = await modals.open('confirm', { title: 'Delete?' });
+
+if (outcome.status === 'resolved' && outcome.value) {
+  await deleteItem();
+}
+```
+
+## Render options
+
+Move v1 behavior fields out of business input and into the third `open()`
+argument:
+
+```ts
+modals.open(
+  'confirm',
+  { title: 'Delete?' },
+  {
+    closeOnPressEsc: false,
+    ariaLabel: 'Delete confirmation',
+  },
+);
+```
+
+There is no compatibility singleton in v2. Migrate one registry at a time, then
+remove v1 module augmentation and `modalStore` imports.

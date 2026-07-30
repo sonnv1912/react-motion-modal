@@ -1,22 +1,24 @@
-import { type ReactNode, useId, useState } from 'react';
+import { type FormEvent, type ReactNode, useId, useState } from 'react';
 import {
-   MODAL_POSITIONS,
-   type ModalConfig,
-   type ModalInitialParams,
-   type ModalParams,
+   createModalSystem,
+   defineModal,
+   type ModalOpenOptions,
    ModalProvider,
-   modalStore,
-   type Params,
+   type ModalRenderProps,
+   motionPresets,
 } from 'react-motion-modal';
 
-// 1. Declare your modal names + params (type-safe via module augmentation).
-declare module 'react-motion-modal' {
-   interface ModalDefinition {
-      alert: { message: string };
-      confirm: { title: string; onConfirm: () => void };
-      form: { defaultValue: string };
-   }
-}
+type MessageInput = {
+   message: string;
+};
+
+type ConfirmInput = {
+   title: string;
+};
+
+type FormInput = {
+   defaultValue: string;
+};
 
 const Card = ({ children }: { children: ReactNode }) => (
    <div
@@ -24,7 +26,7 @@ const Card = ({ children }: { children: ReactNode }) => (
          background: '#fff',
          borderRadius: 12,
          padding: 20,
-         maxWidth: 360,
+         width: 'min(360px, calc(100vw - 32px))',
          boxShadow: '0 12px 32px rgba(0,0,0,0.25)',
       }}
    >
@@ -32,211 +34,249 @@ const Card = ({ children }: { children: ReactNode }) => (
    </div>
 );
 
-const AlertModal = ({ message, closeModal }: Params<'alert'>) => (
+const MessageModal = ({
+   input,
+   resolve,
+}: ModalRenderProps<MessageInput, void>) => (
    <Card>
-      <p style={{ marginTop: 0 }}>{message}</p>
-      <button type='button' onClick={closeModal}>
+      <p style={{ marginTop: 0 }}>{input.message}</p>
+      <button type='button' onClick={() => resolve()}>
          OK
       </button>
    </Card>
 );
 
 const ConfirmModal = ({
-   title,
-   onConfirm,
-   closeModal,
-}: ModalParams<'confirm'>) => (
+   input,
+   resolve,
+   cancel,
+}: ModalRenderProps<ConfirmInput, boolean>) => (
    <Card>
-      <h3 style={{ marginTop: 0 }}>{title}</h3>
+      <h3 style={{ marginTop: 0 }}>{input.title}</h3>
       <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
-         <button type='button' onClick={closeModal}>
+         <button type='button' onClick={() => cancel()}>
             Cancel
          </button>
-         <button
-            type='button'
-            onClick={() => {
-               onConfirm();
-               closeModal();
-            }}
-         >
+         <button type='button' onClick={() => resolve(true)}>
             Confirm
          </button>
       </div>
    </Card>
 );
 
-const FormModal = ({ defaultValue, closeModal }: ModalParams<'form'>) => {
-   const { openModal } = modalStore();
+const FormModal = ({
+   input,
+   resolve,
+   cancel,
+}: ModalRenderProps<FormInput, string>) => {
    const inputId = useId();
+   const [value, setValue] = useState(input.defaultValue);
+
+   const submit = (event: FormEvent) => {
+      event.preventDefault();
+      resolve(value);
+   };
 
    return (
       <Card>
-         <label
-            htmlFor={inputId}
-            style={{ display: 'block', marginBottom: 12 }}
-         >
-            Name
-            <input
-               id={inputId}
-               name='name'
-               autoComplete='name'
-               defaultValue={defaultValue}
-               style={{
-                  display: 'block',
-                  marginTop: 4,
-                  padding: 6,
-                  borderRadius: 6,
-                  border: '1px solid #c7cdd6',
-               }}
-            />
-         </label>
-         <div style={{ display: 'flex', gap: 8 }}>
-            <button
-               type='button'
-               onClick={() =>
-                  openModal('alert', {
-                     message:
-                        'Opened from inside another modal — stacking + focus trap.',
-                  })
-               }
+         <form onSubmit={submit}>
+            <label
+               htmlFor={inputId}
+               style={{ display: 'block', marginBottom: 12 }}
             >
-               Open nested alert
-            </button>
-            <button type='button' onClick={closeModal}>
-               Close
-            </button>
-         </div>
+               Name
+               <input
+                  id={inputId}
+                  name='name'
+                  autoComplete='name'
+                  value={value}
+                  onChange={(event) => setValue(event.currentTarget.value)}
+                  style={{
+                     display: 'block',
+                     marginTop: 4,
+                     padding: 6,
+                     borderRadius: 6,
+                     border: '1px solid #c7cdd6',
+                  }}
+               />
+            </label>
+            <div style={{ display: 'flex', gap: 8 }}>
+               <button
+                  type='button'
+                  onClick={() =>
+                     modalSystem.open('alert', {
+                        message: 'This alert is stacked above the form.',
+                     })
+                  }
+               >
+                  Open nested alert
+               </button>
+               <button type='button' onClick={() => cancel()}>
+                  Cancel
+               </button>
+               <button type='submit'>Save</button>
+            </div>
+         </form>
       </Card>
    );
 };
 
-const POSITIONS: ReadonlyArray<readonly [string, string]> = [
-   ['Center', MODAL_POSITIONS.CENTER],
-   ['Right', MODAL_POSITIONS.RIGHT],
-   ['Left', MODAL_POSITIONS.LEFT],
-   ['Top', MODAL_POSITIONS.TOP],
-   ['Bottom', MODAL_POSITIONS.BOTTOM],
-   ['Top-Right', MODAL_POSITIONS.TOP_RIGHT],
-];
+const modalSystem = createModalSystem({
+   alert: defineModal({
+      component: MessageModal,
+      preset: motionPresets.dialog(),
+   }),
+   confirm: defineModal({
+      component: ConfirmModal,
+      preset: motionPresets.dialog(),
+      policy: 'singleton',
+   }),
+   form: defineModal({
+      component: FormModal,
+      preset: motionPresets.drawer(),
+   }),
+   sheet: defineModal({
+      component: MessageModal,
+      preset: motionPresets.sheet(),
+   }),
+   replacement: defineModal({
+      component: MessageModal,
+      preset: motionPresets.dialog(),
+      policy: 'replace',
+   }),
+});
 
-const modalConfig: ModalConfig = {
-   alert: AlertModal,
-   confirm: ConfirmModal,
-   form: FormModal,
-};
-
-const initialParams: ModalInitialParams = {
+const defaultOptions: ModalOpenOptions = {
    ariaLabel: 'Example modal',
+   backdrop: {
+      style: {
+         backgroundColor: 'rgba(15, 23, 42, 0.38)',
+      },
+   },
+   body: {
+      style: {
+         padding: 16,
+      },
+   },
 };
 
 export const App = () => {
-   const { openModal } = modalStore();
    const [log, setLog] = useState<string[]>([]);
 
    const push = (message: string) =>
       setLog((items) => [message, ...items].slice(0, 8));
 
+   const openConfirmation = async () => {
+      const outcome = await modalSystem.open('confirm', {
+         title: 'Delete this item?',
+      });
+
+      if (outcome.status === 'resolved' && outcome.value) {
+         push('confirmation resolved with true');
+         return;
+      }
+
+      if (outcome.status === 'cancelled') {
+         push(`confirmation cancelled: ${outcome.reason}`);
+      }
+   };
+
+   const openForm = async () => {
+      const outcome = await modalSystem.open('form', {
+         defaultValue: 'Sơn',
+      });
+
+      if (outcome.status === 'resolved') {
+         push(`form resolved: ${outcome.value}`);
+      } else {
+         push(`form cancelled: ${outcome.reason}`);
+      }
+   };
+
    return (
       <>
-         <ModalProvider modals={modalConfig} initialParams={initialParams} />
+         <ModalProvider system={modalSystem} defaultOptions={defaultOptions} />
 
          <main>
-            <h1>react-motion-modal — example</h1>
+            <h1>react-motion-modal — typed flows</h1>
 
             <section>
-               <h2>Basic</h2>
-               <button
-                  type='button'
-                  onClick={() =>
-                     openModal('alert', {
-                        message: 'Hello from the alert modal!',
-                        onClose: () =>
-                           push('alert closed (onClose fired once)'),
-                     })
-                  }
-               >
-                  Open alert
+               <h2>Awaitable results</h2>
+               <button type='button' onClick={() => void openConfirmation()}>
+                  Open typed confirmation
                </button>
-               <button
-                  type='button'
-                  onClick={() =>
-                     openModal('confirm', {
-                        title: 'Delete this item?',
-                        onConfirm: () => push('confirmed'),
-                        onClose: () => push('confirm closed'),
-                     })
-                  }
-               >
-                  Open confirm
-               </button>
-               <button
-                  type='button'
-                  onClick={() => openModal('form', { defaultValue: 'Sơn' })}
-               >
-                  Open form (focus trap)
+               <button type='button' onClick={() => void openForm()}>
+                  Open typed form
                </button>
             </section>
 
             <section>
-               <h2>Positions</h2>
-               {POSITIONS.map(([label, position]) => (
-                  <button
-                     type='button'
-                     key={position}
-                     onClick={() =>
-                        openModal('alert', {
-                           message: `Position: ${position}`,
-                           position,
-                        })
-                     }
-                  >
-                     {label}
-                  </button>
-               ))}
-            </section>
-
-            <section>
-               <h2>Behavior toggles</h2>
+               <h2>Motion presets</h2>
                <button
                   type='button'
                   onClick={() =>
-                     openModal('alert', {
-                        message: 'Clicking outside will NOT close this modal.',
-                        closeOnClickOutside: false,
+                     modalSystem.open('alert', {
+                        message: 'Dialog preset',
                      })
                   }
                >
-                  closeOnClickOutside = false
+                  Dialog
                </button>
                <button
                   type='button'
                   onClick={() =>
-                     openModal('alert', {
-                        message: 'Pressing ESC will NOT close this modal.',
-                        closeOnPressEsc: false,
-                     })
+                     modalSystem.open('form', { defaultValue: 'Drawer' })
                   }
                >
-                  closeOnPressEsc = false
+                  Drawer
                </button>
                <button
                   type='button'
                   onClick={() =>
-                     openModal('alert', {
-                        message: 'No backdrop blur.',
-                        blur: false,
+                     modalSystem.open('sheet', {
+                        message: 'Sheet preset',
                      })
                   }
                >
-                  blur = false
+                  Sheet
                </button>
             </section>
 
             <section>
-               <h2>onClose log</h2>
+               <h2>Orchestration</h2>
+               <button
+                  type='button'
+                  onClick={() => {
+                     void modalSystem.open('alert', {
+                        message: 'First modal in the stack',
+                     });
+                     void modalSystem.open('alert', {
+                        message: 'Second modal in the stack',
+                     });
+                  }}
+               >
+                  Stack two dialogs
+               </button>
+               <button
+                  type='button'
+                  onClick={() => {
+                     void modalSystem.open('alert', {
+                        message: 'This modal will be replaced immediately.',
+                     });
+                     void modalSystem.open('replacement', {
+                        message: 'The previous active modal was replaced.',
+                     });
+                  }}
+               >
+                  Replace active modal
+               </button>
+            </section>
+
+            <section>
+               <h2>Outcome log</h2>
                {log.length === 0 ? (
                   <p style={{ color: '#6b7280' }}>
-                     Nothing yet — open and close a modal.
+                     Complete or cancel an awaitable flow.
                   </p>
                ) : (
                   <ul>

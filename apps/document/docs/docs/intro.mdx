@@ -1,0 +1,45 @@
+---
+title: Introduction
+description: Typed, awaitable modal flows for React.
+---
+
+# react-motion-modal
+
+`react-motion-modal` turns modal interactions into typed, awaitable flows. A
+modal definition owns its input type, result type, motion preset, and
+orchestration policy.
+
+## What it gives you
+
+- Typed input and output inferred from the modal registry
+- `await modals.open(...)` instead of callback wiring
+- Explicit resolved and cancelled outcomes
+- Isolated systems for SSR, tests, and multiple React roots
+- `stack`, `replace`, and `singleton` orchestration
+- Headless `dialog`, `drawer`, and `sheet` motion presets
+- Focus trapping, focus restoration, scroll locking, and reduced motion
+
+## Installation
+
+**npm**
+
+```bash
+npm install react-motion-modal motion zustand
+```
+
+**Yarn**
+
+```bash
+yarn add react-motion-modal motion zustand
+```
+
+`react` and `react-dom` are peer dependencies and must already exist in the
+application.
+
+## Core flow
+
+1. Create modal components with `ModalRenderProps<Input, Result>`.
+2. Register them with `defineModal()` and `createModalSystem()`.
+3. Mount `<ModalProvider system={modals} />`.
+4. Await `modals.open(name, input)`.
+5. Call `resolve(value)` or `cancel()` from the modal component.

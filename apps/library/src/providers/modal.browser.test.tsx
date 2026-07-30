@@ -1,50 +1,56 @@
 import { MODAL_POSITIONS } from '@configs/constant';
-import { modalStore } from '@stores/modal';
 import { page, userEvent } from '@vitest/browser/context';
 import { act, type ReactElement } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import type { ModalComponent } from '#types/modal';
+import { defineModal } from '../system/define-modal';
+import { createModalSystem } from '../system/modal-system';
+import type {
+   ModalOutcome,
+   ModalRenderProps,
+   ModalSystem,
+} from '../types/modal-system';
 import '../assets/style/main.css';
 import { ModalProvider } from './modal';
 
 Object.assign(globalThis, { IS_REACT_ACT_ENVIRONMENT: true });
 
-type LooseActions = {
-   openModal: (name: string, params?: Record<string, unknown>) => void;
-   closeAllModal: () => void;
-};
+type TestRegistry = ReturnType<typeof createTestSystem> extends ModalSystem<
+   infer Registry
+>
+   ? Registry
+   : never;
 
-type TestModalProps = {
-   closeModal: () => void;
-};
-
-const TestModal: ModalComponent<TestModalProps> = ({
-   closeModal,
-}): ReactElement => (
+const TestModal = ({ cancel }: ModalRenderProps<void, void>): ReactElement => (
    <div>
       <button type='button'>First action</button>
-      <button type='button' onClick={closeModal}>
+      <button type='button' onClick={() => cancel()}>
          Last action
       </button>
    </div>
 );
 
 const ResponsiveModal = (): ReactElement => (
-   <div style={{ width: 280, height: 400 }}>Responsive modal content</div>
+   <div style={{ width: 340, height: 400 }}>Responsive modal content</div>
 );
 
 const OversizedModal = (): ReactElement => (
    <div style={{ width: 280, height: 800 }}>Oversized modal content</div>
 );
 
-const modals = {
-   test: TestModal,
-   responsive: ResponsiveModal,
-   oversized: OversizedModal,
-};
-
-const getActions = () => modalStore.getState() as unknown as LooseActions;
+function createTestSystem() {
+   return createModalSystem({
+      test: defineModal({
+         component: TestModal,
+      }),
+      responsive: defineModal({
+         component: ResponsiveModal,
+      }),
+      oversized: defineModal({
+         component: OversizedModal,
+      }),
+   });
+}
 
 const nextFrame = () =>
    new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
@@ -52,10 +58,11 @@ const nextFrame = () =>
 describe('ModalProvider', () => {
    let host: HTMLDivElement;
    let root: Root;
+   let system: ModalSystem<TestRegistry>;
    let trigger: HTMLButtonElement | undefined;
 
    beforeEach(() => {
-      getActions().closeAllModal();
+      system = createTestSystem();
       host = document.createElement('div');
       document.body.append(host);
       root = createRoot(host);
@@ -66,16 +73,15 @@ describe('ModalProvider', () => {
       trigger?.remove();
       trigger = undefined;
       host.remove();
-      getActions().closeAllModal();
       document.body.style.overflow = '';
       await page.viewport(1024, 768);
    });
 
    it('renders a modal that was opened before the provider mounted', async () => {
-      getActions().openModal('test');
+      system.open('test');
 
       await act(async () => {
-         root.render(<ModalProvider modals={modals} />);
+         root.render(<ModalProvider system={system} />);
          await nextFrame();
       });
 
@@ -93,12 +99,12 @@ describe('ModalProvider', () => {
       trigger.focus();
 
       await act(async () => {
-         root.render(<ModalProvider modals={modals} />);
+         root.render(<ModalProvider system={system} />);
          await nextFrame();
       });
 
       await act(async () => {
-         getActions().openModal('test');
+         system.open('test');
          await nextFrame();
       });
 
@@ -118,43 +124,122 @@ describe('ModalProvider', () => {
       expect(document.activeElement).toBe(first);
    });
 
-   it('gives the dialog a default accessible name', async () => {
+   it('uses default and custom accessible names', async () => {
       await act(async () => {
-         root.render(<ModalProvider modals={modals} />);
+         root.render(<ModalProvider system={system} />);
          await nextFrame();
       });
 
       await act(async () => {
-         getActions().openModal('test');
+         system.open('test');
          await nextFrame();
       });
 
-      const dialog = document.querySelector<HTMLElement>('[role="dialog"]');
-
+      let dialog = document.querySelector<HTMLElement>(
+         '[role="dialog"][aria-modal="true"]',
+      );
       expect(dialog?.getAttribute('aria-label')).toBe('Modal');
+
+      await act(async () => {
+         system.cancel();
+         system.open('test', undefined, {
+            ariaLabel: 'Account settings',
+         });
+         await nextFrame();
+      });
+
+      dialog = document.querySelector<HTMLElement>(
+         '[role="dialog"][aria-modal="true"]',
+      );
+      expect(dialog?.getAttribute('aria-label')).toBe('Account settings');
    });
 
-   it('uses the custom accessible name when provided', async () => {
+   it('settles backdrop and Escape cancellations with their source', async () => {
       await act(async () => {
-         root.render(<ModalProvider modals={modals} />);
+         root.render(<ModalProvider system={system} />);
+         await nextFrame();
+      });
+
+      let backdropOutcome: Promise<ModalOutcome<void>> | undefined;
+
+      await act(async () => {
+         backdropOutcome = system.open('test');
+         await nextFrame();
+      });
+
+      const backdrop = document.querySelector<HTMLElement>(
+         '.react-motion-modal__backdrop',
+      );
+
+      await act(async () => backdrop?.click());
+      await expect(backdropOutcome).resolves.toEqual({
+         status: 'cancelled',
+         reason: 'backdrop',
+      });
+
+      let escapeOutcome: Promise<ModalOutcome<void>> | undefined;
+
+      await act(async () => {
+         escapeOutcome = system.open('test');
+         await nextFrame();
+      });
+      await act(async () => userEvent.keyboard('{Escape}'));
+      await expect(escapeOutcome).resolves.toEqual({
+         status: 'cancelled',
+         reason: 'escape',
+      });
+   });
+
+   it('locks background scroll and restores it when the stack empties', async () => {
+      document.body.style.overflow = 'scroll';
+
+      await act(async () => {
+         root.render(<ModalProvider system={system} />);
+         await nextFrame();
+         system.open('test');
+         await nextFrame();
+      });
+
+      expect(document.body.style.overflow).toBe('hidden');
+
+      await act(async () => {
+         system.cancel();
+         await nextFrame();
+      });
+
+      expect(document.body.style.overflow).toBe('scroll');
+   });
+
+   it('cancels pending flows when its provider unmounts', async () => {
+      await act(async () => {
+         root.render(<ModalProvider system={system} />);
+         await nextFrame();
+      });
+      let outcome: Promise<ModalOutcome<void>> | undefined;
+
+      await act(async () => {
+         outcome = system.open('test');
          await nextFrame();
       });
 
       await act(async () => {
-         getActions().openModal('test', { ariaLabel: 'Account settings' });
-         await nextFrame();
+         root.unmount();
+         await Promise.resolve();
       });
 
-      const dialog = document.querySelector<HTMLElement>('[role="dialog"]');
+      await expect(outcome).resolves.toEqual({
+         status: 'cancelled',
+         reason: 'provider-unmounted',
+      });
 
-      expect(dialog?.getAttribute('aria-label')).toBe('Account settings');
+      root = createRoot(host);
    });
 
    it('does not squeeze positioned modals into half-viewports on small screens', async () => {
       await page.viewport(360, 640);
 
       await act(async () => {
-         root.render(<ModalProvider modals={modals} />);
+         root.render(<ModalProvider system={system} />);
          await nextFrame();
       });
 
@@ -164,7 +249,7 @@ describe('ModalProvider', () => {
 
       for (const position of positions) {
          await act(async () => {
-            getActions().openModal('responsive', { position });
+            system.open('responsive', undefined, { position });
             await nextFrame();
          });
 
@@ -173,7 +258,7 @@ describe('ModalProvider', () => {
          );
          const bounds = dialog?.getBoundingClientRect();
 
-         expect(bounds?.width, `${position} width`).toBeGreaterThanOrEqual(320);
+         expect(bounds?.width, `${position} width`).toBeGreaterThanOrEqual(340);
 
          if (
             position !== MODAL_POSITIONS.LEFT &&
@@ -185,7 +270,7 @@ describe('ModalProvider', () => {
          }
 
          await act(async () => {
-            getActions().closeAllModal();
+            system.cancelAll();
             await nextFrame();
          });
       }
@@ -195,12 +280,12 @@ describe('ModalProvider', () => {
       await page.viewport(360, 640);
 
       await act(async () => {
-         root.render(<ModalProvider modals={modals} />);
+         root.render(<ModalProvider system={system} />);
          await nextFrame();
       });
 
       await act(async () => {
-         getActions().openModal('oversized', {
+         system.open('oversized', undefined, {
             position: MODAL_POSITIONS.TOP_RIGHT,
          });
          await nextFrame();

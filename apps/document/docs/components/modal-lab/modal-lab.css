@@ -1,0 +1,622 @@
+.modal-lab {
+  --lab-accent: #7185ff;
+  --lab-accent-strong: #5269f2;
+  --lab-border: rgb(255 255 255 / 12%);
+  --lab-panel: #242433;
+  --lab-panel-raised: #2d2d3d;
+  --lab-text: #f7f7fb;
+  --lab-muted: #aaaab8;
+
+  margin: 1.5rem 0 3rem;
+  border: 1px solid var(--lab-border);
+  border-radius: 1rem;
+  background: #1d1d2a;
+  color: var(--lab-text);
+  overflow: hidden;
+}
+
+.modal-lab * {
+  box-sizing: border-box;
+}
+
+.modal-lab button,
+.modal-lab input {
+  font: inherit;
+}
+
+.modal-lab button {
+  color: inherit;
+}
+
+.modal-lab-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--lab-border);
+}
+
+.modal-lab-kicker,
+.modal-lab-surface__eyebrow {
+  color: #9daaff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.modal-lab-header h2 {
+  margin: 0.25rem 0 0.5rem;
+  color: var(--lab-text);
+  font-size: 1.5rem;
+}
+
+.modal-lab-header p {
+  max-width: 38rem;
+  margin: 0;
+  color: var(--lab-muted);
+  line-height: 1.6;
+}
+
+.modal-lab-status {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.65rem;
+  border: 1px solid var(--lab-border);
+  border-radius: 999px;
+  color: #c8cad5;
+  font-size: 0.75rem;
+}
+
+.modal-lab-status span,
+.modal-lab-toolbar__dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: #53d889;
+  box-shadow: 0 0 0.75rem rgb(83 216 137 / 65%);
+}
+
+.modal-lab-workspace {
+  display: grid;
+  grid-template-columns: minmax(16rem, 18rem) minmax(0, 1fr);
+  min-height: 44rem;
+}
+
+.modal-lab-controls {
+  display: grid;
+  align-content: start;
+  gap: 1.25rem;
+  padding: 1.25rem;
+  border-right: 1px solid var(--lab-border);
+  background: rgb(255 255 255 / 2%);
+}
+
+.modal-lab-fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.modal-lab-fieldset legend {
+  margin-bottom: 0.65rem;
+  color: #d7d8e2;
+  font-size: 0.75rem;
+  font-weight: 750;
+}
+
+.modal-lab-scenarios {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.modal-lab-scenario {
+  display: grid;
+  gap: 0.15rem;
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--lab-border);
+  border-radius: 0.65rem;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.modal-lab-scenario strong {
+  font-size: 0.82rem;
+}
+
+.modal-lab-scenario span {
+  color: var(--lab-muted);
+  font-size: 0.72rem;
+}
+
+.modal-lab-scenario[data-active='true'] {
+  border-color: rgb(113 133 255 / 75%);
+  background: rgb(113 133 255 / 12%);
+}
+
+.modal-lab-control-grid {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.modal-lab-segmented {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  padding: 0.2rem;
+  border: 1px solid var(--lab-border);
+  border-radius: 0.65rem;
+  background: #1a1a26;
+}
+
+.modal-lab-segmented button {
+  min-width: 0;
+  padding: 0.45rem 0.3rem;
+  border: 0;
+  border-radius: 0.45rem;
+  background: transparent;
+  color: var(--lab-muted);
+  font-size: 0.7rem;
+  cursor: pointer;
+}
+
+.modal-lab-segmented button[data-active='true'] {
+  background: var(--lab-panel-raised);
+  color: #ffffff;
+  box-shadow: 0 1px 0.25rem rgb(0 0 0 / 22%);
+}
+
+.modal-lab-position-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 2.25rem);
+  gap: 0.35rem;
+  width: fit-content;
+  padding: 0.5rem;
+  border: 1px solid var(--lab-border);
+  border-radius: 0.75rem;
+  background: #1a1a26;
+}
+
+.modal-lab-position-grid button {
+  display: grid;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 0.45rem;
+  background: var(--lab-panel);
+  color: #858596;
+  place-items: center;
+  cursor: pointer;
+}
+
+.modal-lab-position-grid button[data-active='true'] {
+  border-color: var(--lab-accent);
+  background: var(--lab-accent-strong);
+  color: #ffffff;
+}
+
+.modal-lab-toggles {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.modal-lab-toggles label {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: #d0d1dc;
+  font-size: 0.76rem;
+  cursor: pointer;
+}
+
+.modal-lab-toggles input {
+  width: 1rem;
+  height: 1rem;
+  margin: 0;
+  accent-color: var(--lab-accent-strong);
+}
+
+.modal-lab-output {
+  min-width: 0;
+  background: #181822;
+}
+
+.modal-lab-toolbar,
+.modal-lab-runtime__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.modal-lab-toolbar {
+  min-height: 3.25rem;
+  padding: 0.65rem 1rem;
+  border-bottom: 1px solid var(--lab-border);
+}
+
+.modal-lab-toolbar__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #d7d8e2;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.modal-lab-viewport-switch {
+  display: flex;
+  gap: 0.2rem;
+  margin: 0;
+  min-inline-size: 0;
+  padding: 0.2rem;
+  border: 1px solid var(--lab-border);
+  border-radius: 0.55rem;
+}
+
+.modal-lab-viewport-switch button,
+.modal-lab-runtime__header button {
+  padding: 0.35rem 0.55rem;
+  border: 0;
+  border-radius: 0.4rem;
+  background: transparent;
+  color: var(--lab-muted);
+  font-size: 0.7rem;
+  cursor: pointer;
+}
+
+.modal-lab-viewport-switch button[data-active='true'] {
+  background: var(--lab-panel-raised);
+  color: #ffffff;
+}
+
+.modal-lab-preview-shell {
+  display: grid;
+  min-height: 31rem;
+  padding: 1rem;
+  background:
+    linear-gradient(rgb(255 255 255 / 3%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 3%) 1px, transparent 1px),
+    #111119;
+  background-size: 1.5rem 1.5rem;
+  place-items: center;
+}
+
+.modal-lab-preview {
+  position: relative;
+  width: 100%;
+  max-width: 46rem;
+  min-height: 27rem;
+  border: 1px solid rgb(255 255 255 / 14%);
+  border-radius: 0.85rem;
+  background: #f2f4f8;
+  color: #172033;
+  box-shadow: 0 1rem 3rem rgb(0 0 0 / 30%);
+  overflow: hidden;
+  transform: translateZ(0);
+  transition: width 180ms ease;
+}
+
+.modal-lab-preview[data-viewport='mobile'] {
+  width: min(100%, 22rem);
+}
+
+.modal-lab-demo-app {
+  min-height: 27rem;
+  padding: 2rem;
+  background:
+    radial-gradient(circle at 88% 8%, rgb(82 105 242 / 16%), transparent 12rem),
+    #f2f4f8;
+}
+
+.modal-lab-demo-app > span {
+  color: #65708a;
+  font-size: 0.7rem;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.modal-lab-demo-app h3 {
+  margin: 4rem 0 0.5rem;
+  color: #172033;
+  font-size: clamp(1.45rem, 4vw, 2rem);
+}
+
+.modal-lab-demo-app p {
+  max-width: 25rem;
+  margin: 0 0 1.25rem;
+  color: #65708a;
+}
+
+.modal-lab-portal {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.modal-lab-portal .react-motion-modal {
+  pointer-events: auto;
+}
+
+.modal-lab-runtime {
+  border-top: 1px solid var(--lab-border);
+  background: #12121b;
+}
+
+.modal-lab-runtime__header {
+  min-height: 2.75rem;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid var(--lab-border);
+  color: #d7d8e2;
+  font-size: 0.75rem;
+}
+
+.modal-lab-runtime__header button {
+  border: 1px solid var(--lab-border);
+}
+
+.modal-lab-runtime ol {
+  display: grid;
+  gap: 0.4rem;
+  min-height: 7rem;
+  max-height: 9rem;
+  margin: 0;
+  padding: 0.75rem 1rem 1rem 2.5rem;
+  color: #8f92a4;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.7rem;
+  overflow: auto;
+}
+
+.modal-lab-runtime li:first-child {
+  color: #d4d7e6;
+}
+
+.modal-lab-button {
+  min-height: 2.5rem;
+  padding: 0.65rem 0.9rem;
+  border: 1px solid transparent;
+  border-radius: 0.55rem;
+  font-size: 0.8rem;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.modal-lab .modal-lab-button--primary {
+  border-color: #5269f2;
+  background: #5269f2;
+  color: #ffffff;
+}
+
+.modal-lab .modal-lab-button--primary:hover {
+  background: #3d54d8;
+}
+
+.modal-lab-button--quiet {
+  border-color: rgb(255 255 255 / 16%);
+  background: transparent;
+  color: #d7d8e2;
+}
+
+.modal-lab-button--nested {
+  width: 100%;
+  margin-top: 0.75rem;
+  border-color: rgb(113 133 255 / 45%);
+  background: rgb(113 133 255 / 12%);
+  color: #cbd1ff;
+}
+
+.modal-lab-body {
+  color: var(--lab-text);
+}
+
+.modal-lab-body--dialog {
+  width: min(25rem, calc(100% - 2rem));
+}
+
+.modal-lab-body--drawer {
+  width: min(21rem, 90%);
+  height: 100%;
+}
+
+.modal-lab-body--sheet {
+  width: 100%;
+  max-height: 72%;
+}
+
+.modal-lab-body--drawer .react-motion-modal__content,
+.modal-lab-body--drawer .modal-lab-surface {
+  height: 100%;
+}
+
+.modal-lab-body--drawer .modal-lab-surface {
+  border-radius: 0;
+}
+
+.modal-lab-body--sheet .modal-lab-surface {
+  border-radius: 1rem 1rem 0 0;
+}
+
+.modal-lab-surface {
+  width: 100%;
+  padding: 1.25rem;
+  border: 1px solid rgb(255 255 255 / 14%);
+  border-radius: 0.85rem;
+  background: #2b2b3a;
+  color: #f7f7fb;
+  box-shadow: 0 1rem 3rem rgb(0 0 0 / 38%);
+}
+
+.modal-lab-surface h2 {
+  margin: 0.35rem 0 0.5rem;
+  color: #ffffff;
+  font-size: 1.2rem;
+}
+
+.modal-lab-surface p {
+  margin: 0;
+  color: #b4b5c1;
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
+.modal-lab-surface form {
+  margin-top: 1rem;
+}
+
+.modal-lab-surface label {
+  color: #d7d8e2;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.modal-lab-surface input {
+  display: block;
+  width: 100%;
+  height: 2.6rem;
+  margin-top: 0.4rem;
+  padding: 0 0.75rem;
+  border: 1px solid rgb(255 255 255 / 18%);
+  border-radius: 0.55rem;
+  outline: 0;
+  background: #20202c;
+  color: #ffffff;
+}
+
+.modal-lab-surface input:focus {
+  border-color: var(--lab-accent);
+  box-shadow: 0 0 0 3px rgb(113 133 255 / 18%);
+}
+
+.modal-lab-surface__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.55rem;
+  margin-top: 1.25rem;
+}
+
+.modal-lab-summary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin: 1rem 0 0;
+}
+
+.modal-lab-summary div {
+  padding: 0.65rem;
+  border: 1px solid rgb(255 255 255 / 10%);
+  border-radius: 0.55rem;
+  background: rgb(255 255 255 / 4%);
+}
+
+.modal-lab-summary dt {
+  color: #9293a2;
+  font-size: 0.65rem;
+}
+
+.modal-lab-summary dd {
+  margin: 0.15rem 0 0;
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 750;
+}
+
+.modal-lab-surface--notice {
+  width: min(22rem, 100%);
+}
+
+.modal-lab :where(button, input):focus-visible {
+  outline: 2px solid #9daaff;
+  outline-offset: 2px;
+}
+
+@media (max-width: 900px) {
+  .modal-lab-workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-lab-controls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-right: 0;
+    border-bottom: 1px solid var(--lab-border);
+  }
+
+  .modal-lab-controls > :first-child,
+  .modal-lab-controls > :last-child {
+    grid-column: 1 / -1;
+  }
+
+  .modal-lab-control-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .modal-lab {
+    margin-inline: -0.5rem;
+    border-radius: 0.75rem;
+  }
+
+  .modal-lab-header {
+    display: grid;
+    padding: 1rem;
+  }
+
+  .modal-lab-status {
+    width: fit-content;
+  }
+
+  .modal-lab-controls {
+    display: grid;
+    grid-template-columns: 1fr;
+    padding: 1rem;
+  }
+
+  .modal-lab-controls > * {
+    grid-column: auto;
+  }
+
+  .modal-lab-control-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-lab-position-grid {
+    grid-template-columns: repeat(3, 2.5rem);
+  }
+
+  .modal-lab-position-grid button {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .modal-lab-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .modal-lab-preview-shell {
+    min-height: 27rem;
+    padding: 0.75rem;
+  }
+
+  .modal-lab-preview,
+  .modal-lab-demo-app {
+    min-height: 24rem;
+  }
+
+  .modal-lab-demo-app {
+    padding: 1.25rem;
+  }
+
+  .modal-lab-surface__actions .modal-lab-button {
+    flex: 1 1 auto;
+  }
+}

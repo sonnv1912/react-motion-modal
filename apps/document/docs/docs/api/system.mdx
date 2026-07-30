@@ -1,0 +1,70 @@
+---
+title: Modal System
+description: Create isolated modal registries and orchestrate their lifecycle.
+---
+
+# Modal System
+
+`createModalSystem()` owns an isolated registry and modal stack.
+
+```ts
+const modals = createModalSystem({
+  confirm,
+  profileForm,
+  notice,
+});
+```
+
+## `open(name, input, options?)`
+
+Opens a modal and returns its typed outcome:
+
+```ts
+const outcome = await modals.open(
+  'profileForm',
+  { initialName: 'Sơn' },
+  { ariaLabel: 'Edit profile' },
+);
+```
+
+The promise settles at close intent. Exit animation continues visually without
+delaying application code.
+
+## `cancel(reason?)`
+
+Cancels the top modal. The default reason is `programmatic`.
+
+```ts
+modals.cancel();
+modals.cancel('programmatic');
+```
+
+## `cancelAll(reason?)`
+
+Cancels the entire stack from top to bottom:
+
+```ts
+modals.cancelAll();
+```
+
+Every pending operation settles exactly once.
+
+## Policies
+
+Set a policy on a modal definition:
+
+```ts
+defineModal({
+  component: ConfirmModal,
+  policy: 'singleton',
+});
+```
+
+- `stack` is the default and adds a new modal above the current one.
+- `replace` cancels the active modal with reason `replaced`, then opens the new
+  modal.
+- `singleton` returns the existing in-flight promise when the same modal is
+  already active.
+
+Systems do not share state. Create a fresh system for isolated tests or server
+requests.

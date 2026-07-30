@@ -1,0 +1,47 @@
+---
+title: Styling
+description: Split structural library CSS from application-owned surfaces.
+---
+
+# Styling
+
+The package is headless. Its stylesheet provides structural positioning,
+viewport bounds, overflow handling, and stacking, but no modal surface,
+backdrop color, padding, shadow, or typography.
+
+## Add application defaults
+
+```tsx
+<ModalProvider
+  system={modals}
+  defaultOptions={{
+    backdrop: {
+      className: 'bg-black/50',
+    },
+    body: {
+      className: 'p-4',
+    },
+  }}
+/>
+```
+
+## Style the component surface
+
+```tsx
+function ConfirmModal(props: ModalRenderProps<ConfirmInput, boolean>) {
+  return (
+    <section className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
+      {/* content */}
+    </section>
+  );
+}
+```
+
+## Recommended ownership
+
+- Use `backdrop` for dimming and overlay visuals.
+- Use `body` for viewport spacing and container constraints.
+- Put the actual surface, typography, and controls in the modal component.
+
+The body wrapper scrolls vertically when content exceeds the viewport and hides
+horizontal overflow caused by off-screen motion.
