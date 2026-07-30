@@ -1,9 +1,11 @@
+import { MODAL_POSITIONS } from '@configs/constant';
 import { modalStore } from '@stores/modal';
-import { userEvent } from '@vitest/browser/context';
+import { page, userEvent } from '@vitest/browser/context';
 import { act, type ReactElement } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import type { ModalComponent } from '#types/modal';
+import '../assets/style/main.css';
 import { ModalProvider } from './modal';
 
 Object.assign(globalThis, { IS_REACT_ACT_ENVIRONMENT: true });
@@ -28,8 +30,13 @@ const TestModal: ModalComponent<TestModalProps> = ({
    </div>
 );
 
+const ResponsiveModal = (): ReactElement => (
+   <div style={{ width: 280, height: 400 }}>Responsive modal content</div>
+);
+
 const modals = {
    test: TestModal,
+   responsive: ResponsiveModal,
 };
 
 const getActions = () => modalStore.getState() as unknown as LooseActions;
@@ -56,6 +63,7 @@ describe('ModalProvider', () => {
       host.remove();
       getActions().closeAllModal();
       document.body.style.overflow = '';
+      await page.viewport(1024, 768);
    });
 
    it('renders a modal that was opened before the provider mounted', async () => {
@@ -135,5 +143,46 @@ describe('ModalProvider', () => {
       const dialog = document.querySelector<HTMLElement>('[role="dialog"]');
 
       expect(dialog?.getAttribute('aria-label')).toBe('Account settings');
+   });
+
+   it('does not squeeze positioned modals into half-viewports on small screens', async () => {
+      await page.viewport(360, 640);
+
+      await act(async () => {
+         root.render(<ModalProvider modals={modals} />);
+         await nextFrame();
+      });
+
+      const positions = Object.values(MODAL_POSITIONS).filter(
+         (position) => position !== MODAL_POSITIONS.CENTER_FULL,
+      );
+
+      for (const position of positions) {
+         await act(async () => {
+            getActions().openModal('responsive', { position });
+            await nextFrame();
+         });
+
+         const dialog = document.querySelector<HTMLElement>(
+            '[role="dialog"][aria-modal="true"]',
+         );
+         const bounds = dialog?.getBoundingClientRect();
+
+         expect(bounds?.width, `${position} width`).toBeGreaterThanOrEqual(320);
+
+         if (
+            position !== MODAL_POSITIONS.LEFT &&
+            position !== MODAL_POSITIONS.RIGHT
+         ) {
+            expect(bounds?.height, `${position} height`).toBeGreaterThanOrEqual(
+               400,
+            );
+         }
+
+         await act(async () => {
+            getActions().closeAllModal();
+            await nextFrame();
+         });
+      }
    });
 });
