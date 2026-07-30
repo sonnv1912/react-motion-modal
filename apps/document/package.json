@@ -14,7 +14,7 @@
       "@rspress/core": "2.0.19",
       "@rspress/plugin-playground": "2.0.19",
       "monaco-editor": "^0.52.2",
-      "motion": "^12.23.12",
+      "motion": "^12.43.0",
       "react": "^19.0.0",
       "react-dom": "^19.0.0",
       "react-motion-modal": "*",
