@@ -34,9 +34,14 @@ const ResponsiveModal = (): ReactElement => (
    <div style={{ width: 280, height: 400 }}>Responsive modal content</div>
 );
 
+const OversizedModal = (): ReactElement => (
+   <div style={{ width: 280, height: 800 }}>Oversized modal content</div>
+);
+
 const modals = {
    test: TestModal,
    responsive: ResponsiveModal,
+   oversized: OversizedModal,
 };
 
 const getActions = () => modalStore.getState() as unknown as LooseActions;
@@ -184,5 +189,37 @@ describe('ModalProvider', () => {
             await nextFrame();
          });
       }
+   });
+
+   it('does not show horizontal scrollbars caused by position animations', async () => {
+      await page.viewport(360, 640);
+
+      await act(async () => {
+         root.render(<ModalProvider modals={modals} />);
+         await nextFrame();
+      });
+
+      await act(async () => {
+         getActions().openModal('oversized', {
+            position: MODAL_POSITIONS.TOP_RIGHT,
+         });
+         await nextFrame();
+      });
+
+      const dialog = document.querySelector<HTMLElement>(
+         '[role="dialog"][aria-modal="true"]',
+      );
+
+      expect(dialog).not.toBeNull();
+
+      if (!dialog) {
+         return;
+      }
+
+      const style = getComputedStyle(dialog);
+
+      expect(style.overflowX).toBe('hidden');
+      expect(style.overflowY).toBe('auto');
+      expect(dialog.scrollHeight).toBeGreaterThan(dialog.clientHeight);
    });
 });
