@@ -1,4 +1,4 @@
-import { type ReactNode, useState } from 'react';
+import { type ReactNode, useId, useState } from 'react';
 import {
    MODAL_POSITIONS,
    type ModalConfig,
@@ -67,12 +67,19 @@ const ConfirmModal = ({
 
 const FormModal = ({ defaultValue, closeModal }: ModalParams<'form'>) => {
    const { openModal } = modalStore();
+   const inputId = useId();
 
    return (
       <Card>
-         <label style={{ display: 'block', marginBottom: 12 }}>
+         <label
+            htmlFor={inputId}
+            style={{ display: 'block', marginBottom: 12 }}
+         >
             Name
             <input
+               id={inputId}
+               name='name'
+               autoComplete='name'
                defaultValue={defaultValue}
                style={{
                   display: 'block',
