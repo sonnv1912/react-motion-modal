@@ -66,7 +66,11 @@ describe('ModalProvider', () => {
          await nextFrame();
       });
 
-      expect(document.querySelector('[role="dialog"]')).not.toBeNull();
+      const dialog = document.querySelector<HTMLElement>('[role="dialog"]');
+      const firstButton = dialog?.querySelector('button');
+
+      expect(dialog).not.toBeNull();
+      expect(document.activeElement).toBe(firstButton);
    });
 
    it('keeps Tab focus inside the active dialog', async () => {

@@ -94,6 +94,10 @@ export const ModalProvider = ({
    // empties. The active dialog is resolved by id (from store state) so
    // exiting modals don't steal focus during their exit.
    useEffect(() => {
+      if (!portalRoot) {
+         return;
+      }
+
       const activeId = active?.id;
 
       if (!hasOpenModals) {
@@ -117,7 +121,7 @@ export const ModalProvider = ({
          const focusables = getFocusableElements(dialog);
          (focusables[0] ?? dialog).focus();
       }
-   }, [active, hasOpenModals]);
+   }, [active, hasOpenModals, portalRoot]);
 
    return (
       portalRoot &&
