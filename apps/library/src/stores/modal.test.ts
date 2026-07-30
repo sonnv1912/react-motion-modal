@@ -41,6 +41,32 @@ describe('modalStore', () => {
       expect(modalStore.getState().modals).toHaveLength(0);
    });
 
+   it('injected closeModal closes its exact instance when names repeat', () => {
+      const actions = getActions();
+
+      actions.openModal('alert', { marker: 'first' });
+      actions.openModal('alert', { marker: 'second' });
+
+      const active = modalStore.getState().active as
+         | {
+              params?: {
+                 closeModal?: () => void;
+              };
+           }
+         | undefined;
+
+      active?.params?.closeModal?.();
+
+      const state = modalStore.getState() as unknown as {
+         modals: Array<{ params?: { marker?: string } }>;
+         active?: { params?: { marker?: string } };
+      };
+
+      expect(state.modals).toHaveLength(1);
+      expect(state.modals[0]?.params?.marker).toBe('first');
+      expect(state.active?.params?.marker).toBe('first');
+   });
+
    it('closeModal() removes the topmost modal and updates active', () => {
       const actions = getActions();
 
@@ -81,6 +107,18 @@ describe('modalStore', () => {
       expect(state.active?.name).toBe('c');
    });
 
+   it('closeModal is a no-op when the stack is empty or the name is missing', () => {
+      const actions = getActions();
+
+      expect(() => actions.closeModal()).not.toThrow();
+
+      actions.openModal('alert');
+
+      expect(() => actions.closeModal('missing')).not.toThrow();
+      expect(modalStore.getState().modals).toHaveLength(1);
+      expect(modalStore.getState().active?.name).toBe('alert');
+   });
+
    it('invokes onClose exactly once when the modal is closed', () => {
       const onClose = vi.fn();
       const actions = getActions();
@@ -102,5 +140,18 @@ describe('modalStore', () => {
 
       expect(state.modals).toHaveLength(0);
       expect(state.active).toBeUndefined();
+   });
+
+   it('closeAllModal invokes onClose once for every open modal', () => {
+      const firstOnClose = vi.fn();
+      const secondOnClose = vi.fn();
+      const actions = getActions();
+
+      actions.openModal('a', { onClose: firstOnClose });
+      actions.openModal('b', { onClose: secondOnClose });
+      actions.closeAllModal();
+
+      expect(firstOnClose).toHaveBeenCalledTimes(1);
+      expect(secondOnClose).toHaveBeenCalledTimes(1);
    });
 });

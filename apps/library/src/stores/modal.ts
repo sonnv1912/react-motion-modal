@@ -13,60 +13,73 @@ const createModalId = () => {
    return `modal-${Date.now()}-${Math.random().toString(36).slice(2)}`;
 };
 
-export const modalStore = create<ModalState & ModalAction>((set, get) => ({
-   modals: [],
+export const modalStore = create<ModalState & ModalAction>((set, get) => {
+   const closeModalAtIndex = (index: number) => {
+      const modals = [...get().modals];
 
-   openModal(name, _params) {
-      const closeModal = () => get().closeModal(name);
+      if (index < 0 || index >= modals.length) {
+         return;
+      }
 
-      const params = {
-         ..._params,
-         closeModal,
-      } as any;
-
-      const modal: ActiveModal = {
-         id: createModalId(),
-         name,
-         params,
-      };
-
-      const modals = [...get().modals, modal];
+      const [modal] = modals.splice(index, 1);
 
       set({
          modals,
-         active: modal,
+         active: modals[modals.length - 1],
       });
-   },
 
-   closeAllModal() {
-      set({
-         modals: [],
-         active: undefined,
-      });
-   },
+      (modal?.params as BaseModalParams | undefined)?.onClose?.();
+   };
 
-   closeModal(name) {
-      const modals = [...get().modals];
+   return {
+      modals: [],
 
-      const foundIndex = name
-         ? modals.findIndex((t) => t.name === name)
-         : modals.length - 1;
+      openModal(name, _params) {
+         const id = createModalId();
+         const closeModal = () => {
+            const index = get().modals.findIndex((modal) => modal.id === id);
+            closeModalAtIndex(index);
+         };
 
-      const modal = modals[foundIndex];
-      const params = modal.params as BaseModalParams | undefined;
+         const params = {
+            ..._params,
+            closeModal,
+         } as any;
 
-      if (foundIndex > -1) {
-         params?.onClose?.();
+         const modal: ActiveModal = {
+            id,
+            name,
+            params,
+         };
 
-         modals.splice(foundIndex, 1);
+         const modals = [...get().modals, modal];
 
-         // The active modal is always the topmost remaining one. Splicing a
-         // non-top modal (close by name) must not leave `active` pointing at
-         // the modal below the one we removed, or at undefined.
          set({
             modals,
-            active: modals[modals.length - 1],
+            active: modal,
          });
-      }
-   },
-}));
+      },
+
+      closeAllModal() {
+         const modals = get().modals;
+
+         set({
+            modals: [],
+            active: undefined,
+         });
+
+         for (const modal of [...modals].reverse()) {
+            (modal.params as BaseModalParams | undefined)?.onClose?.();
+         }
+      },
+
+      closeModal(name) {
+         const modals = get().modals;
+         const index = name
+            ? modals.findIndex((modal) => modal.name === name)
+            : modals.length - 1;
+
+         closeModalAtIndex(index);
+      },
+   };
+});
