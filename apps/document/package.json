@@ -13,7 +13,7 @@
    "dependencies": {
       "@rspress/core": "2.0.19",
       "@rspress/plugin-playground": "2.0.19",
-      "monaco-editor": "^0.52.2",
+      "monaco-editor": "^0.56.0",
       "motion": "^12.23.12",
       "react": "^19.0.0",
       "react-dom": "^19.0.0",
