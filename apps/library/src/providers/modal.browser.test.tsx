@@ -190,6 +190,39 @@ describe('ModalProvider', () => {
       });
    });
 
+   it('cancels the full modal stack on browser history navigation', async () => {
+      await act(async () => {
+         root.render(<ModalProvider system={system} />);
+         await nextFrame();
+      });
+
+      let firstOutcome: Promise<ModalOutcome<void>> | undefined;
+      let secondOutcome: Promise<ModalOutcome<void>> | undefined;
+
+      await act(async () => {
+         firstOutcome = system.open('test');
+         secondOutcome = system.open('test');
+         await nextFrame();
+      });
+
+      await act(async () => {
+         window.dispatchEvent(new PopStateEvent('popstate'));
+         await nextFrame();
+      });
+
+      await expect(firstOutcome).resolves.toEqual({
+         status: 'cancelled',
+         reason: 'programmatic',
+      });
+      await expect(secondOutcome).resolves.toEqual({
+         status: 'cancelled',
+         reason: 'programmatic',
+      });
+      expect(
+         document.querySelector('[role="dialog"][aria-modal="true"]'),
+      ).toBeNull();
+   });
+
    it('locks background scroll and restores it when the stack empties', async () => {
       document.body.style.overflow = 'scroll';
 

@@ -1,4 +1,10 @@
-import { type FormEvent, type ReactNode, useId, useState } from 'react';
+import {
+   type FormEvent,
+   type ReactNode,
+   useEffect,
+   useId,
+   useState,
+} from 'react';
 import {
    createModalSystem,
    defineModal,
@@ -162,6 +168,22 @@ const defaultOptions: ModalOpenOptions = {
 
 export const App = () => {
    const [log, setLog] = useState<string[]>([]);
+   const [historyStep, setHistoryStep] = useState(() =>
+      Number(new URLSearchParams(window.location.search).get('history-step')),
+   );
+
+   useEffect(() => {
+      const syncHistoryStep = () => {
+         setHistoryStep(
+            Number(
+               new URLSearchParams(window.location.search).get('history-step'),
+            ),
+         );
+      };
+
+      window.addEventListener('popstate', syncHistoryStep);
+      return () => window.removeEventListener('popstate', syncHistoryStep);
+   }, []);
 
    const push = (message: string) =>
       setLog((items) => [message, ...items].slice(0, 8));
@@ -191,6 +213,14 @@ export const App = () => {
       } else {
          push(`form cancelled: ${outcome.reason}`);
       }
+   };
+
+   const createHistoryEntry = () => {
+      const nextStep = historyStep + 1;
+      const nextUrl = new URL(window.location.href);
+      nextUrl.searchParams.set('history-step', String(nextStep));
+      window.history.pushState(null, '', nextUrl);
+      setHistoryStep(nextStep);
    };
 
    return (
@@ -269,6 +299,29 @@ export const App = () => {
                   }}
                >
                   Replace active modal
+               </button>
+            </section>
+
+            <section>
+               <h2>Browser Back / Forward</h2>
+               <p>
+                  History step: <strong>{historyStep}</strong>. Create an entry,
+                  open the test modal, then press the browser Back or Forward
+                  button.
+               </p>
+               <button type='button' onClick={createHistoryEntry}>
+                  Create history entry
+               </button>
+               <button
+                  type='button'
+                  onClick={() =>
+                     void modalSystem.open('alert', {
+                        message:
+                           'Press the browser Back or Forward button. This modal should close automatically.',
+                     })
+                  }
+               >
+                  Open history test modal
                </button>
             </section>
 

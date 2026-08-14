@@ -48,6 +48,13 @@ export const ModalProvider = <Registry extends ModalRegistry>({
    useEffect(() => attachModalProvider(system), [system]);
 
    useEffect(() => {
+      const onPopState = () => system.cancelAll('programmatic');
+
+      window.addEventListener('popstate', onPopState);
+      return () => window.removeEventListener('popstate', onPopState);
+   }, [system]);
+
+   useEffect(() => {
       if (!hasOpenModals) {
          return;
       }

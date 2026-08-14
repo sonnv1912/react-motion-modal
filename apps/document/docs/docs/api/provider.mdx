@@ -50,6 +50,8 @@ An optional portal target. It defaults to `document.body`.
 - Only the top modal is interactive and exposed as `aria-modal`.
 - Focus stays inside the top dialog and returns to the previous element.
 - Body scroll is locked while the stack is non-empty.
+- Browser Back and Forward navigation cancels the full stack with
+  `programmatic`.
 - Unmounting the last provider cancels pending operations with
   `provider-unmounted`.
 - React Strict Mode remounts do not cancel a live operation.
