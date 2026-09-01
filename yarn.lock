@@ -882,10 +882,10 @@
     unist-util-visit-children "^3.0.0"
     vfile "^6.0.3"
 
-"@rspress/plugin-playground@2.0.19":
-  version "2.0.19"
-  resolved "https://registry.yarnpkg.com/@rspress/plugin-playground/-/plugin-playground-2.0.19.tgz#b875694c7dbce98b0b0ee478458dee5bcda4b65f"
-  integrity sha512-+ep6EsztlyJ8v5wiuv5u4a3ky5DgLOf6le6wuLtnCjHNNKMoKT7ILRtZIPhi4OpcSVBk7W/KaOklvjHJmHVD1w==
+"@rspress/plugin-playground@2.0.21":
+  version "2.0.21"
+  resolved "https://registry.yarnpkg.com/@rspress/plugin-playground/-/plugin-playground-2.0.21.tgz#efe8a3d4b96d7249d32314d2372df7aabbb18a8b"
+  integrity sha512-2D3/8O2lOZ63devVvU5Kx9cZGJCdhskktDGPyP8DXWHYw4JduFZTMH+Hos75qkH85ksLj2eVWK8IYJdCJVfxbg==
   dependencies:
     "@mdx-js/mdx" "^3.1.1"
     "@monaco-editor/react" "~4.7.0"
