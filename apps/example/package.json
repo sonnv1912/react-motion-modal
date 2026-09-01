@@ -13,7 +13,7 @@
       "motion": "^12.23.12",
       "react": "^19.1.0",
       "react-dom": "^19.1.0",
-      "zustand": "^5.0.7"
+      "zustand": "^5.0.15"
    },
    "devDependencies": {
       "@types/react": "^19.1.8",
