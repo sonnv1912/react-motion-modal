@@ -11,7 +11,7 @@
       "test": "vitest run"
    },
    "dependencies": {
-      "@rspress/core": "2.0.19",
+      "@rspress/core": "2.0.21",
       "@rspress/plugin-playground": "2.0.19",
       "monaco-editor": "^0.52.2",
       "motion": "^12.23.12",
