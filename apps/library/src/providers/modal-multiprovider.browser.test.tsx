@@ -297,6 +297,92 @@ describe('ModalProvider multi-provider coordination', () => {
       expect(document.activeElement).toBe(underlyingButton);
    });
 
+   it('restores focus within one stack when the top modal closes', async () => {
+      const harness = mountProvider();
+
+      await act(async () => {
+         void harness.system.open('stack', { label: 'a' });
+         await nextFrame();
+      });
+
+      const underlyingButton = buttonFor(harness.portal, 'a', 'last');
+      underlyingButton?.focus();
+
+      await act(async () => {
+         void harness.system.open('stack', { label: 'b' });
+         await nextFrame();
+      });
+      expect(document.activeElement).toBe(
+         buttonFor(harness.portal, 'b', 'first'),
+      );
+
+      await act(async () => {
+         harness.system.cancel();
+         await nextFrame();
+      });
+
+      expect(document.activeElement).toBe(underlyingButton);
+      expect(
+         harness.portal.querySelector('[role="dialog"][aria-modal="true"]'),
+      ).not.toBeNull();
+   });
+
+   it('opens, exits and restores focus under reduced motion', async () => {
+      const originalMatchMedia = window.matchMedia.bind(window);
+      const reducedMotionQuery = (query: string) =>
+         query.includes('prefers-reduced-motion');
+
+      window.matchMedia = ((query: string) =>
+         reducedMotionQuery(query)
+            ? ({
+                 matches: true,
+                 media: query,
+                 onchange: null,
+                 addEventListener: () => {},
+                 removeEventListener: () => {},
+                 addListener: () => {},
+                 removeListener: () => {},
+                 dispatchEvent: () => false,
+              } as MediaQueryList)
+            : originalMatchMedia(query)) as typeof window.matchMedia;
+
+      try {
+         const trigger = document.createElement('button');
+         trigger.textContent = 'Trigger';
+         document.body.append(trigger);
+         trigger.focus();
+
+         const harness = mountProvider();
+         let outcome: Promise<ModalOutcome<void>> | undefined;
+
+         await act(async () => {
+            outcome = harness.system.open('stack', { label: 'a' });
+            await nextFrame();
+         });
+         expect(
+            harness.portal.querySelector('[role="dialog"][aria-modal="true"]'),
+         ).not.toBeNull();
+
+         await act(async () => {
+            harness.system.cancel();
+            await nextFrame();
+         });
+
+         await expect(outcome).resolves.toEqual({
+            status: 'cancelled',
+            reason: 'programmatic',
+         });
+         expect(document.activeElement).toBe(trigger);
+
+         await vi.waitFor(() => {
+            expect(harness.portal.querySelector('[data-modal-id]')).toBeNull();
+         });
+         trigger.remove();
+      } finally {
+         window.matchMedia = originalMatchMedia;
+      }
+   });
+
    it('returns focus to the trigger after the last modal closes', async () => {
       const trigger = document.createElement('button');
       trigger.textContent = 'Trigger';
