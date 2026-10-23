@@ -111,11 +111,45 @@ describe('createModalSystem', () => {
       ).toEqual(['replaceable']);
    });
 
+   it('replace cancels only the top-most modal and keeps deeper entries', async () => {
+      const system = createTestSystem();
+      const first = system.open('confirm', { title: 'First' });
+      const second = system.open('confirm', { title: 'Second' });
+      const third = system.open('replaceable', { title: 'Third' });
+
+      await expect(second).resolves.toEqual({
+         status: 'cancelled',
+         reason: 'replaced',
+      });
+      expect(
+         getModalSystemStore(system)
+            .getState()
+            .activeModals.map((modal) => modal.name),
+      ).toEqual(['confirm', 'replaceable']);
+
+      system.cancelAll('programmatic');
+
+      await expect(first).resolves.toEqual({
+         status: 'cancelled',
+         reason: 'programmatic',
+      });
+      await expect(third).resolves.toEqual({
+         status: 'cancelled',
+         reason: 'programmatic',
+      });
+   });
+
    it('singleton returns the same in-flight promise and instance', () => {
       const system = createTestSystem();
 
       const first = system.open('singleton', { title: 'First' });
-      const second = system.open('singleton', { title: 'Second' });
+      const second = system.open(
+         'singleton',
+         { title: 'Second' },
+         {
+            ariaLabel: 'Second attempt',
+         },
+      );
 
       expect(second).toBe(first);
       expect(getModalSystemStore(system).getState().activeModals).toHaveLength(
@@ -124,6 +158,9 @@ describe('createModalSystem', () => {
       expect(
          getModalSystemStore(system).getState().activeModals[0]?.input,
       ).toEqual({ title: 'First' });
+      expect(
+         getModalSystemStore(system).getState().activeModals[0]?.options,
+      ).toBeUndefined();
    });
 
    it('keeps state isolated between system instances', () => {
