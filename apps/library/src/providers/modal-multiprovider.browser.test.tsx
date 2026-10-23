@@ -106,13 +106,11 @@ describe('ModalProvider multi-provider coordination', () => {
       document.body.style.overflow = 'auto';
       const first = mountProvider();
       const second = mountProvider();
-      let firstOutcome: Promise<ModalOutcome<void>> | undefined;
-      let secondOutcome: Promise<ModalOutcome<void>> | undefined;
 
       await act(async () => {
-         firstOutcome = first.system.open('stack', { label: 'a' });
+         void first.system.open('stack', { label: 'a' });
          await nextFrame();
-         secondOutcome = second.system.open('stack', { label: 'b' });
+         void second.system.open('stack', { label: 'b' });
          await nextFrame();
       });
       expect(document.body.style.overflow).toBe('hidden');
@@ -134,13 +132,11 @@ describe('ModalProvider multi-provider coordination', () => {
       document.body.style.overflow = 'scroll';
       const first = mountProvider();
       const second = mountProvider();
-      let firstOutcome: Promise<ModalOutcome<void>> | undefined;
-      let secondOutcome: Promise<ModalOutcome<void>> | undefined;
 
       await act(async () => {
-         secondOutcome = second.system.open('stack', { label: 'b' });
+         void second.system.open('stack', { label: 'b' });
          await nextFrame();
-         firstOutcome = first.system.open('stack', { label: 'a' });
+         void first.system.open('stack', { label: 'a' });
          await nextFrame();
       });
 
@@ -234,13 +230,11 @@ describe('ModalProvider multi-provider coordination', () => {
    it('keeps Tab focus inside the top dialog across providers', async () => {
       const first = mountProvider();
       const second = mountProvider();
-      let firstOutcome: Promise<ModalOutcome<void>> | undefined;
-      let secondOutcome: Promise<ModalOutcome<void>> | undefined;
 
       await act(async () => {
-         firstOutcome = first.system.open('stack', { label: 'a' });
+         void first.system.open('stack', { label: 'a' });
          await nextFrame();
-         secondOutcome = second.system.open('stack', { label: 'b' });
+         void second.system.open('stack', { label: 'b' });
          await nextFrame();
       });
 
@@ -257,13 +251,11 @@ describe('ModalProvider multi-provider coordination', () => {
    it('traps Tab inside the dialog of the most recently opened provider', async () => {
       const first = mountProvider();
       const second = mountProvider();
-      let firstOutcome: Promise<ModalOutcome<void>> | undefined;
-      let secondOutcome: Promise<ModalOutcome<void>> | undefined;
 
       await act(async () => {
-         secondOutcome = second.system.open('stack', { label: 'second' });
+         void second.system.open('stack', { label: 'second' });
          await nextFrame();
-         firstOutcome = first.system.open('stack', { label: 'first' });
+         void first.system.open('stack', { label: 'first' });
          await nextFrame();
       });
 
@@ -280,11 +272,9 @@ describe('ModalProvider multi-provider coordination', () => {
    it('restores focus into the underlying dialog when the top modal closes', async () => {
       const first = mountProvider();
       const second = mountProvider();
-      let firstOutcome: Promise<ModalOutcome<void>> | undefined;
-      let secondOutcome: Promise<ModalOutcome<void>> | undefined;
 
       await act(async () => {
-         firstOutcome = first.system.open('stack', { label: 'a' });
+         void first.system.open('stack', { label: 'a' });
          await nextFrame();
       });
 
@@ -292,7 +282,7 @@ describe('ModalProvider multi-provider coordination', () => {
       underlyingButton?.focus();
 
       await act(async () => {
-         secondOutcome = second.system.open('stack', { label: 'b' });
+         void second.system.open('stack', { label: 'b' });
          await nextFrame();
       });
       expect(document.activeElement).toBe(
@@ -410,12 +400,11 @@ describe('ModalProvider multi-provider coordination', () => {
       const first = mountProvider();
       const second = mountProvider();
       let firstOutcome: Promise<ModalOutcome<void>> | undefined;
-      let secondOutcome: Promise<ModalOutcome<void>> | undefined;
 
       await act(async () => {
          firstOutcome = first.system.open('stack', { label: 'a' });
          await nextFrame();
-         secondOutcome = second.system.open('stack', { label: 'b' });
+         void second.system.open('stack', { label: 'b' });
          await nextFrame();
       });
 
@@ -528,7 +517,9 @@ describe('ModalProvider multi-provider coordination', () => {
       const iframe = document.createElement('iframe');
       document.body.append(iframe);
       const iframeDoc = iframe.contentDocument;
-      const frameWindow = iframe.contentWindow;
+      const frameWindow = iframe.contentWindow as
+         | (Window & typeof globalThis)
+         | null;
 
       if (!iframeDoc || !frameWindow) {
          iframe.remove();

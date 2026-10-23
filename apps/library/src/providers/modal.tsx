@@ -1,4 +1,11 @@
 import { Modal } from '@components/modal';
+import {
+   acquireScrollLock,
+   claimKeyboardOwnership,
+   hasKeyboardOwnership,
+   releaseKeyboardOwnership,
+   releaseScrollLock,
+} from '@utils/document-modal-coordinator';
 import { getFocusableElements, trapFocus } from '@utils/focus';
 import { mergeModalOptions } from '@utils/modal-options';
 import { AnimatePresence } from 'motion/react';
@@ -24,7 +31,9 @@ export type ModalProviderProps<Registry extends ModalRegistry = ModalRegistry> =
 
 /**
  * Renders one modal system into a portal and owns its browser accessibility
- * lifecycle.
+ * lifecycle. Providers that share one document coordinate body scroll locking
+ * and keyboard ownership through a per-document coordinator, so independent
+ * systems never unlock or cancel each other.
  */
 export const ModalProvider = <Registry extends ModalRegistry>({
    system,
@@ -39,7 +48,9 @@ export const ModalProvider = <Registry extends ModalRegistry>({
    );
    const containerRef = useRef<HTMLDivElement>(null);
    const returnFocusRef = useRef<HTMLElement | null>(null);
+   const coordinatorTokenRef = useRef<object>({});
    const hasOpenModals = activeModals.length > 0;
+   const doc = portalRoot?.ownerDocument ?? null;
 
    useEffect(() => {
       setPortalRoot(requestedPortalRoot ?? document.body);
@@ -55,7 +66,25 @@ export const ModalProvider = <Registry extends ModalRegistry>({
    }, [system]);
 
    useEffect(() => {
-      if (!hasOpenModals) {
+      if (!doc || !hasOpenModals) {
+         return;
+      }
+
+      const token = coordinatorTokenRef.current;
+      claimKeyboardOwnership(doc, token);
+
+      return () => releaseKeyboardOwnership(doc, token);
+   }, [doc, hasOpenModals]);
+
+   useEffect(() => {
+      if (!doc || !hasOpenModals) {
+         return;
+      }
+
+      const token = coordinatorTokenRef.current;
+      const view = doc.defaultView;
+
+      if (!view) {
          return;
       }
 
@@ -73,6 +102,10 @@ export const ModalProvider = <Registry extends ModalRegistry>({
       const closeOnPressEsc = options.closeOnPressEsc ?? true;
 
       const onKeyDown = (event: KeyboardEvent) => {
+         if (!hasKeyboardOwnership(doc, token)) {
+            return;
+         }
+
          if (event.key === 'Escape' && closeOnPressEsc) {
             active?.cancel('escape');
             return;
@@ -87,23 +120,20 @@ export const ModalProvider = <Registry extends ModalRegistry>({
          trapFocus(dialog, event);
       };
 
-      window.addEventListener('keydown', onKeyDown);
-      return () => window.removeEventListener('keydown', onKeyDown);
-   }, [active, defaultOptions, hasOpenModals]);
+      view.addEventListener('keydown', onKeyDown);
+      return () => view.removeEventListener('keydown', onKeyDown);
+   }, [active, defaultOptions, doc, hasOpenModals]);
 
    useEffect(() => {
-      if (!hasOpenModals) {
+      if (!doc || !hasOpenModals) {
          return;
       }
 
-      const { body } = document;
-      const previousOverflow = body.style.overflow;
-      body.style.overflow = 'hidden';
+      const token = coordinatorTokenRef.current;
+      acquireScrollLock(doc, token);
 
-      return () => {
-         body.style.overflow = previousOverflow;
-      };
-   }, [hasOpenModals]);
+      return () => releaseScrollLock(doc, token);
+   }, [doc, hasOpenModals]);
 
    useEffect(() => {
       if (!portalRoot) {
@@ -118,7 +148,7 @@ export const ModalProvider = <Registry extends ModalRegistry>({
 
       if (returnFocusRef.current === null) {
          returnFocusRef.current =
-            (document.activeElement as HTMLElement | null) ?? null;
+            (doc?.activeElement as HTMLElement | null) ?? null;
       }
 
       const dialog = active
@@ -131,7 +161,7 @@ export const ModalProvider = <Registry extends ModalRegistry>({
          const focusables = getFocusableElements(dialog);
          (focusables[0] ?? dialog).focus();
       }
-   }, [active, hasOpenModals, portalRoot]);
+   }, [active, doc, hasOpenModals, portalRoot]);
 
    if (!portalRoot) {
       return null;
