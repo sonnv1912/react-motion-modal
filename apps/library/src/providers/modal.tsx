@@ -1,4 +1,5 @@
 import { Modal } from '@components/modal';
+import { MODAL_Z_INDEX } from '@configs/constant';
 import {
    acquireScrollLock,
    claimKeyboardOwnership,
@@ -22,6 +23,17 @@ import type {
    ModalSystem,
 } from '../types/modal-system';
 
+// The claiming provider turns its container into a stacking context above
+// every other provider's, so its modals always paint on top.
+const applyLayer = (container: HTMLElement | null, layer: number): void => {
+   if (!container) {
+      return;
+   }
+
+   container.style.position = 'relative';
+   container.style.zIndex = String(MODAL_Z_INDEX + layer);
+};
+
 export type ModalProviderProps<Registry extends ModalRegistry = ModalRegistry> =
    {
       system: ModalSystem<Registry>;
@@ -31,9 +43,10 @@ export type ModalProviderProps<Registry extends ModalRegistry = ModalRegistry> =
 
 /**
  * Renders one modal system into a portal and owns its browser accessibility
- * lifecycle. Providers that share one document coordinate body scroll locking
- * and keyboard ownership through a per-document coordinator, so independent
- * systems never unlock or cancel each other.
+ * lifecycle. Providers that share one document coordinate body scroll
+ * locking, keyboard ownership and visual layering through a per-document
+ * coordinator, so independent systems never unlock, cancel or cover each
+ * other accidentally.
  */
 export const ModalProvider = <Registry extends ModalRegistry>({
    system,
@@ -48,6 +61,7 @@ export const ModalProvider = <Registry extends ModalRegistry>({
    );
    const containerRef = useRef<HTMLDivElement>(null);
    const coordinatorTokenRef = useRef<object>({});
+   const lastFocusedRef = useRef<HTMLElement | null>(null);
    const focusMemoryRef = useRef(new Map<string, HTMLElement | null>());
    const previousIdsRef = useRef<string[]>([]);
    const hasOpenModals = activeModals.length > 0;
@@ -72,7 +86,7 @@ export const ModalProvider = <Registry extends ModalRegistry>({
       }
 
       const token = coordinatorTokenRef.current;
-      claimKeyboardOwnership(doc, token);
+      applyLayer(containerRef.current, claimKeyboardOwnership(doc, token));
 
       return () => releaseKeyboardOwnership(doc, token);
    }, [doc, hasOpenModals]);
@@ -101,6 +115,10 @@ export const ModalProvider = <Registry extends ModalRegistry>({
          active?.options,
       );
       const closeOnPressEsc = options.closeOnPressEsc ?? true;
+      const dialogFor = (id: string) =>
+         containerRef.current?.querySelector<HTMLElement>(
+            `[data-modal-id="${id}"]`,
+         );
 
       const onKeyDown = (event: KeyboardEvent) => {
          if (!hasKeyboardOwnership(doc, token)) {
@@ -112,17 +130,74 @@ export const ModalProvider = <Registry extends ModalRegistry>({
             return;
          }
 
-         const dialog = active
-            ? containerRef.current?.querySelector<HTMLElement>(
-                 `[data-modal-id="${active.id}"]`,
-              )
-            : undefined;
+         trapFocus(dialogFor(active?.id ?? ''), event);
+      };
 
-         trapFocus(dialog, event);
+      // Focus that escapes the interactive stack programmatically (consumer
+      // code focusing background elements) is pulled back into the top
+      // dialog, restoring the element the user last focused inside it.
+      const onFocusIn = (event: FocusEvent) => {
+         const container = containerRef.current;
+         const target = event.target as Node | null;
+
+         if (!container) {
+            return;
+         }
+
+         if (target && container.contains(target)) {
+            lastFocusedRef.current =
+               target instanceof HTMLElement ? target : null;
+            return;
+         }
+
+         if (!hasKeyboardOwnership(doc, token) || !active) {
+            return;
+         }
+
+         const dialog = dialogFor(active.id);
+         const candidates = [
+            lastFocusedRef.current,
+            ...getFocusableElements(dialog),
+         ];
+
+         for (const candidate of candidates) {
+            if (candidate?.isConnected) {
+               candidate.focus();
+
+               if (doc.activeElement === candidate) {
+                  return;
+               }
+            }
+         }
+
+         dialog?.focus();
+      };
+
+      // iOS Safari scrolls the locked body on touch drags; cancel touches
+      // that start outside this provider's stack while it owns interaction.
+      // Touches inside the dialog keep scrolling its own content.
+      const onTouchMove = (event: TouchEvent) => {
+         if (!hasKeyboardOwnership(doc, token) || !event.cancelable) {
+            return;
+         }
+
+         const container = containerRef.current;
+
+         if (container && event.composedPath().includes(container)) {
+            return;
+         }
+
+         event.preventDefault();
       };
 
       view.addEventListener('keydown', onKeyDown);
-      return () => view.removeEventListener('keydown', onKeyDown);
+      doc.addEventListener('focusin', onFocusIn);
+      doc.addEventListener('touchmove', onTouchMove, { passive: false });
+      return () => {
+         view.removeEventListener('keydown', onKeyDown);
+         doc.removeEventListener('focusin', onFocusIn);
+         doc.removeEventListener('touchmove', onTouchMove);
+      };
    }, [active, defaultOptions, doc, hasOpenModals]);
 
    useEffect(() => {
@@ -161,9 +236,9 @@ export const ModalProvider = <Registry extends ModalRegistry>({
       previousIdsRef.current = ids;
 
       if (openedIds.length > 0) {
-         // The latest modal owns Escape/Tab while its layer stays on top,
-         // even when another provider already had modals open.
-         claimKeyboardOwnership(doc, token);
+         // The latest modal owns Escape/Tab and the top visual layer, even
+         // when another provider already had modals open.
+         applyLayer(containerRef.current, claimKeyboardOwnership(doc, token));
 
          const topId = ids[ids.length - 1];
 

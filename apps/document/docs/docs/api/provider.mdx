@@ -67,16 +67,22 @@ Several providers (for example micro-frontends or embedded tools) can share one
 document. The library coordinates their side effects per document:
 
 - Body scroll stays locked until every provider with open modals closes them,
-  regardless of the closing or unmounting order.
+  regardless of the closing or unmounting order. While locked, the body's
+  `overscroll-behavior` is set to `none`, and the owning provider cancels
+  touch drags that start outside its stack (mobile Safari keeps scrolling a
+  `overflow: hidden` body otherwise). Dialog bodies set
+  `overscroll-behavior: contain` so their internal scrolling never chains to
+  the page.
 - The provider that opened the most recent modal owns Escape and Tab. Other
   providers keep their stacks untouched, and a top modal with
   `closeOnPressEsc: false` blocks Escape for every provider.
+- Focus that escapes the stack programmatically (application code focusing a
+  background element while a modal is open) is pulled back into the top
+  dialog, restoring the element that was focused last inside it.
+- The most recent provider also renders on top: each claim moves the
+  provider's portal container above every other provider's, so Escape, Tab
+  and pointer order match the visual order.
 - When the owning provider unmounts or empties its stack, keyboard ownership
   returns to the remaining provider.
 - Providers portaled into another document (for example inside an `iframe`)
   lock and listen within that document only.
-
-One constraint: the libraries cannot guarantee a visual order between portals
-it does not control. When two providers are open at the same time, place their
-portal roots (or z-index stacking contexts) so the newest modal renders above
-the older one.

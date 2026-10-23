@@ -103,6 +103,8 @@ export const Modal = ({ data, index, isActive, defaultOptions }: Props) => {
                options.body?.className,
             )}
             style={{
+               // Keep dialog scrolling from chaining to the locked page.
+               overscrollBehavior: 'contain',
                ...options.body?.style,
                zIndex: MODAL_Z_INDEX + index + 1,
             }}

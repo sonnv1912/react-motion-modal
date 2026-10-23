@@ -100,6 +100,7 @@ describe('ModalProvider multi-provider coordination', () => {
       }
 
       document.body.style.overflow = '';
+      document.body.style.overscrollBehavior = '';
    });
 
    it('keeps body scroll locked until every provider releases its modals', async () => {
@@ -653,5 +654,173 @@ describe('ModalProvider multi-provider coordination', () => {
          host.remove();
          iframe.remove();
       }
+   });
+
+   it('locks body overscroll behavior with the scroll lock', async () => {
+      document.body.style.overflow = 'auto';
+      document.body.style.overscrollBehavior = 'contain';
+      const first = mountProvider();
+      const second = mountProvider();
+
+      await act(async () => {
+         void first.system.open('stack', { label: 'a' });
+         await nextFrame();
+         void second.system.open('stack', { label: 'b' });
+         await nextFrame();
+      });
+      expect(document.body.style.overscrollBehavior).toBe('none');
+
+      await act(async () => {
+         first.system.cancel();
+         await nextFrame();
+      });
+      expect(document.body.style.overscrollBehavior).toBe('none');
+
+      await act(async () => {
+         second.system.cancel();
+         await nextFrame();
+      });
+      expect(document.body.style.overscrollBehavior).toBe('contain');
+   });
+
+   it('contains dialog overscroll so inner scrolling does not chain', async () => {
+      const harness = mountProvider();
+
+      await act(async () => {
+         void harness.system.open('stack', { label: 'a' });
+         await nextFrame();
+      });
+
+      const dialog = harness.portal.querySelector<HTMLElement>(
+         '[role="dialog"][aria-modal="true"]',
+      );
+      expect(dialog).not.toBeNull();
+      expect(getComputedStyle(dialog as HTMLElement).overscrollBehavior).toBe(
+         'contain',
+      );
+   });
+
+   it('pulls programmatic focus back into the top dialog', async () => {
+      const harness = mountProvider();
+
+      await act(async () => {
+         void harness.system.open('stack', { label: 'a' });
+         await nextFrame();
+      });
+
+      const lastButton = buttonFor(harness.portal, 'a', 'last');
+      lastButton?.focus();
+
+      const outside = document.createElement('input');
+      outside.type = 'text';
+      document.body.append(outside);
+
+      await act(async () => {
+         outside.focus();
+      });
+
+      expect(document.activeElement).toBe(lastButton);
+
+      await act(async () => {
+         outside.remove();
+         harness.system.cancelAll();
+         await nextFrame();
+      });
+   });
+
+   // WebKit rejects the Touch constructor and Firefox hides TouchEvent on
+   // desktop, so probe once and run this check only where synthesis works.
+   const synthesizeTouchMove = (target: Element): TouchEvent => {
+      const touch =
+         typeof Touch === 'function'
+            ? new Touch({
+                 identifier: 1,
+                 target,
+                 clientX: 10,
+                 clientY: 10,
+              })
+            : ({
+                 identifier: 1,
+                 target,
+                 clientX: 10,
+                 clientY: 10,
+              } as unknown as Touch);
+
+      return new TouchEvent('touchmove', {
+         bubbles: true,
+         cancelable: true,
+         touches: [touch],
+      });
+   };
+
+   const supportsTouchEvents = (() => {
+      try {
+         return synthesizeTouchMove(document.documentElement).cancelable;
+      } catch {
+         return false;
+      }
+   })();
+
+   it.skipIf(!supportsTouchEvents)(
+      'blocks background touch scrolling while modals are open',
+      async () => {
+         const harness = mountProvider();
+
+         await act(async () => {
+            void harness.system.open('stack', { label: 'a' });
+            await nextFrame();
+         });
+
+         const background = document.createElement('div');
+         document.body.append(background);
+         const dialog =
+            harness.portal.querySelector<HTMLElement>('[data-modal-id]');
+
+         const touchOn = (target: Element) => {
+            const event = synthesizeTouchMove(target);
+            target.dispatchEvent(event);
+            return event;
+         };
+
+         if (dialog) {
+            expect(touchOn(dialog).defaultPrevented).toBe(false);
+         }
+         expect(touchOn(background).defaultPrevented).toBe(true);
+
+         await act(async () => {
+            harness.system.cancelAll();
+            await nextFrame();
+         });
+         expect(touchOn(background).defaultPrevented).toBe(false);
+
+         background.remove();
+      },
+   );
+
+   it('raises the newest provider above the previously opened one', async () => {
+      const first = mountProvider();
+      const second = mountProvider();
+      const containerZIndex = (harness: ProviderHarness) =>
+         Number(
+            getComputedStyle(harness.portal.firstElementChild as HTMLElement)
+               .zIndex,
+         );
+
+      await act(async () => {
+         void first.system.open('stack', { label: 'a' });
+         await nextFrame();
+         void second.system.open('stack', { label: 'b' });
+         await nextFrame();
+      });
+      expect(containerZIndex(second)).toBeGreaterThan(containerZIndex(first));
+
+      await act(async () => {
+         void first.system.open('stack', { label: 'a2' });
+         await nextFrame();
+      });
+      expect(containerZIndex(first)).toBeGreaterThan(containerZIndex(second));
+      expect(
+         first.portal.querySelector('[role="dialog"][aria-modal="true"]'),
+      ).not.toBeNull();
    });
 });

@@ -36,6 +36,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   including when several providers have modals open at the same time. See the
   "Multiple providers on one document" section of the provider docs.
 
+### Added
+
+- The owning provider now renders above every other provider: the newest
+  claim raises its portal container, so visual, Escape and Tab order always
+  match across providers.
+- Focus that escapes the stack programmatically (application code focusing a
+  background element while a modal is open) is pulled back into the top
+  dialog.
+- Scroll locking now also pins `overscroll-behavior: none` on the body,
+  cancels background touch drags (mobile Safari), and sets
+  `overscroll-behavior: contain` on dialog bodies so inner scrolling does not
+  chain to the page.
+
 ## 2.0.1 · 2026-08-14
 
 ### Fixed
