@@ -32,7 +32,7 @@ jobs:
         run: yarn workspace react-motion-modal check-types
 
       - name: Install browser test runtime
-        run: yarn playwright install --with-deps chromium
+        run: yarn playwright install --with-deps chromium firefox webkit
 
       - name: Build library
         run: yarn workspace react-motion-modal build
@@ -40,6 +40,10 @@ jobs:
       - name: Run tests
         working-directory: apps/library
         run: yarn test
+
+      - name: Run cross-browser tests
+        working-directory: apps/library
+        run: BROWSER_INSTANCES=firefox,webkit yarn test:browser
 
       - name: Verify publish contents
         working-directory: apps/library

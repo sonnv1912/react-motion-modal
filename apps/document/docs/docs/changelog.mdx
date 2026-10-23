@@ -10,6 +10,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.2 · 2026-10-23
+
+### Fixed
+
+- Body scroll now stays locked until every `ModalProvider` sharing the
+  document closes its modals, instead of unlocking when the first provider
+  closes. The original inline `overflow` value is restored when the last lock
+  releases, in any closing or unmounting order.
+- A single Escape now cancels only the top modal of the most recently opened
+  provider. Other providers keep their stacks, and a top modal with
+  `closeOnPressEsc: false` blocks Escape for every provider instead of
+  leaking the keypress to modals underneath.
+- Covered and exiting modal layers are now `inert`, so their content can no
+  longer receive focus or clicks while an exit animation finishes.
+- Closing a stacked modal restores focus to the exact element that was focused
+  before it opened (the trigger for the last modal), instead of always jumping
+  to the first focusable element.
+- Providers portaled into a separate document (for example an `iframe` root)
+  now lock scroll and handle keyboard input within that document.
+
+### Changed
+
+- The provider that opened the most recent modal owns keyboard interaction,
+  including when several providers have modals open at the same time. See the
+  "Multiple providers on one document" section of the provider docs.
+
 ## 2.0.1 · 2026-08-14
 
 ### Fixed

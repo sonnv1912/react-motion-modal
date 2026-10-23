@@ -5,6 +5,19 @@ import { defineConfig } from 'vitest/config';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
+type BrowserName = 'chromium' | 'firefox' | 'webkit';
+
+// Browser tests default to Chromium; set BROWSER_INSTANCES to run the same
+// suite elsewhere, for example BROWSER_INSTANCES=firefox,webkit.
+const parseBrowsers = (value: string | undefined): BrowserName[] => {
+   const requested = (value ?? 'chromium')
+      .split(',')
+      .map((browser) => browser.trim())
+      .filter(Boolean) as BrowserName[];
+
+   return requested.length > 0 ? requested : ['chromium'];
+};
+
 export default defineConfig({
    resolve: {
       alias: {
@@ -19,12 +32,12 @@ export default defineConfig({
       browser: {
          enabled: true,
          provider: 'playwright',
-         instances: [
-            {
-               browser: 'chromium',
+         instances: parseBrowsers(process.env.BROWSER_INSTANCES).map(
+            (browser) => ({
+               browser,
                headless: true,
-            },
-         ],
+            }),
+         ),
       },
    },
 });

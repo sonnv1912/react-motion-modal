@@ -62,9 +62,10 @@ defineModal({
 
 - `stack` is the default and adds a new modal above the current one.
 - `replace` cancels the active modal with reason `replaced`, then opens the new
-  modal.
+  modal. Only the top-most modal is cancelled; deeper stack entries stay
+  pending, so `A → B → replace(C)` leaves `A → C`.
 - `singleton` returns the existing in-flight promise when the same modal is
-  already active.
+  already active. The first open's input and options win.
 
 Systems do not share state. Create a fresh system for isolated tests or server
 requests.
