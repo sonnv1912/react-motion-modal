@@ -53,6 +53,9 @@ export const Modal = ({ data, index, isActive, defaultOptions }: Props) => {
          className='react-motion-modal__root'
          initial={false}
          exit={{}}
+         // Non-interactive layers (covered or exiting) must not receive focus,
+         // clicks, or Tab while their exit animation finishes.
+         inert={!isInteractive}
          style={{
             zIndex: MODAL_Z_INDEX + index,
             pointerEvents: isInteractive ? undefined : 'none',

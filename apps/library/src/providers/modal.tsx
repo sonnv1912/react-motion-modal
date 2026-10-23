@@ -47,8 +47,9 @@ export const ModalProvider = <Registry extends ModalRegistry>({
       requestedPortalRoot ?? null,
    );
    const containerRef = useRef<HTMLDivElement>(null);
-   const returnFocusRef = useRef<HTMLElement | null>(null);
    const coordinatorTokenRef = useRef<object>({});
+   const focusMemoryRef = useRef(new Map<string, HTMLElement | null>());
+   const previousIdsRef = useRef<string[]>([]);
    const hasOpenModals = activeModals.length > 0;
    const doc = portalRoot?.ownerDocument ?? null;
 
@@ -136,32 +137,76 @@ export const ModalProvider = <Registry extends ModalRegistry>({
    }, [doc, hasOpenModals]);
 
    useEffect(() => {
-      if (!portalRoot) {
+      if (!doc || !portalRoot) {
          return;
       }
 
-      if (!hasOpenModals) {
-         returnFocusRef.current?.focus?.();
-         returnFocusRef.current = null;
+      const token = coordinatorTokenRef.current;
+      const ids = activeModals.map((modal) => modal.id);
+      const previousIds = previousIdsRef.current;
+      const openedIds = ids.filter((id) => !previousIds.includes(id));
+      const closedIds = previousIds.filter((id) => !ids.includes(id));
+
+      // Remember where focus lived before each layer moved it, so closing a
+      // layer restores the exact element instead of the first focusable one.
+      for (const modal of activeModals) {
+         if (!focusMemoryRef.current.has(modal.id)) {
+            focusMemoryRef.current.set(
+               modal.id,
+               (doc.activeElement as HTMLElement | null) ?? null,
+            );
+         }
+      }
+
+      previousIdsRef.current = ids;
+
+      if (openedIds.length > 0) {
+         // The latest modal owns Escape/Tab while its layer stays on top,
+         // even when another provider already had modals open.
+         claimKeyboardOwnership(doc, token);
+
+         const topId = ids[ids.length - 1];
+
+         if (topId) {
+            const dialog = containerRef.current?.querySelector<HTMLElement>(
+               `[data-modal-id="${topId}"]`,
+            );
+
+            (getFocusableElements(dialog)[0] ?? dialog)?.focus();
+         }
+
          return;
       }
 
-      if (returnFocusRef.current === null) {
-         returnFocusRef.current =
-            (doc?.activeElement as HTMLElement | null) ?? null;
-      }
+      if (closedIds.length > 0) {
+         const topClosedId = closedIds[closedIds.length - 1];
+         const target = topClosedId
+            ? (focusMemoryRef.current.get(topClosedId) ?? null)
+            : null;
 
-      const dialog = active
-         ? containerRef.current?.querySelector<HTMLElement>(
-              `[data-modal-id="${active.id}"]`,
-           )
-         : undefined;
+         for (const id of closedIds) {
+            focusMemoryRef.current.delete(id);
+         }
 
-      if (dialog) {
-         const focusables = getFocusableElements(dialog);
-         (focusables[0] ?? dialog).focus();
+         if (target?.isConnected) {
+            target.focus();
+
+            if (doc.activeElement === target) {
+               return;
+            }
+         }
+
+         const nextTop = activeModals[activeModals.length - 1];
+
+         if (nextTop) {
+            const dialog = containerRef.current?.querySelector<HTMLElement>(
+               `[data-modal-id="${nextTop.id}"]`,
+            );
+
+            (getFocusableElements(dialog)[0] ?? dialog)?.focus();
+         }
       }
-   }, [active, doc, hasOpenModals, portalRoot]);
+   }, [activeModals, doc, portalRoot]);
 
    if (!portalRoot) {
       return null;
